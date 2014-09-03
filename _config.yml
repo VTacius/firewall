@@ -1,2 +1,11 @@
 highlighter: pygments
 encoding: UTF-8
+baseurl: /firewall
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "base"
+      author: "Mr. Hyde"
