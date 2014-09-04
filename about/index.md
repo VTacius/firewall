@@ -13,12 +13,6 @@ def foo
 end
 {% endhighlight %}
 
-{% highlight conf %}
-def foo
-  puts 'foo'
-end
-{% endhighlight %}
-
 ## Segundo título
 Vemos que queda bonito
 
