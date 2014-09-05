@@ -11,6 +11,6 @@ El núcleo del proyecto es información sobre los siguientes aspectos de un Fire
 * Configuración de IPtables
 * Configuración de Squid3
 * Configuración de SquidGuard
-Todo ello esta organizado en (firewall)[http://vtacius.github.io/firewall/]
+Todo ello esta organizado en [firewall](http://vtacius.github.io/firewall/)
 
 Además, planteamos un par de herramientas para automatizar la configuración sobre Debian, distribución que sirvió de base para este trabajo
