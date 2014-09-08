@@ -16,19 +16,17 @@ mh.add_argument('--imh', help='Interfaz MH', nargs="+")
 args = parser.parse_args()
 
 # Creamos la máscara de red a partir del prefijo que el usuario pasa por consola
-#cidr = re.search('((\d{1,3}\.*){4})\/(.{1,2})', args.iwan[1])
 cidr = re.search("((\d{1,3})\.*(\d{1,3})\.*(\d{1,3})\.*(\.*\d{1,3}))\/(\d{1,2})", args.iwan[1]);
 ip_address = cidr.group(1)
 sufijo_red = cidr.group(6)
 
 bits = int(sufijo_red) % 8
-bites = [ 2 ** (7-x) for x in range(bits) ]
 octeto = 0
-for bit in bites:
+for bit in [ 2 ** (7-x) for x in range(bits) ]:
   octeto += bit
 
-pos = (int(sufijo_red) // 8)
-print(bits, bites, octeto, pos)
+pos = int(sufijo_red) // 8
+print(bits, octeto, pos)
 
 # Cual es la red segun la mascara de red
 byte_mask = bin(octeto)[2:]
