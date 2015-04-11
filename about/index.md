@@ -2,6 +2,7 @@
 layout: base
 site.author : "Alexander Ortiz"
 author : "Alexander Ortiz"
+title: Sobre el proyecto
 ---
 
 # Esta página es sobre quién hizo el proyecto

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Firewall by VTacius</title>
+    <title>{{page.title}}</title>
 
     <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/styles.css">
     <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/pygment_trac.css">
@@ -17,7 +17,6 @@
       <header>
         <h1>Firewall</h1>
         <p>Configuración de Iptables + Squid3 + SquidGuard como Firewall/Proxy para pequeñas organizaciones</p>
-
         <p class="view"><a href="https://github.com/VTacius/firewall">View the Project on GitHub <small>VTacius/firewall</small></a></p>
 
         <ul>
@@ -28,14 +27,13 @@
 
       </header>
       <section>
-        <ul>
-          <li><a href="{{ site.baseurl }}/index.html"><strong>Inicio</strong></a></li>
-          <li><a href="{{ site.baseurl }}/about"><strong>Sobre el proyecto</strong></a></li>
-          <li><a href="{{ site.baseurl }}/squid3"><strong>Squid3</strong></a></li>
-          <li><a href="{{ site.baseurl }}/squidguard"><strong>SquidGuard</strong></a></li>
-        </ul>
-	{{ content }}
-      </section>
+    <ul>
+	    {% for page in site.pages %}
+			<li> <a href="{{site.baseurl}}{{ page.url }}"><strong>{{ page.title }} </strong></a> </li>
+		{% endfor %}
+	</ul>
+	    {{ content }}
+    </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/VTacius">VTacius</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
