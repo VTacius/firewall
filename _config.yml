@@ -1,3 +1,6 @@
 highlighter: pygments
 encoding: "UTF-8"
 baseurl: "/firewall"
+collections:
+    docs:
+        output: true

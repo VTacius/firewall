@@ -16,7 +16,7 @@
     <div class="wrapper">
       <header>
         <h1>Firewall</h1>
-        <p>Configuración de Iptables + Squid3 + SquidGuard como Firewall/Proxy para pequeñas organizaciones</p>
+        <p>Documentacion Configuración de Iptables + Squid3 + SquidGuard como Firewall/Proxy para pequeñas organizaciones</p>
         <p class="view"><a href="https://github.com/VTacius/firewall">View the Project on GitHub <small>VTacius/firewall</small></a></p>
 
         <ul>
@@ -25,17 +25,11 @@
           <li><a href="https://github.com/VTacius/firewall">View On <strong>GitHub</strong></a></li>
         </ul>
 
-      </header>
-      <section>
-    <ul>
-	    {% for page in site.pages %}
-			<li> <a href="{{site.baseurl}}{{ page.url }}"><strong>{{ page.title }} </strong></a> </li>
-		{% endfor %}
-	</ul>
-	    {{ content }}
-<ul>
-</ul>
-    </section>
+        </header>
+        <section>
+	        {{ content }}
+            {% include navegacion_docs.html %}
+        </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/VTacius">VTacius</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>

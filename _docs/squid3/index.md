@@ -1,8 +1,9 @@
 ---
-layout: base
-site.author : "Alexander Ortiz"
-author : "Alexander Ortiz"
-title: "Configuración de Squid"
+layout: docs
+site.author : Alexander Ortiz
+author : Alexander Ortiz
+title: Configuración de Squid
+orden: 2
 ---
 
 # Configuración de Squid

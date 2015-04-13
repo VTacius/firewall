@@ -1,8 +1,9 @@
 ---
-layout: base
-site.author : "Alexander Ortiz"
-author : "Alexander Ortiz"
+layout: docs
+site.author : Alexander Ortiz
+author : Alexander Ortiz
 title: Configuración de squidGuard
+orden: 3
 ---
 
 # Configuración de squidGuard
