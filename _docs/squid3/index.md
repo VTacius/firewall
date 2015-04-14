@@ -3,7 +3,7 @@ layout: docs
 site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Configuración de Squid
-orden: 2
+orden: 4
 ---
 
 # Configuración de Squid

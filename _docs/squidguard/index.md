@@ -3,7 +3,7 @@ layout: docs
 site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Configuración de squidGuard
-orden: 3
+orden: 5
 ---
 
 # Configuración de squidGuard
