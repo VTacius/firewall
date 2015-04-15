@@ -1,3 +1,4 @@
 Gemfile.lock
 *.swp
 _site/
+_site/about/index.html

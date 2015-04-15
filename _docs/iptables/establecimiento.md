@@ -1,4 +1,6 @@
-#!/bin/bash -x ## establecimiento.sh #### source /root/fws/infraestructura.sh 
+#!/bin/bash -x 
+## establecimiento.sh 
+source /root/fws/infraestructura.sh 
 echo -e "\n\n ESTABLECIMIENTO.SH\n\n"
 
 ## Servicios adicionales en el servidor
@@ -15,26 +17,27 @@ echo -e "\n\n ESTABLECIMIENTO.SH\n\n"
 #ifconfig eth0:1 192.168.2.5/27
 #ifconfig eth0:2 192.168.2.6/27
 
-## El presente archivo configurará reglas especificas del establecimiento en la cadena FWD_LOCAL referenciada en la cadena FORWARD de la tabla FILTER de IPTABLES
+## Se presentan algunas pautas sobre la manera de configurar nuevos permisos en su red
+# Acceso a toda su red LAN hacia lo que sea que halla después de WAN. Podría especificar con -d un destino especifico
 FWD_SLAN="iptables -t filter -A FWD_LOCAL -i $INL -s $LAN -o $INW"
+# Acceso desde el con entrada en interfaz LAN y salida en WAN, se recomienda que use un grupo ipset 
 FWD_SSET="iptables -t filter -A FWD_LOCAL -i $INL -o $INW"
+# Acceso especial para un permiso, usualmente desde DMZ Minsal, hacia dentro de LAN
 FWD_SWAN="iptables -t filter -A FWD_LOCAL -i $INW"
+# Acceso de toda la Red DMZ a un nuevo servicios
+FWD_SDMZ="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $INW"
 
-## Configura reglas especificas del establecimiento en la cadena FWD_DMZ referenciada en la cadena FORWARD
-FWD_SDMZ="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $WAN"
-FWD_ODMZ="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $IND"
+### Trafico de servicios avanzados
+## Revise cuales son verdaderamente necesarios para su establecimiento
 
-## Trafico de servicios avanzados
-# Revise cuales son verdaderamente necesarios para su establecimiento
-# Acceso remoto al servidor de Hacienda
-$FWD_SLAN -p tcp --dport 63231 -m conntrack --ctstate NEW -j ACCEPT
-
-### Empiece sus reglas a partir de este punto
+## Acceso remoto al servidor de Hacienda
+#$FWD_SLAN -p tcp --dport 63231 -m conntrack --ctstate NEW -j ACCEPT
 ## Configuración necesaria para Comunicarse con Antivirus Kaspersky
-# $FWD_SSET -d 10.10.20.5 -p tcp -m multiport --dport 13000,13111 -m conntrack --ctstate NEW -j ACCEPT
-# $FWD_SSET -d 10.10.20.5 -p udp -m multiport --dport 7,67,69,13000,1500,1501 -j ACCEPT
-# $FWD_SSET -d 10.10.20.5 -p icmp -j ACCEPT
-# $FWD_SWAN -s 10.10.20.5 -p udp -m multiport --dport 15000,15001 -j ACCEPT
+#$FWD_SLAN -d 10.10.20.5 -p tcp -m multiport --dport 13000,13111,14000 -m conntrack --ctstate NEW -j ACCEPT
+#$FWD_SLAN -d 10.10.20.5 -p udp -m multiport --dport 7,67,69,13000,1500,1501 -j ACCEPT
+#$FWD_SLAN -d 10.10.20.5 -p icmp -j ACCEPT
+#$FWD_SWAN -s 10.10.20.5 -p udp -m multiport --dport 15000,15001 -j ACCEPT
+#$FWD_SWAN -s 10.10.20.5 -p tcp -m multiport --dport 13111,14000 -j ACCEPT
 
 # Publica un servicio hacia la WAN. 
 # Quizá este interesado en compartir impresoras con Hacienda
