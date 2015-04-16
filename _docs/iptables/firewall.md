@@ -26,7 +26,7 @@ $OUTPUTL -p icmp -j ACCEPT
 ## Salida desde $INW
 OUTPUTW="iptables -t filter -A OUTPUT -o $INW"
 $OUTPUTW -m set --match-set admins dst -m multiport -p tcp --sport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Puertos abiertos para WAN"  -j ACCEPT
-$OUTPUTW -d 0.0.0.0/0 -m multiport -p tcp --dport 80,443,22,20,21,465 -m comment --comment "Servicios permitos hacia WAN"  -j ACCEPT
+$OUTPUTW -d 0.0.0.0/0 -m multiport -p tcp --dport 80,8080,443,22,20,21,465 -m comment --comment "Servicios permitos hacia WAN"  -j ACCEPT
 $OUTPUTW -d 0.0.0.0/0 -m multiport -p udp --dport 53,123 -m comment --comment "Servicios permitos hacia WAN" -j ACCEPT
 $OUTPUTW -p icmp -j ACCEPT 
 
@@ -47,7 +47,7 @@ $INPUTL -j SRVADD -m comment --comment "Enviamos a las reglas INPUT personalizad
 INPUTW="iptables -t filter -A INPUT -i $INW"
 $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas para #admins" -j ACCEPT 
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta ICMP para #admins" -j ACCEPT
-$INPUTW -s 0.0.0.0/0 -m multiport -p tcp --sport 80,443,22,20,21,465 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
+$INPUTW -s 0.0.0.0/0 -m multiport -p tcp --sport 80,443,8080,22,20,21,465 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
 $INPUTW -s 0.0.0.0/0 -m multiport -p udp --sport 53,123 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
 $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m conntrack --ctstate NEW -m comment --comment "Sarg y SSH entrante para #admins" -j ACCEPT
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate NEW -m comment --comment "ICMP para #admins" -j ACCEPT

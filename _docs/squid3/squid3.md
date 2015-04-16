@@ -1,5 +1,5 @@
 acl usuarios src {{redlan}}
-acl Safe_ports port 80 443
+acl Safe_ports port 80 443 8080
 acl manager proto cache_object
 acl CONNECT method CONNECT
 
