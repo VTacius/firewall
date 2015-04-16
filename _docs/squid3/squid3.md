@@ -1,11 +1,13 @@
 acl usuarios src {{redlan}}
-acl Safe_ports port 80 443 8080
+acl Safe_ports port 80 443 8080 20 21
 acl manager proto cache_object
 acl CONNECT method CONNECT
 
 http_access deny !Safe_ports
 http_access allow usuarios
 http_access deny all
+
+ftp_passive off
 
 http_port {{ipaddresslan}}:3128 intercept
 cache_mem 469 MB
