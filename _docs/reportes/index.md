@@ -97,7 +97,7 @@ MAFI
 Creamos el directorio y normalizamos permisos
 {% highlight bash %}
 mkdir /var/www/sarg
-chown www-data:www-data /var/www/sarg
+chown -R www-data:www-data /var/www/sarg
 {% endhighlight %}
 
 Restringimos el acceso (Cuidado con el momento en que piden la nueva contraseña):
