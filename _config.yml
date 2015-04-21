@@ -18,12 +18,12 @@ description: "Documentacion Configuración de Iptables + Squid3 + SquidGuard com
 
 # This URL is the main adresse. Don't include a slash at the end.
 #
-url: "http://vtacius.github.io:4000/firewall"
+url: "http://vtacius.github.io/firewall"
 baseurl: "/firewall"
 
 # This URL points directly to the images directory making
 # things easier to link to images in posts and templates. It needs a slash.
-urlimg: "http://vtacius.github.io:4000/firewall/images"
+urlimg: "http://vtacius.github.io/firewall/images"
 
 # Logo size is 600x80 pixels
 logo: "logo.png"
