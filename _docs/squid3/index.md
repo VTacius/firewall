@@ -6,7 +6,7 @@ title: Configuración de Squid
 orden: 4
 ---
 
-# Configuración de Squid
+## Configuración de Squid
 Borre el contenido del fichero de configuración de Squid, y copie el contenido siguiente.
 Asegúrese de hacer una copia del contenido limpia, cuide los saltos de línea y tabulaciones.
 
@@ -14,7 +14,7 @@ Asegúrese de hacer una copia del contenido limpia, cuide los saltos de línea y
 {% include_relative squid3.md %}
 {% endhighlight %}
 
-#Personalizando la configuración: 
+## Personalizando la configuración: 
 Los siguientes comandos configuran Squid de acuerdo a los parámetros en `/root/fws/infraestructura.sh`
 
 {% highlight bash %}
@@ -31,6 +31,22 @@ url_rewrite_children 5 startup=0 idle=1 concurrency=3
 
 Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 15 startup=0 idle=1 concurrency=5`, que sin embargo es fácilmente superable por algunos servidores
 
-# Prueba de configuración
+## Prueba de configuración
 Ni siquiera reinicie Squid3 aún, realizaremos pruebas hasta que hayamos configurado squidGuard.
 
+## Configuración avanzada
+La experiencia dice que si su enlace no es de al menos 5 Mbps, es conveniente poner un límite global a squid.  
+Puede calcular el valor a usar con  la formula `(x * 1000) / 8`, donde `x` es la velocidad de su enlace en Kbps.  
+Tenga cuidado al convertir desde Mbps; en general, cerciórese bien de los datos de su enlace.
+
+La ubicación de esta configuración es inmediatamente antes de las directivas http_access.
+
+{% highlight squid %}
+delay_pools 1
+delay_class 1 1
+delay_access 1 allow all
+delay_parameters 1 64000/64000
+
+http_access deny !Safe_ports
+[...]
+{% endhighlight %}
