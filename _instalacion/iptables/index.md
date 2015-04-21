@@ -4,7 +4,15 @@ site.author : Alexander Ortiz
 author : Alexander Ortiz
 title : "Configuración de red: Filtros de paquetes, rutas y nateo"
 orden : 3
+header: no
 ---
+
+<div class="panel radius" markdown="1">
+**Tabla de contenido**
+{: #toc }
+*  TOC
+{:toc}
+</div>
 
 # Configuración de red: Filtros de paquetes, rutas y nateo
 

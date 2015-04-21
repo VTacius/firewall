@@ -4,7 +4,15 @@ site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Configuración de Squid
 orden: 4
+header: no
 ---
+
+<div class="panel radius" markdown="1">
+**Tabla de contenido**
+{: #toc }
+*  TOC
+{:toc}
+</div>
 
 ## Configuración de Squid
 Borre el contenido del fichero de configuración de Squid, y copie el contenido siguiente.

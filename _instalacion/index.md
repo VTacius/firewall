@@ -4,6 +4,7 @@ site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Directivas para instalación del sistema base
 orden: 0
+header: no
 ---
 
 # Directivas para instalación del sistema base

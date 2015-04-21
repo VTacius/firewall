@@ -1,33 +1,23 @@
-<ul>
-{% assign items = (site.docs | sort: 'orden') %}
-{% for album in items %}
-    <li>
-        {% assign direccion =  {{album.url}} | prepend:{{site.baseurl}} | remove: "index.html" %}
-        <a href="{{ direccion }}">{{ album.title }}</a>
-    </li>
-{% endfor %}
-</ul>
-
+<center><nav id="pagination-centered">
+{% assign items = (site.instalacion | sort: 'orden') %}
 {% for document in items %}
     {% assign document_url = document.url %}
     {% if document_url == page.url %}
         {% if forloop.first %}
-            {% assign previous = forloop.index0 | minus: 1 %}
-            {% assign previous_page = items[previous].url | prepend:{{site.baseurl}} | remove: "index.html" %}
-            <span class="prev disabled">Back</span>
+            <span class="radius button small disabled">Back</span>
         {% else %}
             {% assign previous = forloop.index0 | minus: 1 %}
             {% assign previous_page = items[previous].url | prepend:{{site.baseurl}} | remove: "index.html" %}
-            <a href="{{ previous_page }}" class="prev">Back</a>
+            <a class="radius button small" href="{{ previous_page}}" class="prev">Anterior: {{items[previous].title}}</a>
         {% endif %}
         {% if forloop.last %}
-            <span class="next disabled">Next</span>
-            {% assign next = forloop.index0 | plus: 1 %}
-            {% assign next_page = items[next].url | prepend:{{site.baseurl}} | remove: "index.html"%}
+            <span class="radius button small disabled">Next</span>
         {% else %}
             {% assign next = forloop.index0 | plus: 1 %}
             {% assign next_page = items[next].url | prepend:{{site.baseurl}} | remove: "index.html"%}
-            <a href="{{ next_page }}" class="next">Next</a>
+            <a class="radius button small" href="{{ next_page }}" class="next">Siguiente: {{items[next].title}}</a>
         {% endif %}
     {% endif %}
 {% endfor %}
+</nav></center>
+

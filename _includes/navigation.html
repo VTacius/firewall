@@ -1,0 +1,57 @@
+
+<div id="navigation" class="sticky">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+      <h1 class="show-for-small-only"><a href="{{ site.url }}" class="icon-tree"> {{ site.title }}</a></h1>
+    </li>
+       <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+    </ul>
+    <section class="top-bar-section">
+{% comment %}
+
+    ____  _       __    __     _   __            _             __  _           
+   / __ \(_)___ _/ /_  / /_   / | / /___ __   __(_)___ _____ _/ /_(_)___  ____ 
+  / /_/ / / __ `/ __ \/ __/  /  |/ / __ `/ | / / / __ `/ __ `/ __/ / __ \/ __ \
+ / _, _/ / /_/ / / / / /_   / /|  / /_/ /| |/ / / /_/ / /_/ / /_/ / /_/ / / / /
+/_/ |_/_/\__, /_/ /_/\__/  /_/ |_/\__,_/ |___/_/\__, /\__,_/\__/_/\____/_/ /_/ 
+        /____/                                 /____/                          
+
+{% endcomment %}
+      <ul class="right">
+        <li><a href="{{ site.url }}/sobre"/>Sobre el proyecto</a></li>
+        <li><a href="{{ site.url }}/search"/>Búsqueda</a></li>
+      </ul>
+{% comment %}
+
+    __         ______     _   __            _             __  _           
+   / /   ___  / __/ /_   / | / /___ __   __(_)___ _____ _/ /_(_)___  ____ 
+  / /   / _ \/ /_/ __/  /  |/ / __ `/ | / / / __ `/ __ `/ __/ / __ \/ __ \
+ / /___/  __/ __/ /_   / /|  / /_/ /| |/ / / /_/ / /_/ / /_/ / /_/ / / / /
+/_____/\___/_/  \__/  /_/ |_/\__,_/ |___/_/\__, /\__,_/\__/_/\____/_/ /_/ 
+                                          /____/                          
+
+{% endcomment %}
+    <ul class="left">
+        <li><a href="{{ site.url }}"/>Inicio</a></li>
+        <li class="divider"></li>
+        {% for clave in site.collections %}
+            {% for sitio in clave %}
+                {% if sitio.label != null %}
+                        <li class="has-dropdown">
+                            <a href="{{ domain }}{{ link.url }}">{{sitio.label}}</a>
+                            <ul class="dropdown">
+                            {% assign cole = (site[sitio.label] | sort : "orden") %}
+                            {% for url in cole %}
+                                <li><a href="{{site.baseurl}}{{ url.url | remove: "index.html"}} ">{{url.title}}</a></li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                {%endif%}
+            {% endfor %}
+        {%endfor%}
+      </ul>
+    </section>
+  </nav>
+</div><!-- /#navigation -->

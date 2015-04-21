@@ -4,7 +4,14 @@ site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Configuración Primaria de Red
 orden: 1
+header: no
 ---
+<div class="panel radius" markdown="1">
+**Table of Contents**
+{: #toc }
+*  TOC
+{:toc}
+</div>
 
 # Configuración Primaria de Red
 

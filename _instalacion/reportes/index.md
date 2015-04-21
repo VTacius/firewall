@@ -4,7 +4,15 @@ site.author : Alexander Ortiz
 author : Alexander Ortiz
 title: Otras configuraciones importantes
 orden: 6
+header: no
 ---
+
+<div class="panel radius" markdown="1">
+**Tabla de contenido**
+{: #toc }
+*  TOC
+{:toc}
+</div>
 
 # Otras configuraciones importantes
 ## Configuración de Registro de Iptables
