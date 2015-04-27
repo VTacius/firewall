@@ -1,5 +1,5 @@
 <center><nav id="pagination-centered">
-{% assign items = (site.instalacion | sort: 'orden') %}
+{% assign items = (site[page.collection] | sort: 'orden') %}
 {% for document in items %}
     {% assign document_url = document.url %}
     {% if document_url == page.url %}
