@@ -9,7 +9,7 @@ title: "Firewall"
 header: no
 widget-1:
     title: "Primer vistazo al proyecto"
-    url: 'primer-vistazo'
+    url: 'primer_vistazo'
     image: Diagrama_de_Red.png
 widget-2:
     title: "Guía de configuración"

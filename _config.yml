@@ -23,7 +23,7 @@ baseurl: "/firewall"
 
 # This URL points directly to the images directory making
 # things easier to link to images in posts and templates. It needs a slash.
-urlimg: "http://vtacius.github.io/firewall/images"
+urlimg: "/firewall/assets/proyecto"
 
 # Logo size is 600x80 pixels
 logo: "logo.png"
