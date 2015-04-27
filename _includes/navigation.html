@@ -40,7 +40,7 @@
             {% for sitio in clave %}
                 {% if sitio.label != null %}
                         <li class="has-dropdown">
-                            <a href="{{ domain }}{{ link.url }}">{{sitio.label}}</a>
+                            <a href="{{ site.baseurl }}/{{ sitio.name }}">{{sitio.label}}</a>
                             <ul class="dropdown">
                             {% assign cole = (site[sitio.label] | sort : "orden") %}
                             {% for url in cole %}
