@@ -39,8 +39,8 @@ url_rewrite_children 5 startup=0 idle=1 concurrency=3
 
 Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 15 startup=0 idle=1 concurrency=5`, que sin embargo es fácilmente superable por algunos servidores
 
-## Prueba de configuración
-Ni siquiera reinicie Squid3 aún, realizaremos pruebas hasta que hayamos configurado squidGuard.
+## Despliegue de configuración
+Ni siquiera reinicie Squid3 aún, realizaremos el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
 
 ## Configuración avanzada
 La experiencia dice que si su enlace no es de al menos 5 Mbps, es conveniente poner un límite global a squid.  

@@ -137,6 +137,13 @@ sass:
     sass_dir: _sass
     style: :compressed
 
+#############################################
+#
+# Configuracion del proyecto Firewall
+#
+#########################
+
+version_manual: FID-3.1
 
 collections:
     instalacion:

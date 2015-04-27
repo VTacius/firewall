@@ -56,12 +56,13 @@ multi on
 MAFI
 {% endhighlight %}
 
+# Despliegue de la configuración
 Reinicie la red para que la anterior configuración tome efecto.
 {% highlight bash %}
 service networking restart
 {% endhighlight %}
 
-Si estaba trabajando desde consola y cambió las interfaces (Cosa que de hecho no debió pasar, ¿Está seguro de como ha conectado físicamente las interfaces?), debió además perder la sesión SSH, remítase al anexo Notas sobre el uso de SSH 
+En este punto, pudo haber perdido la sesión ssh por no fijarse de la ubicación de las interfaces. Esa es la única razón ya que aún no se han configurado permisos
 
 # Prueba de configuración
 Ejecutar `ip addr show` debería devolver todas físicas como activas y configuradas. 

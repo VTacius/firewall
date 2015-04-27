@@ -15,6 +15,7 @@ header: no
 </div>
 
 # Otras configuraciones importantes
+
 ## Configuración de Registro de Iptables
 En principio, estas configuraciones no parecerían esenciales para el correcto funcionamiento de su firewall. Sin embargo, TODAS son fundamentales para que la experiencia de uso sea verdaderamente profesional tanto para los usuarios como para usted como administrador.  
 
@@ -40,10 +41,10 @@ Configuramos logrotate
     {% include_relative logrotate_iptables.md %}
 {% endhighlight %}
 
-Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En base al espacio del que disponga en disco, puede configurar que guarde menos anecdóticos configurando el valor rotate.
+Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En base al espacio del que disponga en disco, puede configurar que guarde menos anecdóticos configurando el valor `rotate`.
 
 ## Configuración de Mensaje de Error
-__Esta página de error sólo aparece para contenido HTTP, en HTTPS el navegador devuelve como resultado un error 1111__
+**Esta página de error sólo aparece para contenido HTTP, en HTTPS el navegador devuelve como resultado un error 1111**  
 Junto con esta guía, debió habérsele proporcionado el fichero error-html.tgz que contiene un pequeño sitio que muestra un mensaje de error. Envíelo al servidor ejecutando scp desde el equipo remoto que tiene el fichero:
 {% highlight bash %}
 scp error-html.tgz root@192.168.2.26:/root/fws
@@ -66,7 +67,7 @@ sed -i "s/{{ipaddresslan}}/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraest
 sed -i "s/{{MarcadorInstitucion}}/`perl -ne 'print $_=~m/^INSTITUCION=\"(.*)\"/' /root/fws/infraestructura.sh `/g" /var/www/index.php
 {% endhighlight %}
 
-### Prueba de configuración
+## Prueba de configuración
 Compruebe que el directorio `/var/www/` quede de la siguiente forma:
 {% highlight bash %}
 tree /var/www/ 
@@ -154,4 +155,12 @@ sed -i '/\trotate/c\\trotate 10' /etc/logrotate.d/squid3
 sed -i '/postrotate/i\\tprerotate\n\t\tbash /root/fws/reportes.sh \n\tendscript' /etc/logrotate.d/squid3
 {% endhighlight %}
 
-Una vez configurada, tendrá que esperar cosa de un día para que al acceder a sitio pueda encontrar las estadística
+# Prueba de configuración
+Envie un correo de prueba
+{% highlight bash %}
+mutt -nx -s "Probando desde cero el Mutt" fws@salud.gob.sv <<MAFI
+Este correo es la prueba final en Firewall
+MAFI
+{% endhighlight %}
+
+Una vez configurada, tendrá que esperar cosa de un día para que al acceder a sitio pueda encontrar las estadísticas

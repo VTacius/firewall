@@ -18,7 +18,6 @@ header: no
 
 Tomando en cuenta que ahora tiene una red totalmente funcional, le será posible seguir con las siguientes instrucciones que incluyen la instalación de paquetes, actividad que hace uso de la red.
 
-
 ## /etc/apt/sources.list
 Configure los repositorios con los tres siguientes comandos que puede copiar y pegar de una vez
 {% highlight bash %}
@@ -36,8 +35,6 @@ deb http://debian.salud.gob.sv/debian-security/ wheezy/updates main contrib non-
 deb-src http://debian.salud.gob.sv/debian-security/ wheezy/updates main contrib non-free
 #Fin del archivo /etc/apt/sources.list
 MAFI
-
-aptitude update
 {% endhighlight %}
 
 Y actualice el sistema, tarea que debe realizar cada tanto:
@@ -59,10 +56,10 @@ aptitude -y install vim htop iptraf lshw nmap pv python3 squidview sudo tcpdump 
 Configure VIM
 Active el resaltado de sintaxis, numerado de líneas,  identado a 4 espacios y, en el caso que el fondo de su terminal sea oscuro (Algo que recomiendo para la comodidad de sus ojos), configure el patrón de colores para tal efecto.
 {% highlight bash %}
-sed -i '/^syntax /a set number' /etc/vim/vimrc
 sed -i '/\"syntax on/c\syntax on' /etc/vim/vimrc
 sed -i '/\"set background=dark/c\set background=dark' /etc/vim/vimrc
 sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
+sed -i '/^syntax /a set number' /etc/vim/vimrc
 {% endhighlight %}
 
 Active los módulos para manejo de sesiones FTP.

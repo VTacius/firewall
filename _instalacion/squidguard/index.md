@@ -73,7 +73,7 @@ Normalice permisos a todos los archivos que ha creado:
 chown -R proxy:proxy BL custom
 {% endhighlight %}
 
-## Despliegue de configuración
+# Despliegue de configuración
 Reinicie squid3, quién se encarga de iniciar/apagar a squidGuard
 {% highlight bash %}
 service squid3 restart
@@ -94,7 +94,7 @@ Pese a lo anteriormente dicho, podría aceptar también esta línea (Muchas, de 
 2015-03-26 12:29:31 [14125] INFO: recalculating alarm in 30 seconds
 {% endhighlight %}
 
-## Prueba de configuración
+# Prueba de configuración
 La prueba más convincente de la configuración de filtro de contenido es ver a los usuarios navegando correctamente.  
 En ese caso, necesita avanzar en Otras configuraciones importantes hasta Configuración de Mensajes de Error
 

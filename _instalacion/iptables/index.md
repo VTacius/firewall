@@ -31,13 +31,44 @@ El contenido de dicho fichero de muestra a continuación
     {% include_relative firewall.md %}
 {% endhighlight %}
 
-__Personalizando la configuración:__ Toda regla adicional a la estructura de este fichero debe ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo; de esta forma podrá seguir recibiendo  actualizaciones de este fichero a futuro sin problemas para sus configuraciones.  
+## Personalizando la configuración: 
+Toda regla adicional a la estructura de este fichero debe ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo; de esta forma podrá seguir recibiendo  actualizaciones de este fichero a futuro sin problemas para sus configuraciones.  
 __En suma, esto significa que esta totalmente prohibido modificar este fichero.__
 
 Pese a todo, el fichero pretende ser bastante didáctico, esperando de hecho que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades
 
+## Configuración de Tablas Nat y rutas en general
+Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh`.  
+El contenido de dicho fichero se muestra a continuación
+{% highlight bash %}
+    {% include_relative rutas.md %}
+{% endhighlight %}
+
+## Personalizando la configuración:
+Al igual que con el archivo `/root/fws/firewall`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
+Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
+
+## Configuración de DMZ
+**Si usted no tiene una red de servidores como tal, la forma más sencilla es comentarizar su post-up en `/etc/network/interfaces`**  
+
+La DMZ puede ser un trabajo realmente complicado. No hay una formula mágica: Aún con el mejor asistente gráfico de configuración, se requiere que usted realmente entienda la red que esta configurando. 
+
+El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del fichero establecimiento.sh. 
+
+{% highlight bash %}
+    {% include_relative dmz.md %}
+{% endhighlight %}
+
+## Personalizando la configuración:
+¿Es lícito cambiar dmz.sh? No lo creemos necesario, tiene suficiente para trabajar en establecimiento, pero suponemos que este fichero es menos restrictivo que firewall.sh
+
 ## Configuración de reglas específicas para el establecimiento
-En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las actuales. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.
+En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las actuales. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
+Un ejemplo del fichero `/root/fws/establecimiento.sh` es mostrada a continuación
+{% highlight bash %}
+    {% include_relative establecimiento.md %}
+{% endhighlight %}
+
 
 __Agregar un servicio para toda la red__
 Si bien podría no ser el caso más frecuente, bastaría agregar una regla como la siguiente con sus respectivas modificaciones  
@@ -76,27 +107,7 @@ iptables -t filter -A FWD_LOCAL -d 10.30.20.5 -p tcp -m multiport --dport 80 -j 
 {% endhighlight %}
 En casos muy especificos, podría necesitar que algún dispositivo no pase de ninguna forma por el proxy. La cadena SERVICIOS le sería útil para eliminar la redirección HTTP de dicho dispositivo, ya que ocurre antes de dichas reglas
 
-## Configuración de Tablas Nat y rutas en general
-Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh`.  
-El contenido de dicho fichero se muestra a continuación
-{% highlight bash %}
-    {% include_relative rutas.md %}
-{% endhighlight %}
-
-__Personalizando la configuración:__ 
-Al igual que con el archivo `/root/fws/firewall`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
-Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
-
-## Configuración de DMZ
-La DMZ puede ser un trabajo realmente complicado. No hay una formula mágica: Aún con el mejor asistente gráfico de configuración, se requiere que usted realmente entienda la red que esta configurando. 
-
-El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del fichero establecimiento.sh. ¿Es lícito cambiar dmz.sh? No lo creemos necesario, tiene suficiente para trabajar en establecimiento, pero suponemos que este fichero es menos restrictivo que firewall.sh
-
-{% highlight bash %}
-    {% include_relative dmz.md %}
-{% endhighlight %}
-
-## Despliegue de la configuración
+# Despliegue de la configuración
 Habiendo configurado los archivos anteriores, reinicie la red:
 {% highlight bash %}
 service networking restart
@@ -115,7 +126,7 @@ ifdown --force eth1
 
 Y podrá reiniciar la red sin ningún problema
 
-## Prueba de configuración
+# Prueba de configuración
 Desde alguno de los cliente en la red interna debe acceder a los servicios del MINSAL, y los servidores de HACIENDA. Algunos ejemplos que puede hacer:
 {% highlight bash %}
 nslookup debian.salud.gob.sv

@@ -20,7 +20,7 @@ NOMBRE=firewall
 ## Dominio del equipo (salud.gob.sv por defecto)
 DOMINIO=salud.gob.sv
 ## Versión de la guía que esta usando para configurar
-VERSION=4.8
+VERSION={{site.version_manual}}
 
 #### Infraestructura de red ##### 
 ### WAN
@@ -42,7 +42,7 @@ LAN=10.20.20.0/24
 IND=eth2
 ## IP interfaz de Red DMZ
 SRD=10.30.20.1
-## ReD dmZ
+## Red DMZ
 DMZ=10.30.20.0/24 
 
 ### Red WAN Alterna hacia DMZ Minsal y MH
@@ -65,7 +65,7 @@ RWA="
     192.168.85.0/24
     192.168.87.0/24
 " 
-## Grupos con IP para listas varias
+## Creación de grupos IPSET para permisos específicos
 for grupo in ${!listados[*]}
 do
     ipset -exist create $grupo hash:ip
