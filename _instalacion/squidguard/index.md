@@ -24,8 +24,8 @@ Si va a cambiar su contenido, tenga especial cuidado con los comentarios: No com
 # Personalizando la configuración: 
 Los siguientes comandos son la primera configuración que debe hacerse, automáticamente y en base a lo establecido en `/root/fws/infraestructura.sh`
 {% highlight bash %}
-sed -i "s_{{redlan}}_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf 
-sed -i "s_{{ipaddresslan}}_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf
+sed -i "s_<<redlan>>_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf 
+sed -i "s_<<ipaddresslan>>_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf
 {% endhighlight %}
 
 Las siguientes acciones configuran todos los archivos referenciados en squidguard y que permiten otra serie de personalizaciones básicas a squidGuard.
@@ -116,7 +116,7 @@ Por otro lado, navegar hacia www.google.com.sv no debería causar mayores proble
 echo "www.google.com.sv/- 10.20.20.5 - GET -" | squidGuard -c /etc/squidguard/squidGuard.conf -d
 2015-03-26 12:39:27 [14206] INFO: recalculating alarm in 2073 seconds
 2015-03-26 12:39:27 [14206] INFO: squidGuard ready for requests (1427387967.027)
-{{esta línea esta en blanco en la consola}}
+<<esta línea esta en blanco en la consola>>
 2015-03-26 12:39:27 [14206] INFO: squidGuard stopped (1427387967.028)
 {% endhighlight %}
 

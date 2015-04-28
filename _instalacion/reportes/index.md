@@ -45,7 +45,9 @@ Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En
 
 ## Configuración de Mensaje de Error
 **Esta página de error sólo aparece para contenido HTTP, en HTTPS el navegador devuelve como resultado un error 1111**  
-Junto con esta guía, debió habérsele proporcionado el fichero error-html.tgz que contiene un pequeño sitio que muestra un mensaje de error. Envíelo al servidor ejecutando scp desde el equipo remoto que tiene el fichero:
+En la versión web de esta guía, puede descargar el fichero comprimido [error-html.tgz]({{site.baseurl}}/assets/download/error-html.tgz), que contiene un pequeño sitio que muestra un mensaje de error. En otro caso, debio serle proporcionado junto con la guía.
+
+Envíelo al servidor ejecutando scp desde el equipo remoto que tiene el fichero:
 {% highlight bash %}
 scp error-html.tgz root@192.168.2.26:/root/fws
 {% endhighlight %}
@@ -60,11 +62,11 @@ Descomprima error-html.tgz en /var/www/
 tar -xzvf /root/fws/error-html.tgz -C /var/www/
 {% endhighlight %}
 
-Cambie 10.20.20.1 por la dirección IP de la interfaz del lado de LAN.
+Los siguientes comandos configuran la paǵina de error según la información contenida en `/root/fws/infraestructura`
 {% highlight bash %}
-sed -i "s/{{ipaddresslan}}/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/script/default.css
-sed -i "s/{{ipaddresslan}}/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/index.php
-sed -i "s/{{MarcadorInstitucion}}/`perl -ne 'print $_=~m/^INSTITUCION=\"(.*)\"/' /root/fws/infraestructura.sh `/g" /var/www/index.php
+sed -i "s/<<ipaddresslan>>/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/script/default.css
+sed -i "s/<<ipaddresslan>>/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/index.php
+sed -i "s/<<MarcadorInstitucion>>/`perl -ne 'print $_=~m/^INSTITUCION=\"(.*)\"/' /root/fws/infraestructura.sh `/g" /var/www/index.php
 {% endhighlight %}
 
 ## Prueba de configuración

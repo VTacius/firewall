@@ -1,4 +1,4 @@
-acl usuarios src {{redlan}}
+acl usuarios src <<redlan>>
 acl Safe_ports port 80 443 8080 20 21
 acl manager proto cache_object
 acl CONNECT method CONNECT
@@ -9,7 +9,7 @@ http_access deny all
 
 ftp_passive off
 
-http_port {{ipaddresslan}}:3128 intercept
+http_port <<ipaddresslan>>:3128 intercept
 cache_mem 469 MB
 cache_dir aufs /var/spool/squid3 500 16 256
 
@@ -26,7 +26,7 @@ connect_timeout 20 seconds
 shutdown_lifetime 3 seconds
 cache_mgr fws@salud.gob.sv
 httpd_suppress_version_string on
-visible_hostname {{hostname}}
+visible_hostname <<hostname>>
 
 error_default_language  es-sv
 prefer_direct on

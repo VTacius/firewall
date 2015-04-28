@@ -146,12 +146,12 @@ src lista_negra {
 }
 
 src usuarios_laboral {
-    ip  {{redlan}}
+    ip  <<redlan>>
     within  laboral
 }
 
 src usuarios_almuerzo {
-    ip  {{redlan}}
+    ip  <<redlan>>
     within  almuerzo
 }
 
@@ -168,23 +168,23 @@ acl {
     } 
     
     lista_negra {
-        redirect http://{{ipaddresslan}}/index.php?purl=%u&razon=%t
+        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t
     }else{
-        redirect http://{{ipaddresslan}}/index.php?purl=%u&razon=%t
+        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t
     }
 
     usuarios_laboral  { 
         pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any 
-        redirect http://{{ipaddresslan}}/index.php?purl=%u&razon=%t 
+        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
    
     usuarios_almuerzo  { 
         pass sitios !in-addr !adv !archivos !compras !descargas !porn !proxy !radio !sexo !tracker !warez !web-proxy !any 
-        redirect http://{{ipaddresslan}}/index.php?purl=%u&razon=%t 
+        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
  
     default { 
         pass   none 
-        redirect http://{{ipaddresslan}}/index.php?purl=%u&razon=%t 
+        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
 }

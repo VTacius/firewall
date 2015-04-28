@@ -26,9 +26,9 @@ Asegúrese de hacer una copia del contenido limpia, cuide los saltos de línea y
 Los siguientes comandos configuran Squid de acuerdo a los parámetros en `/root/fws/infraestructura.sh`
 
 {% highlight bash %}
-sed -i "s_{{redlan}}_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
-sed -i "s_{{ipaddresslan}}_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
-sed -i "s/{{hostname}}/`hostname -f`/g" /etc/squid3/squid.conf
+sed -i "s_<<redlan>>_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
+sed -i "s_<<ipaddresslan>>_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
+sed -i "s/<<hostname>>/`hostname -f`/g" /etc/squid3/squid.conf
 {% endhighlight %}
 
 Luego, puede cambiar los valores por defecto para url_rewrite_children:
