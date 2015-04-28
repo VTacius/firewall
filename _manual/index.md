@@ -2,14 +2,11 @@
 layout: docs
 site.author : Alexander Ortiz
 author : Alexander Ortiz
-title: Directivas para mantenimiento del Firewall
+title: Comprobación rápida de la configuración de su Firewall 
 orden: 0
 header: no
 ---
-# Directivas para mantenimiento del Firewall
-El siguiente proyecto tiene por finalidad sugerir una serie de pautas para darle mantenimiento al firewall anterior, que si bien recuerda, también era solo un número de pautas
-
-## Comprobación rápida de la configuración de su Firewall
+# Comprobación rápida de la configuración de su Firewall
 
 * Conéctese al servidor por SSH. Debe haber configurado la IP del equipo desde el cual se conecta en la lista `admins` en `/root/fws/infraestructura.sh`
 * Revise el log de squidGuard. SquidGuard está tan alto en la configuración que sus registros sirven por si sólo para confirmar gran parte de toda la infraestructura.  
@@ -24,4 +21,4 @@ Este es el mensaje que squid debería mostrarle en la última línea
 * Acceda con su cliente FTP favorito (Por favor, que este no sea el navegador) al FTP en la DMZ de sucursal en ftp://192.168.87.2/
 
 Estas acciones deberían ser suficientes para afirmar que la configuración de su proxy esta funcionando como se debe.  
-Y no, no hay error alguno en llamarlas "Comprobaciones rápidas". El correcto funcionamiento de un Firewall puede ser un poco más complicado, tal como lo verá en las siguientes páginas
+Y no, no hay error alguno en llamarlas **"Comprobaciones rápidas"**. Comprobar el correcto funcionamiento de un Firewall puede ser un poco más complicado, tal como lo verá en las siguientes páginas.

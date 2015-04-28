@@ -5,6 +5,7 @@ title: "Primer Vistazo"
 permalink: "/primer_vistazo/"
 header: no
 ---
+El presente documento tiene por finalidad sugerir algunas pautas que lleven a la configuración de un servidor Firewall de pila (casi, casi) completa. El filtrado de los paquetes de red se han de realizar con el conocido iptables. El tráfico web (Hoy en día, el asunto principal del ocio en su red local), será filtrado con mediante Squid llamando a SquidGuard como módulo, tomando como referencias las listas negras de !shallalist.de
 
 Una forma de entender la infraestructura que se pretende montar es mediante el siguiente gráfico
 ![Imagen]({{site.url}}/assets/proyecto/Diagrama_de_Red.png)

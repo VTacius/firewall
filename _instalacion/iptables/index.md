@@ -19,7 +19,8 @@ header: no
 ## Configuración de archivo de infraestructura
 El siguiente archivo configura la infraestructura de red que ha ideado dentro de su Establecimiento.  
 Los demás archivos de configuración leerán desde acá los valores que han de usar para configurarse.  
-Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción:
+Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción.
+Cree el fichero /root/fws/infraestructura.sh con el siguiente contenido y configure según los comentarios:
 {% highlight bash %}
     {% include_relative infraestructura.md %}
 {% endhighlight %}
@@ -27,15 +28,12 @@ Los comentarios son bastante ilustrativos sobre como debe configurarse cada opci
 ## Configuración del Filtrado de Paquetes de Red
 Cree el fichero de configuración para la tabla Filter de Iptables en `/root/fws/firewall.sh`  
 El contenido de dicho fichero de muestra a continuación
+
+El fichero, pese a no estar recomendada su modificación, pretende ser bastante didáctico, esperando de hecho que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades
+
 {% highlight bash %}
     {% include_relative firewall.md %}
 {% endhighlight %}
-
-## Personalizando la configuración: 
-Toda regla adicional a la estructura de este fichero debe ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo; de esta forma podrá seguir recibiendo  actualizaciones de este fichero a futuro sin problemas para sus configuraciones.  
-__En suma, esto significa que esta totalmente prohibido modificar este fichero.__
-
-Pese a todo, el fichero pretende ser bastante didáctico, esperando de hecho que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades
 
 ## Configuración de Tablas Nat y rutas en general
 Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh`.  
@@ -43,10 +41,6 @@ El contenido de dicho fichero se muestra a continuación
 {% highlight bash %}
     {% include_relative rutas.md %}
 {% endhighlight %}
-
-## Personalizando la configuración:
-Al igual que con el archivo `/root/fws/firewall`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
-Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
 
 ## Configuración de DMZ
 **Si usted no tiene una red de servidores como tal, la forma más sencilla es comentarizar su post-up en `/etc/network/interfaces`**  
@@ -59,53 +53,30 @@ El presente fichero habilita a una red de servidores web para ser alcanzados des
     {% include_relative dmz.md %}
 {% endhighlight %}
 
-## Personalizando la configuración:
-¿Es lícito cambiar dmz.sh? No lo creemos necesario, tiene suficiente para trabajar en establecimiento, pero suponemos que este fichero es menos restrictivo que firewall.sh
-
 ## Configuración de reglas específicas para el establecimiento
-En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las actuales. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
-Un ejemplo del fichero `/root/fws/establecimiento.sh` es mostrada a continuación
+En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las que ya han sido configuradas en los ficheros anteriores. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
+Un ejemplo del fichero `/root/fws/establecimiento.sh`, con algunos ejemplos listos para usar y útiles para muchos establecimientos, es mostrada a continuación
 {% highlight bash %}
     {% include_relative establecimiento.md %}
 {% endhighlight %}
 
+# Personalización de la configuración
+En definitiva, la mayoría de estos ficheros pueden recibir actualizaciones, por lo que es conveniente que se limite a usar el fichero `/root/fws/establecimiento.sh` para las reglas propias de sus establecimiento.
 
-__Agregar un servicio para toda la red__
-Si bien podría no ser el caso más frecuente, bastaría agregar una regla como la siguiente con sus respectivas modificaciones  
-{% highlight bash %}
-$FWD_SLAN -d [[destino]] -p tcp -m multiport --dport [[puerto]] -m conntrack --ctstate NEW -j ACCEPT
-{% endhighlight %}
+Si usted tiene alguna sugerencia para el cambio de estos ficheros, comuníquese con el nivel central, que estará agradecido por sus sugerencias.
 
-Donde:  
-[[destino]]
- : Dirección IP del servidor donde se encuentra el servicio que quiere hacer accesible
+`/root/fws/firewall.sh`
+ : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo** 
 
-[[puerto]]
- : Una lista separada por comas de puertos que el servicio (O servicios) necesitan
+`/root/fws/rutas.sh`
+ : Al igual que con el archivo `/root/fws/firewall.sh, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
+Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
 
-[[comentario]]
- : Una breve reseña del servicio añadido.
+`/root/fws/dmz.sh`
+ : Tampoco lo vaya a cambiar. Parece que ya hemos explicado nuestras razones, `establecimiento.sh` tiene lo suficiente para poder modificar los permisos relacionados con su red DMZ
 
-__Agregar un servicio para usuarios especificos:__
-Podría ser una práctica más común de lo que cree. De hecho, sugerimos que así sea.  
-Primero necesita configurar un grupo de ip en `/root/fws/infraestructura.sh`, siguiendo el ejemplo del grupo `"ejemplo"`, agregando una IP por línea.  
-Luego, referencia ese grupo dentro de la regla personalizada de la siguiente forma.
-
-{% highlight bash %}
-$FWD_SSET -m set --match-set [[grupo]] src -d [[destino]] -p tcp -m multiport --dport [[puertos]] -j ACCEPT
-{% endhighlight %}
-
-Donde:
-[[grupo]]
- : Es el nombre del grupo configurado en `/root/fws/infraestructura.sh.`
-
-__Publicación de servicios__ 
-Para publicar un servicio, bastaría con hacer uso de la cadena personalizada SERVICIOS en conjunto con las reglas de acceso en FWD_LOCAL 
-{% highlight bash %}
-iptables -t nat -A SERVICIOS -d 192.168.2.6 -j DNAT --to-destination 10.30.20.5
-iptables -t filter -A FWD_LOCAL -d 10.30.20.5 -p tcp -m multiport --dport 80 -j ACCEPT
-{% endhighlight %}
-En casos muy especificos, podría necesitar que algún dispositivo no pase de ninguna forma por el proxy. La cadena SERVICIOS le sería útil para eliminar la redirección HTTP de dicho dispositivo, ya que ocurre antes de dichas reglas
+`/root/fws/establecimiento.sh`
+ : Hay algunos ejemplos dentro del fichero Este lo puede cambiar todo lo que quiera. Lea en el manual [Extendiendo las ACL de red para su Firewall]({{site.baseurl}}/manual/iptables/) y vea las opciones que tiene para cambiar este fichero.
 
 # Despliegue de la configuración
 Habiendo configurado los archivos anteriores, reinicie la red:

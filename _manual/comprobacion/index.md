@@ -2,7 +2,7 @@
 layout: docs
 site.author : Alexander Ortiz
 author : Alexander Ortiz
-title: Comprobación de la Instalación
+title: Comprobación exhaustiva de la configuración de su Firewall
 orden: 1
 header: no
 ---
@@ -13,7 +13,7 @@ header: no
 {:toc}
 </div>
 
-# Comprobación de la Instalación
+# Comprobación exhaustiva de la configuración de su Firewall
 Las siguiente pautas pretenden estar en el orden que se recomienda para ejecutar, siéntase a gusto de ejecutarlas en el orden que más le parezca.  
 Se espera que pueda memorizar todos estos puntos. No se preocupe, que con el tiempo verá que es más sencillo de lo que cree.   
 Se recomienda que revise que estos datos la primera vez, más que para comprobar la funcionalidad del Firewall, para que pueda acostumbrarse al correcto comportamiento del Firewall.  
