@@ -132,7 +132,7 @@ Entonces, hay creadas dos `src` por cada grupo para que coincida con las ACL de 
     {% include_relative squidguard_auth.md %}
 {% endhighlight %}
 
-# Personalizando la configuración  
+## Personalizando la configuración  
 La siguiente configuración es un poco más complicada de lo usual en la medida que sea más complicado para usted usar su propio servidor LDAP. Sin embargo, los siguientes datos pueden funcionar para un servidor configurado según el esquema [rfc230bis](http://www.padl.com/~lukeh/rfc2307bis.txt).
 
 * Configure `ldapbinddn` con el DN de un usuario de lectura sin límites en las lecturas sobre el árbol LDAP. Es decir, los mismo permisos que su administrador pero de LECTURA.
