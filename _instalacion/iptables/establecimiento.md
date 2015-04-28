@@ -37,7 +37,7 @@ FWD_SDMZ="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $INW"
 #$FWD_SLAN -d 10.10.20.5 -p udp -m multiport --dport 7,67,69,13000,1500,1501 -j ACCEPT
 #$FWD_SLAN -d 10.10.20.5 -p icmp -j ACCEPT
 #$FWD_SWAN -s 10.10.20.5 -p udp -m multiport --dport 15000,15001 -j ACCEPT
-#$FWD_SWAN -s 10.10.20.5 -p tcp -m multiport --dport 13111,14000 -j ACCEPT
+#$FWD_SWAN -s 10.10.20.5 -p tcp -m multiport --dport 13000,13111,14000 -j ACCEPT
 
 # Publica un servicio hacia la WAN. 
 # Quizá este interesado en compartir impresoras con Hacienda
