@@ -121,3 +121,28 @@ echo "www.google.com.sv/- 10.20.20.5 - GET -" | squidGuard -c /etc/squidguard/sq
 {% endhighlight %}
 
 En base a ello, puede seguir probando las configuraciones personalizadas que haya estado haciendo con usuarios específicos
+
+# Configuración avanzada
+
+## Configuración de Usuarios y Grupos mediante LDAP
+El siguiente archivo lee los grupos de un servidor LDAP. Obviamente, usted puede configurar más grupos.  
+Tome en cuenta que en el ejemplo existe dos grupos LDAP: `Domains Admins` y `http_noacces` y dos ACL de tiempo: `laboral` y `almuerzo`, estás dos últimas podría obviarlas o establecer un horario nocturno si es que necesita que sea diferente a laboral.  
+Entonces, hay creadas dos `src` por cada grupo para que coincida con las ACL de tiempo, lo que nos da cuatro `src`, luego, tal como he hecho antes, debe configurar los permisos por cada `src en 
+{% highlight squid %}
+    {% include_relative squidguard_auth.md %}
+{% endhighlight %}
+
+# Personalizando la configuración  
+La siguiente configuración es un poco más complicada de lo usual en la medida que sea más complicado para usted usar su propio servidor LDAP. Sin embargo, los siguientes datos pueden funcionar para un servidor configurado según el esquema [rfc230bis](http://www.padl.com/~lukeh/rfc2307bis.txt).
+
+* Configure `ldapbinddn` con el DN de un usuario de lectura sin límites en las lecturas sobre el árbol LDAP. Es decir, los mismo permisos que su administrador pero de LECTURA.
+* Configure `ldapbindpass` con la contraseña de dicho usuario, que como nos gusta resaltar, será mejor si sus permisos son de sólo lectura.
+* Los siguientes comandos configuran el resto del archivo. Esperando que usted conozca bien los datos del servidor al cual se ha de conectar
+  * Cambie **10.40.30.5** por la dirección IP del servidor LDAP
+{% highlight bash %}
+    sed -i 's/<<serverldap>>/10.40.30.5/g/' /etc/squidguard/squidGuard.conf
+{% endhighlight %}
+  * Cambie **ou=Groups,dc=empresa,dc=com** por la base de los grupos LDAP
+{% highlight bash %}
+    sed -i 's/<<basegrupos>>/ou=Groups,dc=empresa,dc=com/g' /etc/squidguard/squidGuard.conf
+{% endhighlight %}

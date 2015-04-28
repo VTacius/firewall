@@ -57,3 +57,7 @@ Si bien es cierto que el firewall no es una estación de trabajo, hay tráfico e
 * Los servidores en DMZ son capaces de usar clientes SMTP y POP3. 
 * Los servidores en DMZ pueden acceder a servicos DNS y NTP.
 * Permisos adicionales pueden ser agregados en el fichero `establecimiento.sh` mediante la cadena personalizada `FWD_DMZ`.
+
+## Consideraciones sobre el tráfico web.
+
+* Creemos que usar ACL de tiempo es una especie de complejidad necesaria. En el almuerzo, debería estar permitido el acceso a algunos sitios más que en la hora laboral. En todo caso, no es común que la gente se quede en la oficina, y de serlo, creemos que es una especie de bonito detalle
