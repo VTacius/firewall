@@ -25,6 +25,11 @@ iptables -t filter -A INPUT -i $IND -j LOG --log-prefix "IPTABLES IN DMZ: "
 iptables -t filter -A OUTPUT -o $IND -j LOG --log-prefix "IPTABLES OUT DMZ: "
 
 ### DMZ ###
+## Servicios para administración/monitoreo para #admins
+FWDA="iptables -t filter -A FWD_DMZ -i $INW -o $IND -d $DMZ -m set --match-set admins src"
+$FWDA -p tcp -m multiport --dport 22,3389,5800,5900,5901,5902 -m conntrack --ctstate NEW -m comment --comment "Administración remota" -j ACCEPT
+$FWDA -p icmp -m comment --comment "Monitoreo Remoto" -j ACCEPT
+
 ## Servicios permitidos a servidores DMZ
 FWDD="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $INW"
 $FWDD -p tcp -m multiport --dport 80,443,22  -d 10.10.20.0/24 -m conntrack --ctstate NEW -m comment --comment "Servicios permitidos hacia DMZ MINSAL para DMZ" -j ACCEPT
