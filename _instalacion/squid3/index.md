@@ -69,7 +69,7 @@ En nuestra configuración, tres cosas son necesarias
 * Eliminar `intercept` de la directiva `http_port`
 
 {% highlight squid %}
-auth_param basic program /usr/lib/squid3/squid_ldap_auth -b "ou=Users,dc=empresa,dc=com" -u "uid" -v 3 -H ldap://ldap.empresa.com 
+auth_param basic program /usr/lib/squid3/squid_ldap_auth -v 3 -b "ou=Users,dc=empresa,dc=com" -f "(uid=%s)" -u "uid" -H ldap://ldap.empresa.com 
 auth_param basic children 50 
 auth_param basic realm Servidor Proxy para INSTITUCION
 

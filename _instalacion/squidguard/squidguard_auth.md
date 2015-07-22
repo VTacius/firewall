@@ -52,17 +52,17 @@ src http_noacces_usuarios_almuerzo {
 ## Empiezan las acl_rules. 
 {% include_relative acl_rules.md %}
 domain_admins_usuarios_laboral  { 
-         sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any
+        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
      
     domain_admins_usuarios_almuerzo  { 
-            pass sitios !in-addr !adv !archivos !compras !descargas !porn !proxy !radio !sexo !tracker !warez !web-proxy !any  
+        pass sitios !in-addr !adv !archivos !compras !descargas !porn !proxy !radio !sexo !tracker !warez !web-proxy !any  
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
      
     http_noacces_usuarios_laboral { 
-        sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any y 
+        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any y 
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
 
