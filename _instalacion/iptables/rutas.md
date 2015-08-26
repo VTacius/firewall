@@ -15,26 +15,25 @@ iptables -t nat -X
 a=$(egrep -c '^(INA|SRA|GWA)' /root/fws/infraestructura.sh)
 if [ $a -eq 3 ]; then 
     ifconfig $INA $SRA
-    for net in ${RWA[*]}
+    for net in ${listado_red[RWA]}
     do
         route add -net $net gw $GWA
     done
 fi
 
 ### PREROUTING
-NATPR="iptables -t nat -A PREROUTING -i $INL -s $LAN"
-$NATPR -d $LAN -m multiport -p tcp --dport 80,443 -j ACCEPT -m comment --comment "Paso directo entre equipos de la misma red"
-$NATPR -m set --match-set rwa dst -m multiport -p tcp --dport 80,443  -j  ACCEPT -m comment --comment "Paso directo hacia Red WAN Alterna"
-
-## Creamos las reglas personalizadas SERVICIOS
+NATPR="iptables -t nat -A PREROUTING -i $INL -m set --match-set LAN src"
+$NATPR -m set --match-set LAN dst -m multiport -p tcp --dport 80,443 -j ACCEPT -m comment --comment "Excluimos equipos de la misma red del Nateo"
+$NATPR -m set --match-set RWA dst -m multiport -p tcp --dport 80,443 -j ACCEPT -m comment --comment "Paso directo hacia Red WAN Alterna"
+## Creamos las reglas personalizadas SERVICIOS en PREROUTING de NAT, que tienen a bien ocurrir antes de un nateo de tráfico web
 iptables -t nat -N SERVICIOS 
 iptables -t nat -A PREROUTING -j SERVICIOS -m comment --comment "Enviamos a las reglas PREROUTING personalizadas"
-
-#### Mandamos todo el tráfico web hacia squid para proxy transparente, o al menos para evitar todo intento de traspasar el firewall
+## Mandamos todo el tráfico web hacia squid para proxy transparente, o al menos para evitar todo intento de traspasar el firewall
 $NATPR -d 0.0.0.0/0 -p tcp --dport 443 -j REDIRECT --to-port 3128
 $NATPR -d 0.0.0.0/0 -p tcp --dport 80 -j REDIRECT --to-port 3128
 
 ### POSTROUTING
-iptables -t nat -A POSTROUTING -s $LAN -d 10.10.20.0/24 -o $INW -j ACCEPT -m comment --comment "Vamos hacia DMZ"
-iptables -t nat -A POSTROUTING -s $LAN -m set --match-set rwa dst -o $INW -j MASQUERADE -m comment --comment "Vamos hacia RWA"
-iptables -t nat -A POSTROUTING -s $LAN -d 0.0.0.0/0 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia Internet"
+NATPO="iptables -t nat -A POSTROUTING -m set --match-set LAN src"
+$NATPO -d 10.10.20.0/24 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia DMZ MINSAL"
+$NATPO -m set --match-set RWA dst -o $INW -j MASQUERADE -m comment --comment "Vamos hacia RWA"
+$NATPO -d 0.0.0.0/0 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia Internet"

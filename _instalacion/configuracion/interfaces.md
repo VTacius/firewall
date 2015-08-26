@@ -21,6 +21,15 @@ iface eth1 inet static
     netmask 255.255.255.0 
     network 10.20.20.0 
     broadcast 10.20.20.255 
+
+# RED LAN Adicional. Cree una subinterfaz en la interfaz LAN para agregar redes adicionales
+# Si no son necesarias, bastará con comentar la siguiente configuración
+auto eth1:0
+iface eth1:0 inet static 
+    address 10.40.20.1
+    netmask 255.255.255.0 
+    network 10.40.20.0 
+    broadcast 10.40.20.255 
  
 # RED DMZ. En esta interfaz colocará los servidores
 # Lo mejor será que esta interfaz sea física, pero no dude en configurarla en /root/fws/rutas.sh si no es posible

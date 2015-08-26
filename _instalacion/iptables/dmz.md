@@ -35,17 +35,19 @@ FWDD="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $INW"
 $FWDD -p tcp -m multiport --dport 80,443,22  -d 10.10.20.0/24 -m conntrack --ctstate NEW -m comment --comment "Servicios permitidos hacia DMZ MINSAL para DMZ" -j ACCEPT
 $FWDD -p tcp -m multiport --dport 587,465 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo SMTP para DMZ" -j ACCEPT
 $FWDD -p tcp -m multiport --dport 110,995 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo POP3 para DMZ" -j ACCEPT 
-$FWDD -p udp -m multiport --dport 53,123 -m comment --comment "DNS y NTP para DMZ" -j ACCEPT
+$FWDD -p udp -m multiport --dport 53,123 -m conntrack --ctstate NEW -m comment --comment "DNS y NTP para DMZ" -j ACCEPT
 
 ## Servicios permitidos de Red LAN a Servidores
-FWDD="iptables -t filter -A FWD_DMZ -i $INL -s $LAN -o $IND"
+FWDD="iptables -t filter -A FWD_DMZ -i $INL -m set --match-set LAN src -o $IND"
 $FWDD -p tcp -m multiport --dport 80,443,22 -m comment --comment "Servicios básicos a RED LAN" -j ACCEPT
 $FWDD -p icmp -m comment --comment "Sondeo de LAN a DMZ" -j ACCEPT
 
 #### NAT ####
 ### PREROUTING mediante SERVICIOS 
-iptables -t nat -A SERVICIOS -i $INL -s $LAN -d $DMZ -m multiport -p tcp --dport 80,443 -j ACCEPT -m comment --comment "Paso directo de LAN hacia DMZ LOCAL"
+iptables -t nat -A SERVICIOS -i $INL -m set --match-set LAN src -d $DMZ -m multiport -p tcp --dport 80,443 -j ACCEPT -m comment --comment "Paso directo de LAN hacia DMZ LOCAL"
 ### POSTROUTING ###
-iptables -t nat -A POSTROUTING -s $DMZ -d 10.10.20.20/0 -o $INW -j ACCEPT -m comment --comment "Salida de DMZ "
-iptables -t nat -A POSTROUTING -s $LAN -d $DMZ -o $IND -j ACCEPT -m comment --comment "Vamos de LAN hacia DMZ LOCAL"
-iptables -t nat -A POSTROUTING -s $DMZ -d 0.0.0.0/0 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia internet desde DMZ"
+FWPO="iptables -t nat -A POSTROUTING"
+$FWPO -s $DMZ -d 10.10.20.20/0 -o $INW -j MASQUERADE -m comment --comment "Salida de DMZ "
+$FWPO -s $DMZ -d 10.10.20.20/0 -o $INW -j ACCEPT -m comment --comment "Salida de DMZ "
+$FWPO -m set --match-set LAN src -d $DMZ -o $IND -j ACCEPT -m comment --comment "Vamos de LAN hacia DMZ LOCAL"
+$FWPO -s $DMZ -d 0.0.0.0/0 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia internet desde DMZ"
