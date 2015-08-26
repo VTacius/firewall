@@ -45,6 +45,21 @@ dest foros {
     log ocio-dest.log
 }
 
+dest juegos {
+    domainlist BL/gamble/domains
+    log ocio-dest.log
+}
+
+dest juegos-online {
+    domainlist BL/hobby/games-online/domains
+    log ocio-dest.log
+}
+
+dest juegos-misc {
+    domainlist BL/hobby/games-misc/domains
+    log ocio-dest.log
+}
+
 dest musica {
     domainlist BL/webradio/domains
     log ocio-dest.log

@@ -10,24 +10,24 @@ logdir /var/log/squidguard
 {% include_relative src_usuario.md %}
 ## Empiezan sus reglas personalizadas 
 src usuarios_laboral {
-    ip  <<redlan>>
+    <<redlan>>
     within  laboral
 }
 
 src usuarios_almuerzo {
-    ip  <<redlan>>
+    <<redlan>>
     within  almuerzo
 }
 
 ## Empiezan las acl_rules personalizadas
 {% include_relative acl_rules.md %}
     usuarios_laboral  { 
-        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any 
+        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !juegos !juegos-online !juegos-misc !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any 
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
    
     usuarios_almuerzo  { 
-        pass sitios !in-addr !adv !archivos !compras !descargas !porn !proxy !radio !sexo !tracker !warez !web-proxy !any 
+        pass sitios !in-addr !adv !archivos !compras !descargas !juegos !porn !proxy !radio !sexo !tracker !warez !web-proxy !any 
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
  

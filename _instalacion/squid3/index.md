@@ -25,8 +25,12 @@ Asegúrese de hacer una copia del contenido limpia, cuide los saltos de línea y
 Los siguientes comandos configuran Squid de acuerdo a los parámetros en `/root/fws/infraestructura.sh`
 
 {% highlight bash %}
-sed -i "s_<<redlan>>_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
-sed -i "s_<<ipaddresslan>>_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squid3/squid.conf
+
+source /root/fws/infraestructura.sh;
+unset acl;for i in ${listados_red[LAN]}; do acl=$acl"acl usuarios src $i\n"; done
+sed -i "s|<<acl_usuarios>>|$acl|g" /etc/squid3/squid.conf
+unset port; for i in ${listados[SRV]}; do port=$port"http_port $i:3128 intercept\n"; done
+sed -i "s|<<http_port>>|$port|g" /etc/squid3/squid.conf
 sed -i "s/<<hostname>>/`hostname -f`/g" /etc/squid3/squid.conf
 {% endhighlight %}
 
@@ -72,11 +76,14 @@ En nuestra configuración, tres cosas son necesarias
 auth_param basic program /usr/lib/squid3/squid_ldap_auth -v 3 -b "ou=Users,dc=empresa,dc=com" -f "(uid=%s)" -u "uid" -H ldap://ldap.empresa.com 
 auth_param basic children 50 
 auth_param basic realm Servidor Proxy para INSTITUCION
+[...]
 
 acl usuarios proxy_auth REQUIRED 
 acl [...]
 [...]
-http_port <<ipaddresslan>>:3128
+
+http_port 10.20.20.1:3128
+http_port [...]
 [...]
 {% endhighlight %}
 

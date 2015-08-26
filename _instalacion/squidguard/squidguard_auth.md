@@ -21,14 +21,14 @@ ldapprotover 3
 
 # Grupo Domains Admins 
 src domain_admins_usuarios_laboral { 
-    ip  <<redlan>> 
+    <<redlan>> 
     ldapusersearch ldap://<<serverldap>>/cn=Domain%20Admins,<<basegrupos>>?memberUid?sub?(&(objectclass=sambaGroupMapping)(memberUid=%s)) 
     within  laboral 
     log users 
 } 
 
 src domain_admins_usuarios_almuerzo { 
-    ip  <<redlan>>  
+    <<redlan>>  
     ldapusersearch ldap://<<serverldap>>/cn=Domain%20Admins,<<basegrupos>>?memberUid?sub?(&(objectclass=sambaGroupMapping)(memberUid=%s)) 
     within  almuerzo 
     log users 
@@ -36,14 +36,14 @@ src domain_admins_usuarios_almuerzo {
 
 # Grupo no http_noacces 
 src http_noacces_usuarios_laboral { 
-    ip  <<redlan>>  
+    <<redlan>>  
     ldapusersearch ldap://<<serverldap>>/cn=http_noacces,<<basegrupos>>?memberUid?sub?(&(objectclass=sambaGroupMapping)(memberUid=%s)) 
     within  laboral 
     log users 
 } 
 
 src http_noacces_usuarios_almuerzo { 
-    ip  <<redlan>>  
+    <<redlan>>  
     ldapusersearch ldap://<<serverldap>>/cn=http_noacces,<<basegrupos>>?memberUid?sub?(&(objectclass=sambaGroupMapping)(memberUid=%s)) 
     within  almuerzo 
     log users 

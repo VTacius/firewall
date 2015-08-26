@@ -24,8 +24,11 @@ Si va a cambiar su contenido, tenga especial cuidado con los comentarios: No com
 # Personalizando la configuración: 
 Los siguientes comandos son la primera configuración que debe hacerse, automáticamente y en base a lo establecido en `/root/fws/infraestructura.sh`
 {% highlight bash %}
-sed -i "s_<<redlan>>_`perl -ne 'print $_=~m/^LAN=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf 
-sed -i "s_<<ipaddresslan>>_`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`_g" /etc/squidguard/squidGuard.conf
+source /root/fws/infraestructura.sh
+unset red;for i in ${listados_red[LAN]}; do red=$red"ip $i\n"; done
+sed -i "s|<<redlan>>|$red|g" /etc/squidguard/squidGuard.conf 
+unset srv;srv=(${listados[SRV]})
+sed -i "s|<<ipaddresslan>>|${srv[0]}|" /etc/squidguard/squidGuard.conf
 {% endhighlight %}
 
 Obtener las listas negras a las que se refiere el archivo anterior. Si la descarga tarda mucho, cancele y vuelva a iniciar
@@ -44,8 +47,10 @@ Ejecute lo siguientes comandos para crear ficheros donde guardar personalizacion
 mkdir /var/lib/squidguard/db/custom
 touch /var/lib/squidguard/db/custom/irrestrictos.lst
 touch /var/lib/squidguard/db/custom/restrictos.lst
-cat << MAFI > /var/lib/squidguard/db/custom/sitios.lst
-$(perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh)
+source /root/fws/infraestructura.sh
+unset srv;srv=(${listados[SRV]})
+cat << MAFI > sitios.lst
+${srv[0]}
 gob.sv
 typepad.com
 blogspot.com
