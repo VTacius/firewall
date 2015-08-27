@@ -64,9 +64,10 @@ tar -xzvf /root/fws/error-html.tgz -C /var/www/
 
 Los siguientes comandos configuran la paǵina de error según la información contenida en `/root/fws/infraestructura`
 {% highlight bash %}
-sed -i "s/<<ipaddresslan>>/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/script/default.css
-sed -i "s/<<ipaddresslan>>/`perl -ne 'print $_=~m/^SRV=(.*)/' /root/fws/infraestructura.sh`/g" /var/www/index.php
-sed -i "s/<<MarcadorInstitucion>>/`perl -ne 'print $_=~m/^INSTITUCION=\"(.*)\"/' /root/fws/infraestructura.sh `/g" /var/www/index.php
+source /root/fws/infraestructura.sh
+unset srv;srv=(${listados[SRV]})
+sed -i "s|<<ipaddresslan>>|${srv[0]}|" /var/www/{index.php,script/default.css}
+sed -i "s|<<MarcadorInstitucion>>|$INSTITUCION|" /var/www/index.php
 {% endhighlight %}
 
 ## Prueba de configuración
