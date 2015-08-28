@@ -133,7 +133,7 @@ La siguiente configuración es un poco más complicada de lo usual en la medida 
 * Los siguientes comandos configuran el resto del archivo. Esperando que usted conozca bien los datos del servidor al cual se ha de conectar
   * Cambie **10.40.30.5** por la dirección IP del servidor LDAP
 {% highlight bash %}
-    sed -i 's/<<serverldap>>/10.40.30.5/g/' /etc/squidguard/squidGuard.conf
+    sed -i 's/<<serverldap>>/10.40.30.5/g' /etc/squidguard/squidGuard.conf
 {% endhighlight %}
   * Cambie **ou=Groups,dc=empresa,dc=com** por la base de los grupos LDAP
 {% highlight bash %}

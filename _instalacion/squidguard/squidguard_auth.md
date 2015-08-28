@@ -62,7 +62,7 @@ domain_admins_usuarios_laboral  {
     } 
      
     http_noacces_usuarios_laboral { 
-        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any y 
+        pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any
         redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
     } 
 
