@@ -49,7 +49,7 @@ touch /var/lib/squidguard/db/custom/irrestrictos.lst
 touch /var/lib/squidguard/db/custom/restrictos.lst
 source /root/fws/infraestructura.sh
 unset srv;srv=(${listados[SRV]})
-cat << MAFI > sitios.lst
+cat << MAFI > /var/lib/squidguard/db/custom/sitios.lst
 ${srv[0]}
 gob.sv
 typepad.com

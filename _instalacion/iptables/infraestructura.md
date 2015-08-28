@@ -53,7 +53,8 @@ INW=eth0
 SRW=192.168.10.15
 
 ### LAN 
-## Interfaz LAN INL=eth1
+## Interfaz LAN 
+INL=eth1
 
 ### DMZ
 ## Interfaz DMZ

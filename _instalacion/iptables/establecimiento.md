@@ -27,7 +27,7 @@ FWD_SWAN="iptables -t filter -A FWD_LOCAL -i $INW"
 # Acceso de toda la Red DMZ a un nuevo servicios
 FWD_SDMZ="iptables -t filter -A FWD_DMZ -i $IND -s $DMZ -o $INW"
 ## Configura reglas especificas del establecimiento en la cadena FWD_DMZ referenciada en la cadena FORWARD
-FWD_SLAN="iptables -t filter -A FWD_DMZ -i $INL -m set --match-set LAN src -o $IND"
+FWD_DDMZ="iptables -t filter -A FWD_DMZ -i $INL -m set --match-set LAN src -o $IND"
 
 ## Trafico de servicios avanzados
 # Revise cuales son verdaderamente necesarios para su establecimiento
