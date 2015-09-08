@@ -106,16 +106,16 @@ s/show_successful_message no/show_successful_message yes/g
 MAFI
 {% endhighlight %}
 
-Creamos el directorio y normalizamos permisos
+Creamos el directorio
 {% highlight bash %}
 mkdir /var/www/sarg
-chown -R www-data:www-data /var/www/sarg
 {% endhighlight %}
 
 Restringimos el acceso (Cuidado con el momento en que piden la nueva contraseña):
 {% highlight bash %}
 touch /var/www/sarg/.htpassword
 chmod 600 /var/www/sarg/.htpassword
+chown -R www-data:www-data /var/www/sarg
 htpasswd /var/www/sarg/.htpassword administrador 
 {% endhighlight %}
 
