@@ -4,10 +4,10 @@ source /root/fws/infraestructura.sh
 echo -e "\n\n ESTABLECIMIENTO.SH\n\n"
 
 ## Servicios adicionales en el servidor
-# No es que lo recomendemos apliamente, pero podría habilitar un par de servicios adicionales en el Firewall
+# Aún cuando lo desaconsejemos rotundamente, es posible habilitar un par de servicios adicionales en el Firewall
 # No especificar el estado con conntrack
-# Para habilitar un servicio hacia LAN
-# iptables -t filter -A SRVADD -i $INL -d $SRV -p udp -m multiport --dport 53,87,88,123 -j ACCEPT
+# Para habilitar un servidor DHCP hacia LAN
+# iptables -t filter -A SRVADD -i $INL -m set --match-set SRV dst -p udp -m multiport --dport 67,68 -j ACCEPT
 # Para habilitar servicios hacia FWD_DMZ
 # iptables -t filter -A SRVADD -i $IND -d $SRD -p udp -m multiport --dport 53,123 -m comment --comment "Servicios básicos a RED LAN" -j ACCEPT
 
