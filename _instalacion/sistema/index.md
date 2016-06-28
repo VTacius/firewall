@@ -48,10 +48,12 @@ Instale todos los paquetes necesarios. Aptitude se encargará de revolver todas 
 aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sarg
 {% endhighlight %}
 
-Instale los siguientes paquetes para monitoreo de la red y otras tareas relacionadas.
+Instale los siguientes paquetes para obtener herramientas de administración bastante probadas dentro de nuestro trabajo
 {% highlight bash %}
-aptitude -y install vim htop iptraf lshw nmap pv python3 squidview sudo tcpdump tree
+aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng
 {% endhighlight %}
+
+Atento al paquete tshark, que hace una pregunta a la que hay que contestar no
 
 Configure VIM
 Active el resaltado de sintaxis, numerado de líneas,  identado a 4 espacios y, en el caso que el fondo de su terminal sea oscuro (Algo que recomiendo para la comodidad de sus ojos), configure el patrón de colores para tal efecto.

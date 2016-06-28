@@ -24,7 +24,7 @@ Los siguientes comandos crearán el fichero de configuaración iptables.conf par
     {% include_relative rsyslog_iptables.md %}
 {% endhighlight %}
 
-Crear el fichero referenciado:
+Crear los ficheros referenciados
 {% highlight bash %}
 mkdir /var/log/iptables
 touch /var/log/iptables/{input,output,forward}.log
@@ -143,7 +143,7 @@ Crear el archivo de configuración de Mutt para enviar correo. Disponemos de una
 
 Para activar el certificado, envíe un correo de prueba con 
 {% highlight bash %}
-mutt -nx -s "Probando desde cero el Mutt" fws@salud.gob.sv
+mutt -nx -s "Probando desde cero el Mutt" fws@empresa.com
 {% endhighlight %}
 
 A continuación, aparecerán unos cuantos mensajes donde se le pide confirmar los certificados como válidos: Una vez aceptados, no requerirá intervención alguna nunca más.

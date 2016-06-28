@@ -42,7 +42,8 @@ iface eth2 inet static
 
 # RED MH. Se accede a los servicios del Ministerio de Hacienda 
 # La interfaz hacia la red de HACIENDA y MINSAL será virtual, configurada en /root/fws/rutas.sh 
-# En caso de tener una intefaz física disponible, tome de ejemplo la configuración de red LAN (Configuración de interfaz si gateway) y configúrela a continuación.
+# En caso de tener una intefaz física disponible, tome de ejemplo la configuración de red LAN,
+# exceptuando el gateway, y configure a continuación
 
 # Configuración de la tabla FILTER de IPTABLES. Recuerde que al menos root debe tener permisos de ejecución 
 post-up /root/fws/firewall.sh

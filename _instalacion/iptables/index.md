@@ -69,7 +69,7 @@ Si usted tiene alguna sugerencia para el cambio de estos ficheros, comuníquese 
  : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo** 
 
 `/root/fws/rutas.sh`
- : Al igual que con el archivo `/root/fws/firewall.sh, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
+ : Al igual que con el archivo `/root/fws/firewall.sh`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
 Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
 
 `/root/fws/dmz.sh`
