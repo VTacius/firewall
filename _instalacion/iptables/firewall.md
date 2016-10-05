@@ -63,7 +63,7 @@ $FWDW admins src -o $INL -m set --match-set LAN dst -p tcp -m multiport --dport 
 FWDL="iptables -t filter -A FORWARD -i $INL -m set --match-set LAN src -o $INW"
 $FWDL -p udp -m multiport --dport 53,123 -m conntrack --ctstate NEW -j ACCEPT
 $FWDL -p tcp -m multiport --dport 80,443  -m set --match-set RWA dst -m conntrack --ctstate NEW -m comment --comment "Cliente WEB para DMZ Hacienda" -j ACCEPT
-$FWDL -p tcp -m multiport --dport 587,465 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo SMTP" -j ACCEPT
+$FWDL -p tcp -m multiport --dport 53,587,465 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo SMTP" -j ACCEPT
 $FWDL -p tcp -m multiport --dport 110,995 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo POP3" -j ACCEPT 
 $FWDL -p tcp -m multiport --dport 20,21 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo FTP" -j ACCEPT 
 

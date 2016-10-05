@@ -61,7 +61,7 @@ dest juegos-misc {
 }
 
 dest musica {
-    domainlist BL/webradio/domains
+    domainlist BL/music/domains
     log ocio-dest.log
 }
 
