@@ -34,6 +34,7 @@ $NATPR -d 0.0.0.0/0 -p tcp --dport 80 -j REDIRECT --to-port 3128
 
 ### POSTROUTING
 NATPO="iptables -t nat -A POSTROUTING -m set --match-set LAN src"
-$NATPO -d 10.10.20.0/24 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia DMZ MINSAL"
+## Recordar que en un entorno de pruebas es posible que si haya que natear el contenido hacia la DMZ Institucional
+$NATPO -d 10.10.20.0/24 -o $INW -j ACCEPT -m comment --comment "Vamos hacia DMZ MINSAL"
 $NATPO -m set --match-set RWA dst -o $INW -j MASQUERADE -m comment --comment "Vamos hacia RWA"
 $NATPO -d 0.0.0.0/0 -o $INW -j MASQUERADE -m comment --comment "Vamos hacia Internet"
