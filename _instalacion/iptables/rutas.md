@@ -15,7 +15,7 @@ iptables -t nat -X
 a=$(egrep -c '^(INA|SRA|GWA)' /root/fws/infraestructura.sh)
 if [ $a -eq 3 ]; then 
     ifconfig $INA $SRA
-    for net in ${listado_red[RWA]}
+    for net in ${listados_red[RWA]}
     do
         route add -net $net gw $GWA
     done

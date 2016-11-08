@@ -73,36 +73,38 @@ Ejecutar `ip addr show` debería devolver todas físicas como activas y configur
     inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
-    link/ether 52:54:00:cb:c9:e2 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.2.26/27 brd 192.168.17.31 scope global eth0
-    inet6 fe80::5054:ff:fecb:c9e2/64 scope link 
+    link/ether 52:54:00:a6:10:5b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.6/27 brd 192.168.2.31 scope global eth0
+    inet6 fe80::5054:ff:fea6:105b/64 scope link 
        valid_lft forever preferred_lft forever
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
-    link/ether 52:54:00:0f:57:c2 brd ff:ff:ff:ff:ff:ff
-    inet 10.20.20.1/24 brd 10.20.20.255 scope global eth1
-    inet6 fe80::5054:ff:fe0f:57c2/64 scope link 
+    link/ether 52:54:00:70:16:b9 brd ff:ff:ff:ff:ff:ff
+    inet 10.168.2.1/24 brd 10.168.2.255 scope global eth1
+    inet6 fe80::5054:ff:fe70:16b9/64 scope link 
        valid_lft forever preferred_lft forever
 4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
-    link/ether 52:54:00:32:bc:3c brd ff:ff:ff:ff:ff:ff
-    inet 10.30.20.1/24 brd 10.30.20.255 scope global eth2
-    inet6 fe80::5054:ff:fe32:bc3c/64 scope link 
+    link/ether 52:54:00:b9:f6:3f brd ff:ff:ff:ff:ff:ff
+    inet 10.20.20.1/24 brd 10.20.20.255 scope global eth2
+    inet6 fe80::5054:ff:feb9:f63f/64 scope link 
        valid_lft forever preferred_lft forever
 {% endhighlight %}
 
-De un ping hacia el nombre de host. La salida se presenta a continuación.
+Pese a lo que puedan decir al respecto, ping es una herramienta muy útil. Por ejemplo, podemos usarla para verificar tanto la resolución correcta del nombre de host como que lo alcanzamos por medio de ICMP.
 {% highlight bash %}
-ping `hostname`
+$ ping `hostname`
 
 PING firewall.salud.gob.sv (10.20.20.1) 56(84) bytes of data.
 64 bytes from firewall.salud.gob.sv (10.20.20.1): icmp_req=1 ttl=64 time=0.017 ms
 64 bytes from firewall.salud.gob.sv (10.20.20.1): icmp_req=2 ttl=64 time=0.013 ms
-El host debian.salud.gob.sv debe resolverse con la IP del servidor en la DMZ del MINSAL:
-ping debian.salud.gob.sv
+
+# El host debian.salud.gob.sv debe resolverse con la IP del servidor en la DMZ del MINSAL:
+$ ping debian.salud.gob.sv
+
 PING mail.salud.gob.sv (10.10.20.7) 56(84) bytes of data. 
 64 bytes from 10.10.20.7: icmp_req=1 ttl=63 time=1.34 ms
 {% endhighlight %}
 
-¿Ha fallado el último ping? Significa que su gateway es hacia un proveedor propio, y que el equipo no conoce por ahora la ruta hacia la DMZ de Minsal. Añada esta ruta temporalmente, hasta que sea configurada después en los ficheros correspondientes:1
+¿Ha fallado el último ping? Es posible entonces que su gateway sea el de un proveedor externo que aún no ha configurado una ruta estática hacia la DMZ de Minsal. Añada esta ruta temporalmente, hasta que sea configurada después en los ficheros correspondientes
 {% highlight bash %}
 route add -net 10.10.20.0/24 gw 192.168.17.1 
 {% endhighlight %}

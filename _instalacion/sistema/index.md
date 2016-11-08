@@ -50,18 +50,16 @@ aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sar
 
 Instale los siguientes paquetes para obtener herramientas de administración bastante probadas dentro de nuestro trabajo
 {% highlight bash %}
-aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng
+DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng
 {% endhighlight %}
 
-Atento al paquete tshark, que hace una pregunta a la que hay que contestar no
-
 Configure VIM
-Active el resaltado de sintaxis, numerado de líneas,  identado a 4 espacios y, en el caso que el fondo de su terminal sea oscuro (Algo que recomiendo para la comodidad de sus ojos), configure el patrón de colores para tal efecto.
+Active, respectivamente, el resaltado de sintaxis, numerado de líneas,  identado a 4 espacios y, en el caso que el fondo de su terminal sea oscuro (Algo que recomiendo para la comodidad de sus ojos), configure el patrón de colores para tal efecto.
 {% highlight bash %}
 sed -i '/\"syntax on/c\syntax on' /etc/vim/vimrc
-sed -i '/\"set background=dark/c\set background=dark' /etc/vim/vimrc
-sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
 sed -i '/^syntax /a set number' /etc/vim/vimrc
+sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
+sed -i '/\"set background=dark/c\set background=dark' /etc/vim/vimrc
 {% endhighlight %}
 
 Active los módulos para manejo de sesiones FTP.

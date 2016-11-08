@@ -6,16 +6,16 @@ echo -e "\n\n ESTABLECIMIENTO.SH\n\n"
 ## Servicios adicionales en el servidor
 # Aún cuando lo desaconsejemos rotundamente, es posible habilitar un par de servicios adicionales en el Firewall
 # No especificar el estado con conntrack
-# Para habilitar un servidor DHCP hacia LAN
+# Para habilitar un servidor hacia INL, es decir, como publicando un DHCP hacia redes LAN
 # iptables -t filter -A SRVADD -i $INL -m set --match-set SRV dst -p udp -m multiport --dport 67,68 -j ACCEPT
-# Para habilitar servicios hacia FWD_DMZ
+# Para habilitar servicios hacia FWD_DMZ, es decir, publicando un servicio como http hacia internet
 # iptables -t filter -A SRVADD -i $IND -d $SRD -p udp -m multiport --dport 53,123 -m comment --comment "Servicios básicos a RED LAN" -j ACCEPT
 
-## Creación de interfaces adicionales para servicios publicados
-# Recuerde empezar las interfaces adicionales desde :1 
-# Asegurése de la IP que esta configurando acá sea la misma del servicio que esta publicando
-ifconfig eth0:1 192.168.2.5/27
-ifconfig eth0:2 192.168.2.6/27
+### Creación de interfaces adicionales para servicios publicados
+## Recuerde empezar las interfaces adicionales desde :1 
+## Asegurése de la IP que esta configurando acá sea la misma del servicio que esta publicando
+# ifconfig eth0:1 192.168.2.3/27
+# ifconfig eth0:2 192.168.2.5/27
 
 ## Se presentan algunas pautas sobre la manera de configurar nuevos permisos en su red
 # Acceso a toda su red LAN hacia lo que sea que halla después de WAN. Podría especificar con -d un destino especifico

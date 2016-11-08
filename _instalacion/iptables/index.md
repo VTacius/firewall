@@ -19,10 +19,10 @@ header: no
 ## Configuración de archivo de infraestructura
 El siguiente archivo configura la infraestructura de red que ha ideado dentro de su Establecimiento.  
 Los demás archivos de configuración leerán desde acá los valores que han de usar para configurarse.  
-Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción.
-Cree el fichero /root/fws/infraestructura.sh con el siguiente contenido y configure según los comentarios:
+Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción. Tómese todo el tiempo del mundo, este es básicamente el único fichero que realmente tendrá que configurar
+Cree el fichero `/root/fws/infraestructura.sh` con el siguiente contenido y configure según los comentarios:
 {% highlight bash %}
-    {% include_relative infraestructura.md %}
+{% include_relative infraestructura.md %}
 {% endhighlight %}
 
 ## Configuración del Filtrado de Paquetes de Red
@@ -32,14 +32,14 @@ El contenido de dicho fichero de muestra a continuación
 El fichero, pese a no estar recomendada su modificación, pretende ser bastante didáctico, esperando de hecho que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades
 
 {% highlight bash %}
-    {% include_relative firewall.md %}
+{% include_relative firewall.md %}
 {% endhighlight %}
 
 ## Configuración de Tablas Nat y rutas en general
 Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh`.  
 El contenido de dicho fichero se muestra a continuación
 {% highlight bash %}
-    {% include_relative rutas.md %}
+{% include_relative rutas.md %}
 {% endhighlight %}
 
 ## Configuración de DMZ
@@ -50,14 +50,14 @@ La DMZ puede ser un trabajo realmente complicado. No hay una formula mágica: A�
 El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del fichero establecimiento.sh. 
 
 {% highlight bash %}
-    {% include_relative dmz.md %}
+{% include_relative dmz.md %}
 {% endhighlight %}
 
 ## Configuración de reglas específicas para el establecimiento
 En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las que ya han sido configuradas en los ficheros anteriores. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
 Un ejemplo del fichero `/root/fws/establecimiento.sh`, con algunos ejemplos listos para usar y útiles para muchos establecimientos, es mostrada a continuación
 {% highlight bash %}
-    {% include_relative establecimiento.md %}
+{% include_relative establecimiento.md %}
 {% endhighlight %}
 
 # Personalización de la configuración
