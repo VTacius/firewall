@@ -18,7 +18,7 @@ Borre el contenido del archivo original de configuración de SquidGuard y copie 
 Si va a cambiar su contenido, tenga especial cuidado con los comentarios: No comente el contenido entre corchetes.
 
 {% highlight squid %}
-    {% include_relative squidguard.md %}
+{% include_relative squidguard.md %}
 {% endhighlight %}
 
 # Personalizando la configuración: 
