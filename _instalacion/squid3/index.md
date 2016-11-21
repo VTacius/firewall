@@ -49,21 +49,73 @@ Ni siquiera reinicie Squid3 aún, realizaremos el despliegue y pruebas de config
 
 ## Limite global al ancho de banda usado por squid
 La experiencia dice que si su enlace no es de al menos 5 Mbps, es conveniente poner un límite global a squid.  
-Puede calcular el valor a usar con  la formula `(x * 1000) / 8`, donde `x` es la velocidad de su enlace en Kbps.  
-Tenga cuidado al convertir desde Mbps; en general, cerciórese bien de los datos de su enlace.
 
-La ubicación de esta configuración es inmediatamente antes de las directivas `http_access`.
+Puede calcular el valor a usar con  la formula `(x * 1000) / 8`, donde `x` es la restricción en kbps que quiere hacer al uso de ancho de banda.
+
+Hasta 2 Mb, considere usar el 75%: (2048 / 4) * 3 
+Luego, hasta 5 Mb, puede considerar 80%: (5120 / 5) *4
+
+La ubicación de esta configuración es inmediatamente antes de las directivas `http_access`. El siguiente ejemplo limitara a 1536 Kb:
 
 {% highlight squid %}
 [...]
+ftp_passive off
+
 delay_pools 1
 delay_class 1 1
 delay_access 1 allow all
-delay_parameters 1 64000/64000
+delay_parameters 1 192000/192000
 
-http_access deny !Safe_ports
+http_access deny NONE
 [...]
 {% endhighlight %}
+
+Es posible que quiera considerar una configuración para tráfico de conocidad voracidad por su ancho de banda:
+
+{% highlight squid %}
+[...]
+ftp_passive off
+
+delay_pools 3
+
+acl STREAMING dstdomain .fbcdn.net
+acl STREAMING dstdomain .openload.co
+acl STREAMING dstdomain .cloudup.com
+acl STREAMING dstdomain .oloadcdn.net
+acl STREAMING dstdomain .nflxvideo.net
+acl STREAMING dstdomain .googlevideo.com
+acl STREAMING dstdomain .drive.amazonaws.com
+delay_class 1 2
+delay_access 1 allow STREAMING
+delay_parameters 1 80000/80000 64000/64000
+
+acl DISPENSA dstdomain .muug.ca
+acl DISPENSA dstdomain .cdn.livefyre.com
+acl DISPENSA dstdomain .windowsupdate.com
+acl DISPENSA dstdomain .drive.google.com
+acl DISPENSA dstdomain .mirror.steadfast.net
+acl DISPENSA dstdomain .geo.kaspersky.com
+acl DISPENSA dstdomain .360safe.com
+acl DISPENSA dstdomain .ff.avast.com
+delay_class 2 2
+delay_access 1 allow DISPENSA
+delay_parameters 1 80000/80000 64000/64000
+
+delay_class 3 1
+delay_access 3 allow all
+delay_parameters 3 192000/192000 
+
+http_access deny NONE
+[...]
+
+{% endhighlight %}
+
+Los tres pool definen el siguiente comportamiento:
+* Al acceder a los sitios en la ACL STREAMING, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
+* Al acceder a los sitios en la ACL DISPENSA, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
+* Para todo el tráfico restante, squid3 tratará de usar no más de 1536 Kbps.
+
+Si necesita agregar una bucket adicional, debe configurarse antes del bucket por defecto, el último en el ejemplo
 
 ## Autenticación de usuarios mediante LDAP
 En nuestra configuración, tres cosas son necesarias  
