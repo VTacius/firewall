@@ -48,9 +48,9 @@ Instale todos los paquetes necesarios. Aptitude se encargará de revolver todas 
 aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sarg
 {% endhighlight %}
 
-Instale los siguientes paquetes para obtener herramientas de administración bastante probadas dentro de nuestro trabajo
+Instale los siguientes paquetes para obtener herramientas de monitoreo útiles para un servidor como este
 {% highlight bash %}
-DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng
+DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng iptstate
 {% endhighlight %}
 
 Configure VIM

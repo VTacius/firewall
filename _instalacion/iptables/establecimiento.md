@@ -52,5 +52,10 @@ iptables -t filter -A FWD_LOCAL -d 10.20.20.10 -p tcp -m multiport --dport 4000 
 iptables -t nat -A SERVICIOS -d 192.168.2.6 -j DNAT --to-destination 10.30.20.5
 iptables -t filter -A FWD_DMZ -d 10.30.20.5 -p tcp -m multiport --dport 80 -j ACCEPT
 
+# Las siguientes reglas deberían permitir la comunicación entre <<telefono>> y <<pbx>>
+# cuando es <<telefono>> el que se encuentra en dicho servidor. No es necesario cambiar nada en el nateo
+# $FWD_SSET -s <<telefono>> -d <<pbx>> -p udp -j ACCEPT
+# $FWD_SSET -s <<pbx>> -d <<telefono>> -p udp -m multiport --dport 5004,5005,5060 -j ACCEPT
+
 ### Empiece sus reglas a partir de este punto
 

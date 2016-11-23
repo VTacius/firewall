@@ -19,9 +19,9 @@ header: no
 ## Configuración de Registro de Iptables
 En principio, estas configuraciones no parecerían esenciales para el correcto funcionamiento de su firewall. Sin embargo, TODAS son fundamentales para que la experiencia de uso sea verdaderamente profesional tanto para los usuarios como para usted como administrador.  
 
-Los siguientes comandos crearán el fichero de configuaración iptables.conf para que rsyslog envíe los registros asociados a IPTABLES a un mismo fichero separado de los demás.
+Los siguientes comandos crearán el fichero de configuración `/etc/rsyslog.d/iptables.conf` para que rsyslog envíe los registros asociados a IPTABLES a una serie de ficheros.
 {% highlight bash %}
-    {% include_relative rsyslog_iptables.md %}
+{% include_relative rsyslog_iptables.md %}
 {% endhighlight %}
 
 Crear los ficheros referenciados
@@ -38,7 +38,7 @@ service rsyslog restart
 
 Configuramos logrotate 
 {% highlight bash %}
-    {% include_relative logrotate_iptables.md %}
+{% include_relative logrotate_iptables.md %}
 {% endhighlight %}
 
 Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En base al espacio del que disponga en disco, puede configurar que guarde menos anecdóticos configurando el valor `rotate`.
@@ -121,14 +121,14 @@ htpasswd /var/www/sarg/.htpassword administrador
 
 Configure el servidor web.
 {% highlight bash %}
-    {% include_relative default.md %}
+{% include_relative default.md %}
 {% endhighlight %}
 
 Hacemos un par de configuraciones que nos parecen necesarias para hacer un poco más discreto a Apache:
 {% highlight bash %}
 sed -i 's/^ServerTokens.*/ServerTokens Prod/g' /etc/apache2/conf.d/security
 sed -i 's/^expose_php.*/expose_php = Off/g' /etc/php5/apache2/php.ini
-a2dismod alias cgi autoindex
+a2dismod cgi autoindex
 {% endhighlight %}
 
 Y reinicie apache:
@@ -138,7 +138,7 @@ service apache2 restart
 
 Crear el archivo de configuración de Mutt para enviar correo. Disponemos de una cuenta por defecto totalmente funcional
 {% highlight bash %}
-    {% include_relative muttrc.md %}
+{% include_relative muttrc.md %}
 {% endhighlight %}
 
 Para activar el certificado, envíe un correo de prueba con 
@@ -149,7 +149,7 @@ mutt -nx -s "Probando desde cero el Mutt" fws@empresa.com
 A continuación, aparecerán unos cuantos mensajes donde se le pide confirmar los certificados como válidos: Una vez aceptados, no requerirá intervención alguna nunca más.
 Creamos un script que diariamente ejecute un backup de todos los archivos involucrados en la configuración de nuestro firewall. 
 {% highlight bash %}
-    {% include_relative reportes.md %}
+{% include_relative reportes.md %}
 {% endhighlight %}
 
 Configuramos la rotación de los log de Squid3 para que guarde un registro diariamente por 10 días, y para que cada vez que rote el registro, ejecute el archivo de para backup y reporte.

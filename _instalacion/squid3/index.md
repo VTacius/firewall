@@ -98,8 +98,8 @@ acl DISPENSA dstdomain .geo.kaspersky.com
 acl DISPENSA dstdomain .360safe.com
 acl DISPENSA dstdomain .ff.avast.com
 delay_class 2 2
-delay_access 1 allow DISPENSA
-delay_parameters 1 80000/80000 64000/64000
+delay_access 2 allow DISPENSA
+delay_parameters 2 80000/80000 64000/64000
 
 delay_class 3 1
 delay_access 3 allow all
@@ -120,9 +120,9 @@ Si necesita agregar una bucket adicional, debe configurarse antes del bucket por
 ## Autenticación de usuarios mediante LDAP
 En nuestra configuración, tres cosas son necesarias  
 
-* Agregar la configuración mediante las directivas `auth_param` al principio del fichero
-* Cambiar nuestra ACL `usuarios`
-* Eliminar `intercept` de la directiva `http_port`
++ Agregar la configuración mediante las directivas `auth_param` al principio del fichero
++ Cambiar nuestra ACL `usuarios`
++ Eliminar `intercept` de la directiva `http_port`
 
 {% highlight squid %}
 auth_param basic program /usr/lib/squid3/squid_ldap_auth -v 3 -b "ou=Users,dc=empresa,dc=com" -f "(uid=%s)" -u "uid" -H ldap://ldap.empresa.com 

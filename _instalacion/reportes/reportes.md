@@ -1,4 +1,3 @@
-
 cat <<"MAFI"> /root/fws/reportes.sh
 #!/bin/bash
 source /root/fws/infraestructura.sh
