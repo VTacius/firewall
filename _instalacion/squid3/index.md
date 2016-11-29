@@ -1,11 +1,12 @@
 ---
 layout: docs
-site.author : Alexander Ortiz
-author : Alexander Ortiz
+site.author: Alexander Ortiz
+author: Alexander Ortiz
 title: Configuración de Squid
 orden: 4
 header: no
 ---
+
 <div class="panel radius" markdown="1">
 **Tabla de contenido**
 {: #toc }
@@ -90,13 +91,14 @@ delay_access 1 allow STREAMING
 delay_parameters 1 80000/80000 64000/64000
 
 acl DISPENSA dstdomain .muug.ca
-acl DISPENSA dstdomain .cdn.livefyre.com
-acl DISPENSA dstdomain .windowsupdate.com
-acl DISPENSA dstdomain .drive.google.com
-acl DISPENSA dstdomain .mirror.steadfast.net
-acl DISPENSA dstdomain .geo.kaspersky.com
+acl DISPENSA dstdomain .dropbox.com
 acl DISPENSA dstdomain .360safe.com
 acl DISPENSA dstdomain .ff.avast.com
+acl DISPENSA dstdomain .drive.google.com
+acl DISPENSA dstdomain .cdn.livefyre.com
+acl DISPENSA dstdomain .windowsupdate.com
+acl DISPENSA dstdomain .mirror.steadfast.net
+acl DISPENSA dstdomain .geo.kaspersky.com
 delay_class 2 2
 delay_access 2 allow DISPENSA
 delay_parameters 2 80000/80000 64000/64000

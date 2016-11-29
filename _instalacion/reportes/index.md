@@ -1,7 +1,7 @@
 ---
 layout: docs
-site.author : Alexander Ortiz
-author : Alexander Ortiz
+site.author: Alexander Ortiz
+author: Alexander Ortiz
 title: Otras configuraciones importantes
 orden: 6
 header: no

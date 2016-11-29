@@ -1,11 +1,12 @@
 ---
 layout: docs
-site.author : Alexander Ortiz
-author : Alexander Ortiz
+site.author: Alexander Ortiz
+author: Alexander Ortiz
 title: Configuración de squidGuard
 orden: 5
 header: no
 ---
+
 <div class="panel radius" markdown="1">
 **Table of Contents**
 {: #toc }

@@ -1,7 +1,7 @@
 ---
 layout: docs
-site.author : Alexander Ortiz
-author : Alexander Ortiz
+site.author: Alexander Ortiz
+author: Alexander Ortiz
 title: Configuración sobre el sistema
 orden: 2
 header: no
