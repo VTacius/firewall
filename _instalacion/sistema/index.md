@@ -42,7 +42,6 @@ Y actualice el sistema, tarea que debe realizar cada tanto:
 aptitude upgrade 
 {% endhighlight %}
 
-
 Instale todos los paquetes necesarios. Aptitude se encargará de revolver todas las dependencias necesarias
 {% highlight bash %}
 aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sarg

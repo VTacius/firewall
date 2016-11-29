@@ -2,7 +2,7 @@
 layout: docs
 site.author: Alexander Ortiz
 author: Alexander Ortiz
-title: Configuración de red: Filtros de paquetes, rutas y nateo
+title: Configuración de red. Filtros de paquetes, rutas y nateo
 orden: 3
 header: no
 ---

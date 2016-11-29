@@ -8,7 +8,7 @@ header: no
 ---
 
 <div class="panel radius" markdown="1">
-**Table of Contents**
+**Tabla de contenido**
 {: #toc }
 *  TOC
 {:toc}
