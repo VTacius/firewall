@@ -58,6 +58,10 @@ SRW=192.168.2.6
 ## Interfaz LAN 
 INL=eth1
 
+## RED PBX
+LBX=10.30.90.0/24
+PBX=10.30.90.1
+
 ### DMZ
 ## Interfaz DMZ
 IND=eth2
@@ -65,18 +69,6 @@ IND=eth2
 SRD=10.20.20.1
 ## RED DMZ
 DMZ=10.20.20.0/24 
-
-### Red WAN Alterna hacia DMZ Minsal y MH
-## Descomente y configure cuando su interfaz WAN apunte hacia un servicio privado de internet, es decir
-## que no seamos nosotros quiénes le brindemos el servicio de Internet
-
-### Interfaz red WAN alterna
-#INA=eth0:0
-### IP interfaz de Red WAN Alterna
-## Específique el prefijo de red
-#SRA=192.168.10.15/24
-### Gateway que se usa hacia DMZ en Minsal
-#GWA=192.168.10.1
 
 #### Operaciones para la creación de grupos IPSET #####
 ## Grupos con IP para listas varias
