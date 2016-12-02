@@ -35,6 +35,11 @@ FWD_DDMZ="iptables -t filter -A FWD_DMZ -i $INL -m set --match-set LAN src -o $I
 # Acceso remoto al servidor de Hacienda
 $FWD_SLAN -p tcp --dport 63231 -m conntrack --ctstate NEW -j ACCEPT
 
+# Acceso remoto para monitoreo y administración de telefonía IP
+# $FWD_SWAN -m set --match-set admins src -d $LBX -p tcp -m multiport --dport 22,80,443 -m conntrack --ctstate NEW -m comment --comment "Administración remota para PBX" -j ACCEPT
+# $FWD_SWAN -m set --match-set admins src -d $LBX -p icmp -m comment --comment "Monitoreo remoto para PBX" -j ACCEPT
+
+
 ## Configuración necesaria para Comunicarse con Antivirus Kaspersky
 #$FWD_SLAN -d 10.10.20.5 -p tcp -m multiport --dport 13000,13111,14000 -m conntrack --ctstate NEW -j ACCEPT
 #$FWD_SLAN -d 10.10.20.5 -p udp -m multiport --dport 7,67,69,13000,1500,1501 -j ACCEPT
