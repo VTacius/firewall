@@ -23,11 +23,11 @@ Para el ejemplo, eth0 es la interfaz WAN, mientras que la interfaz eth1 es la in
 {% include_relative interfaces.md %}
 {% endhighlight %}
 
-Creamos los ficheros de configuración a los que se hace referencia.  
+Creamos los ficheros de configuración a los que se hace referencia en `/etc/network/interfaces`
 {% highlight bash %}
-mkdir ~/fws
+mkdir -p ~/fws/{tools,archivo}
 cd ~/fws 
-touch firewall.sh rutas.sh infraestructura.sh establecimiento.sh dmz.sh
+touch ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimiento.sh,dmz.sh}
 chmod 744 firewall.sh rutas.sh infraestructura.sh establecimiento.sh dmz.sh
 {% endhighlight %}
 
@@ -42,10 +42,11 @@ Cambie firewall por el nombre de host que haya configurado en su firewall.
 ## /etc/resolv.conf
 Revise ahora el archivo /etc/resolv.conf, configure los paramétros de búsqueda DNS, debiendo usar sus servidores DNS y su dominio como mejor opción, o usar los nuestros como opción predeterminada
 {% highlight bash %}
-/etc/resolv.conf
+cat << MAFI > /etc/resolv.conf
 search salud.gob.sv 
 nameserver 10.10.20.20 
 nameserver 10.10.20.21
+MAFI
 {% endhighlight %}
 
 ## /etc/host.conf
@@ -105,7 +106,7 @@ PING mail.salud.gob.sv (10.10.20.7) 56(84) bytes of data.
 64 bytes from 10.10.20.7: icmp_req=1 ttl=63 time=1.34 ms
 {% endhighlight %}
 
-¿Ha fallado el último ping? Es posible entonces que su gateway sea el de un proveedor externo que aún no ha configurado una ruta estática hacia la DMZ de Minsal. Añada esta ruta temporalmente, hasta que sea configurada después en los ficheros correspondientes
+¿Ha fallado el último ping? Es posible entonces que su gateway sea el de un proveedor externo que aún no ha configurado una ruta estática hacia la DMZ de Minsal. Añada esta ruta temporalmente, hasta que sea configurada después en los ficheros correspondientes. Recuerde contactar con su proveedor para resolver este problema en cuento antes.
 {% highlight bash %}
 route add -net 10.10.20.0/24 gw 192.168.17.1 
 {% endhighlight %}

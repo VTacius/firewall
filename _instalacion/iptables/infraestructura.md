@@ -42,6 +42,8 @@ listados["admins"]="
 INSTITUCION="Firewall de prueba"
 ## Nombre del equipo
 NOMBRE=firewall
+## Fondo monetario con el que se ha comprado el hardware donde corre este firewall 
+FONDO_COMPRA=""
 ## Dominio del equipo (salud.gob.sv por defecto)
 DOMINIO=empresa.com
 ## Versión de la guía que esta usando para configurar

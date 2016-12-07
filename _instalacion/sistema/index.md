@@ -49,7 +49,7 @@ aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sar
 
 Instale los siguientes paquetes para obtener herramientas de monitoreo útiles para un servidor como este
 {% highlight bash %}
-DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng iptstate
+DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng iptstate ntp
 {% endhighlight %}
 
 Configure VIM
@@ -59,6 +59,12 @@ sed -i '/\"syntax on/c\syntax on' /etc/vim/vimrc
 sed -i '/^syntax /a set number' /etc/vim/vimrc
 sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
 sed -i '/\"set background=dark/c\set background=dark' /etc/vim/vimrc
+{% endhighlight %}
+
+Configure alternatives editor
+Este podría considerarse cuestión de gustos, pero nano puede llegar a considerarse engorroso a la hora de modificar ciertos ficheros
+{% highlight bash %}
+update-alternatives --set editor /usr/bin/vim.basic
 {% endhighlight %}
 
 Active los módulos para manejo de sesiones FTP.

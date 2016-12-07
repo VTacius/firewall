@@ -16,6 +16,42 @@ header: no
 
 # Otras configuraciones importantes
 
+## Script asistenciales
+Crearemos el fichero `/root/fws/tools/cleantmp.sh` 
+{% highlight bash %}
+cat << "MAFI" > /root/fws/tools/cleantmp.sh
+#!/bin/bash
+for fichero in `find /var/tmp/ -mindepth 1`; do fuser -s $fichero  || rm $fichero; done
+MAFI
+{% endhighlight %}
+
+Y lo ponemos en crontab de una forma un poco alterna debido a que somos quisquillosos con la hora:
+{% highlight bash %}
+crontab -l > horario.cron
+if [ 0 -eq `grep cleantmp.sh horario.cron -c` ]; then  echo "  0 0  * * 0 /root/fws/tools/cleantmp.sh" >> horario.cron && crontab horario.cron; fi
+rm horario.cron
+{% endhighlight %}
+
+Ahora, el script `/root/fws/tools/reinicio.sh`. Usarlo en lugar de reiniciar la red, que puede ser algo engorroso y lento;  a menos que haya agregado la definición de una red en `/etc/network/interfaces`
+{% highlight bash %}
+cat << "MAFI" > /root/fws/tools/reinicio.sh
+#!/bin/bash
+# Configuración de la tabla FILTER de IPTABLES. Recuerde que al menos root debe tener permisos de ejecución 
+/root/fws/firewall.sh
+
+# Configuración de tabla NAT en IPTABLES, y configuración de rutas
+/root/fws/rutas.sh 
+
+# Configura una dmz en caso de tenerla
+if [ 1 -eq `egrep '^\s*post-up /root/fws/dmz.sh' /etc/network/interfaces -c` ]; then
+    /root/fws/dmz.sh 
+fi
+
+# Configuración personalizada de reglas especificas para el establecimiento dado.
+/root/fws/establecimiento.sh
+MAFI
+{% endhighlight %}
+
 ## Configuración de Registro de Iptables
 En principio, estas configuraciones no parecerían esenciales para el correcto funcionamiento de su firewall. Sin embargo, TODAS son fundamentales para que la experiencia de uso sea verdaderamente profesional tanto para los usuarios como para usted como administrador.  
 
@@ -147,6 +183,7 @@ mutt -nx -s "Probando desde cero el Mutt" fws@empresa.com
 {% endhighlight %}
 
 A continuación, aparecerán unos cuantos mensajes donde se le pide confirmar los certificados como válidos: Una vez aceptados, no requerirá intervención alguna nunca más.
+
 Creamos un script que diariamente ejecute un backup de todos los archivos involucrados en la configuración de nuestro firewall. 
 {% highlight bash %}
 {% include_relative reportes.md %}
