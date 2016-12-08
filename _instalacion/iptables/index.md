@@ -17,11 +17,10 @@ header: no
 # Configuración de red: Filtros de paquetes, rutas y nateo
 
 ## Configuración de archivo de infraestructura
-Cree el fichero de configuración `/root/fws/infraestructura.sh`
-
 El siguiente archivo configura la infraestructura de red que ha ideado dentro de su Establecimiento.  
 Los demás archivos de configuración leerán desde acá los valores que han de usar para configurarse.
 Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción. Tómese todo el tiempo del mundo, este es básicamente el único fichero que realmente tendrá que configurar en la instalación inicial.
+
 Cree el fichero `/root/fws/infraestructura.sh` con el siguiente contenido y configure según los comentarios:
 {% highlight bash %}
 {% include_relative infraestructura.md %}
@@ -29,23 +28,23 @@ Cree el fichero `/root/fws/infraestructura.sh` con el siguiente contenido y conf
 
 ## Creación de Grupos IPSET
 Este fichero no necesita configuración alguna. Se limita a crear los grupos que usted ha configurado en `/root/fws/infraestructura.sh`
+
+Cree el fichero `/root/fws/grupos_ipset.sh` con el siguiente contenido
 {% highlight bash %}
 {% include_relative grupos_ipset.md %}
 {% endhighlight %}
 
 ## Configuración del Filtrado de Paquetes de Red
-Cree el fichero de configuración para la tabla Filter de Iptables en `/root/fws/firewall.sh`  
+Las reglas que se configuran en este script pretenden ser didácticas, su intención es que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades.
+No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota. Para agregar reglas, eche mano del script `establecimiento.sh`
 
-Las reglas pretenden ser didácticas, esperando de hecho que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades
-No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota.
+Cree el fichero de configuración para la tabla Filter de Iptables en `/root/fws/firewall.sh` con el siguiente contenido
 {% highlight bash %}
 {% include_relative firewall.md %}
 {% endhighlight %}
 
 ## Configuración de Tablas Nat y rutas en general
-Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh`.  
-
-El contenido de dicho fichero se muestra a continuación
+Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh` con el siguiente contenido
 {% highlight bash %}
 {% include_relative rutas.md %}
 {% endhighlight %}
