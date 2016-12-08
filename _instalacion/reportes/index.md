@@ -36,6 +36,9 @@ Ahora, el script `/root/fws/tools/reinicio.sh`. Usarlo en lugar de reiniciar la 
 {% highlight bash %}
 cat << "MAFI" > /root/fws/tools/reinicio.sh
 #!/bin/bash
+# Configuración de los grupos IPSET a usar en IPTABLES
+/root/fws/grupos_ipset.sh
+
 # Configuración de la tabla FILTER de IPTABLES. Recuerde que al menos root debe tener permisos de ejecución 
 /root/fws/firewall.sh
 
