@@ -113,9 +113,10 @@ http_access deny NONE
 {% endhighlight %}
 
 Los tres pool definen el siguiente comportamiento:
-* Al acceder a los sitios en la ACL STREAMING, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
-* Al acceder a los sitios en la ACL DISPENSA, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
-* Para todo el tráfico restante, squid3 tratará de usar no más de 1536 Kbps.
+
++ Al acceder a los sitios en la ACL STREAMING, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
++ Al acceder a los sitios en la ACL DISPENSA, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
++ Para todo el tráfico restante, squid3 tratará de usar no más de 1536 Kbps.
 
 Si necesita agregar una bucket adicional, debe configurarse antes del bucket por defecto, el último en el ejemplo
 

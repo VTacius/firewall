@@ -113,3 +113,4 @@ fi
 # Vamos a guardar 10 backup. Esto de no tener uno a la mano en cada servidor es como algo loco
 find /root/fws/archivo/backup*tgz -mtime +10 -exec rm  {} +
 
+MAFI

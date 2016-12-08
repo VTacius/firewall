@@ -72,22 +72,3 @@ SRD=10.20.20.1
 ## RED DMZ
 DMZ=10.20.20.0/24 
 
-#### Operaciones para la creación de grupos IPSET #####
-## Grupos con IP para listas varias
-for grupo in ${!listados[*]}
-do
-    ipset -exist create $grupo hash:ip
-    for ipa in ${listados[$grupo]}
-    do
-        ipset -exist add $grupo $ipa
-    done
-done
-
-for grupo in ${!listados_red[*]}
-do
-    ipset -exist create $grupo hash:net
-    for red in ${listados_red[$grupo]}
-    do
-        ipset -exist add $grupo $red
-    done
-done
