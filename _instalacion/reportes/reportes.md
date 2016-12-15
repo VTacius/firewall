@@ -16,7 +16,7 @@ var_timeon_hours=$(uptime | awk -F "," '{print $2}')
 var_memused=$(free -m | awk '/Mem/ {print $3}')
 var_memfree=$(free -m | awk '/Mem/ {print $4}')
 var_memtotal=$(free -m | awk '/Mem/ {print $2}')
-archivos=(establecimiento.sh  firewall.sh  infraestructura.sh  rutas.sh)
+archivos=(establecimiento.sh  firewall.sh  infraestructura.sh  rutas.sh grupos_ipset.sh)
 
 # Verificamos el estado actual de las reglas por defecto para las cadenas en FILTER de IPTABLES
 estado_input=$(iptables -t filter -nvL INPUT | grep -oP '\(policy\s\K(\w+)')
