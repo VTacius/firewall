@@ -1,5 +1,4 @@
-#firewall
-
+# Firewall
 Configuración de Iptables + Squid3 + SquidGuard como Firewall/Proxy para pequeñas organizaciones
 
 ## Introducción
