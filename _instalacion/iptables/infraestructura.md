@@ -17,10 +17,16 @@ listados_red["LAN"]="
 ## mediante un enlace destinado específicamente para ello
 listados_red["RWA"]="
     10.10.20.0/24
+    10.168.0.0/16
+    192.168.0.0/16
+" 
+
+listados_red["MH"]="
     192.168.83.0/24
     192.168.85.0/24
     192.168.87.0/24
-" 
+"
+
 
 ### Listados de grupos HOST
 ## IP Interfaz de Red LAN 

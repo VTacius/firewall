@@ -32,32 +32,31 @@ FWD_DDMZ="iptables -t filter -A FWD_DMZ -i $INL -m set --match-set LAN src -o $I
 ## Trafico de servicios avanzados
 # Revise cuales son verdaderamente necesarios para su establecimiento
 
-# Acceso remoto al servidor de Hacienda
-$FWD_SLAN -p tcp --dport 63231 -m conntrack --ctstate NEW -j ACCEPT
+# HACIENDA: Acceso al escritorio remoto y a servidor SFTP
+$FWD_SLAN -m set --match-set RWA dst -m multiport -p tcp --dport 22,63231 -m conntrack --ctstate NEW -j ACCEPT
 
-# Acceso remoto para monitoreo y administración de telefonía IP
+# PBX: Acceso remoto para monitoreo y administración de telefonía IP
 # $FWD_SWAN -m set --match-set admins src -d $LBX -p tcp -m multiport --dport 22,80,443 -m conntrack --ctstate NEW -m comment --comment "Administración remota para PBX" -j ACCEPT
 # $FWD_SWAN -m set --match-set admins src -d $LBX -p icmp -m comment --comment "Monitoreo remoto para PBX" -j ACCEPT
 
-## Configuración necesaria para Comunicarse con Antivirus Kaspersky
+# KASPERSKY: Configuración necesaria para Comunicarse con Antivirus Kaspersky
 #$FWD_SLAN -d 10.10.20.5 -p tcp -m multiport --dport 13000,13111,14000 -m conntrack --ctstate NEW -j ACCEPT
 #$FWD_SLAN -d 10.10.20.5 -p udp -m multiport --dport 7,67,69,13000,1500,1501 -j ACCEPT
 #$FWD_SLAN -d 10.10.20.5 -p icmp -j ACCEPT
 #$FWD_SWAN -s 10.10.20.5 -p udp -m multiport --dport 15000,15001 -j ACCEPT
 #$FWD_SWAN -s 10.10.20.5 -p tcp -m multiport --dport 13000,13111,14000 -j ACCEPT
 
-# Publica un servicio hacia la WAN. 
-# Quizá este interesado en compartir impresoras con Hacienda
-# Considere configurar esto en dmz.sh si acaso aplica para su infraestructura
-iptables -t nat -A SERVICIOS -d 192.168.2.5 -j DNAT --to-destination 10.20.20.10
-iptables -t filter -A FWD_LOCAL -d 10.20.20.10 -p tcp -m multiport --dport 4000 -j ACCEPT
+# OTROS SERVICIOS:
+# Ejemplo 1: Impresora con Hacienda mediante una IP "Pública"
+#iptables -t nat -A SERVICIOS -d 192.168.2.5 -j DNAT --to-destination 10.20.20.10
+#iptables -t filter -A FWD_LOCAL -d 10.20.20.10 -p tcp -m multiport --dport 9100 -j ACCEPT
 
-# Servicios publicados hacia WAN
-iptables -t nat -A SERVICIOS -d 192.168.2.6 -j DNAT --to-destination 10.30.20.5
-iptables -t filter -A FWD_DMZ -d 10.30.20.5 -p tcp -m multiport --dport 80 -j ACCEPT
+# Ejemplo 2: Servidor web mediante una IP "Pública"
+#iptables -t nat -A SERVICIOS -d 192.168.2.6 -j DNAT --to-destination 10.30.20.5
+#iptables -t filter -A FWD_DMZ -d 10.30.20.5 -p tcp -m multiport --dport 80,443 -j ACCEPT
 
-# Las siguientes reglas deberían permitir la comunicación entre <<telefono>> y <<pbx>>
-# cuando es <<telefono>> el que se encuentra en dicho servidor. No es necesario cambiar nada en el nateo
+# Ejemplo 3: Comunicación entre un teléfono IP dentro de LAN y un servidor PBX externo.
+# Esta es la exacta configuración de permisos, no son necesarios cambios en nateo
 # $FWD_SSET -s <<telefono>> -d <<pbx>> -p udp -j ACCEPT
 # $FWD_SSET -s <<pbx>> -d <<telefono>> -p udp -m multiport --dport 5004,5005,5060 -j ACCEPT
 

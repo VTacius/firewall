@@ -12,13 +12,16 @@ iptables -t filter -X
 iptables -t filter -P INPUT   DROP 
 iptables -t filter -P OUTPUT  DROP 
 iptables -t filter -P FORWARD DROP 
+
 ### OUTPUT ### 
+
 ## Salida desde $INL 
 iptables -t filter -A OUTPUT -m set --match-set SRV src -m set --match-set SRV dst -m comment --comment "Permisivo hacia IP de interfaz LAN" -j ACCEPT 
 OUTPUTL="iptables -t filter -A OUTPUT -o $INL -m set --match-set LAN dst" 
 $OUTPUTL -p tcp -m multiport --sport 3128,22,80 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta a tráfico originado en LAN" -j ACCEPT 
 $OUTPUTL -p tcp -m multiport --dport 22 -m comment --comment "Servicios permitidos hacia LAN" -j ACCEPT 
 $OUTPUTL -p icmp -m comment --comment "Sondeo desde Firewall hacia si mismo" -j ACCEPT 
+
 ## Salida desde $INW 
 OUTPUTW="iptables -t filter -A OUTPUT -o $INW"
 $OUTPUTW -m set --match-set admins dst -m multiport -p tcp --sport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Puertos abiertos para WAN"  -j ACCEPT
@@ -49,7 +52,8 @@ $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m connt
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate NEW -m comment --comment "ICMP para #admins" -j ACCEPT
 $INPUTW -p icmp -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "ICMP iniciado por Firewall" -j ACCEPT
 
-### FORWARD 
+### FORWARD ###
+
 ## Habilitamos todo el tráfico de respuesta
 iptables -t filter -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -t filter -A FORWARD -i $INL -m set --match-set LAN src -o $INW -p icmp -m conntrack --ctstate ESTABLISHED,RELATED  -j ACCEPT
@@ -62,10 +66,10 @@ $FWDW admins src -o $INL -m set --match-set LAN dst -p tcp -m multiport --dport 
 ## Tráfico de servicios básicos
 FWDL="iptables -t filter -A FORWARD -i $INL -m set --match-set LAN src -o $INW"
 $FWDL -p udp -m multiport --dport 53,123 -m conntrack --ctstate NEW -j ACCEPT
-$FWDL -p tcp -m multiport --dport 80,443  -m set --match-set RWA dst -m conntrack --ctstate NEW -m comment --comment "Cliente WEB para DMZ Hacienda" -j ACCEPT
-$FWDL -p tcp -m multiport --dport 53,587,465 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo SMTP" -j ACCEPT
-$FWDL -p tcp -m multiport --dport 110,995 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo POP3" -j ACCEPT 
-$FWDL -p tcp -m multiport --dport 20,21 -m conntrack --ctstate NEW -m comment --comment "Cliente de correo FTP" -j ACCEPT 
+$FWDL -p tcp -m multiport --dport 80,443  -m set --match-set RWA dst -m conntrack --ctstate NEW -m comment --comment "Cliente WEB para Redes Alternas" -j ACCEPT
+$FWDL -p tcp -m multiport --dport 53,587,465 -m conntrack --ctstate NEW -m comment --comment "Cliente SMTP" -j ACCEPT
+$FWDL -p tcp -m multiport --dport 110,995 -m conntrack --ctstate NEW -m comment --comment "Cliente POP3" -j ACCEPT 
+$FWDL -p tcp -m multiport --dport 20,21 -m conntrack --ctstate NEW -m comment --comment "Cliente FTP" -j ACCEPT 
 
 ## Reglas personalizadas
 # Servicios personalizados

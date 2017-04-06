@@ -28,7 +28,7 @@ Creamos los ficheros de configuración a los que se hace referencia en `/etc/net
 mkdir -p ~/fws/{tools,archivo}
 cd ~/fws 
 touch ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimiento.sh,dmz.sh,grupos_ipset.sh}
-chmod 744 firewall.sh rutas.sh infraestructura.sh establecimiento.sh dmz.sh
+chmod 744 ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimiento.sh,dmz.sh,grupos_ipset.sh}
 {% endhighlight %}
 
 ## /etc/hosts
