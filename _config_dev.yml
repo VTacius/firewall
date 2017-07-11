@@ -5,5 +5,9 @@
 #
 # Start development with › $ jekyll serve --config _config.yml,_config_dev.yml
 
-url: "http://192.168.2.5:4000/firewall"
-urlimg: "/firewall/assets/proyecto"
+#url: "http://192.168.2.5:4000/firewall"
+#urlimg: "/firewall/assets/proyecto"
+
+url: "http://192.168.2.20:4000/firewall"
+baseurl: ""
+urlimg: "/assets/proyecto"
