@@ -12,7 +12,7 @@ do
     ipset -exist create $grupo hash:ip
     for ipa in ${listados[$grupo]}
     do  
-        ipset -exist add $grupo $ipa
+        ipset -exist add $grupo $(echo $ipa | cut -d '/' -f 1)
     done
 done
 
@@ -24,4 +24,3 @@ do
         ipset -exist add $grupo $red
     done
 done
-

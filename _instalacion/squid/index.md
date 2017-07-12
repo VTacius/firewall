@@ -3,7 +3,7 @@ layout: docs
 site.author: Alexander Ortiz
 author: Alexander Ortiz
 title: Configuración de Squid
-orden: 4
+orden: 5
 header: no
 ---
 
@@ -15,36 +15,28 @@ header: no
 </div>
 
 # Configuración de Squid
-Borre el contenido del fichero de configuración de Squid, y copie el contenido siguiente.
-Asegúrese de hacer una copia del contenido limpia, cuide los saltos de línea y tabulaciones.
+Copiar y ejecutar los siguientes comandos desde consola creará un fichero de configuración para Squid en su mínima forma
 
 {% highlight squid %}
-{% include_relative squid3.md %}
+chown proxy:proxy /var/spool/squid/dump
+mkdir /var/spool/squid/dump
+source ~/fws/infraestructura.sh
+cat <<MAFI > /etc/squid/squid.conf
+{% include_relative squid.md %}
+MAFI
 {% endhighlight %}
 
 # Personalizando la configuración: 
-Los siguientes comandos configuran Squid de acuerdo a los parámetros en `/root/fws/infraestructura.sh`
+Puede cambiar los valores por defecto para `url_rewrite_children`. Es importante que deje `concurrency=0` o squidGuard dejará de funcionar:
 
 {% highlight bash %}
-
-source /root/fws/infraestructura.sh;
-unset acl;for i in ${listados_red[LAN]}; do acl=$acl"acl usuarios src $i\n"; done
-sed -i "s|<<acl_usuarios>>|$acl|g" /etc/squid3/squid.conf
-unset port; for i in ${listados[SRV]}; do port=$port"http_port $i:3128 intercept\n"; done
-sed -i "s|<<http_port>>|$port|g" /etc/squid3/squid.conf
-sed -i "s/<<hostname>>/`hostname -f`/g" /etc/squid3/squid.conf
+url_rewrite_children 15 startup=50 idle=10 concurrency=0
 {% endhighlight %}
 
-Luego, puede cambiar los valores por defecto para url_rewrite_children:
-
-{% highlight bash %}
-url_rewrite_children 5 startup=0 idle=1 concurrency=3
-{% endhighlight %}
-
-Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 15 startup=0 idle=1 concurrency=5`, que sin embargo es fácilmente superable por algunos servidores
+Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 30 startup=0 idle=1 concurrency=0`, que sin embargo es fácilmente superable por algunos servidores.
 
 # Despliegue de configuración
-Ni siquiera reinicie Squid3 aún, realizaremos el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
+Ni siquiera reinicie Squid aún, realizaremos el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
 
 # Configuración avanzada  
 
@@ -54,7 +46,7 @@ La experiencia dice que si su enlace no es de al menos 5 Mbps, es conveniente po
 Puede calcular el valor a usar con  la formula `(x * 1000) / 8`, donde `x` es la restricción en kbps que quiere hacer al uso de ancho de banda.
 
 Hasta 2 Mb, considere usar el 75%: (2048 / 4) * 3 
-Luego, hasta 5 Mb, puede considerar 80%: (5120 / 5) *4
+Luego, hasta 5 Mb, puede considerar 80%: (5120 / 5) * 4
 
 La ubicación de esta configuración es inmediatamente antes de las directivas `http_access`. El siguiente ejemplo limitara a 1536 Kb:
 

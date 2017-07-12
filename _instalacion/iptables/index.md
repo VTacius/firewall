@@ -3,7 +3,7 @@ layout: docs
 site.author: Alexander Ortiz
 author: Alexander Ortiz
 title: Configuración de red. Filtros de paquetes, rutas y nateo
-orden: 3
+orden: 4
 header: no
 ---
 
@@ -15,38 +15,31 @@ header: no
 </div>
 
 # Configuración de red: Filtros de paquetes, rutas y nateo
-
-## Configuración de archivo de infraestructura
-El siguiente archivo configura la infraestructura de red que ha ideado dentro de su Establecimiento.  
-Los demás archivos de configuración leerán desde acá los valores que han de usar para configurarse.
-Los comentarios son bastante ilustrativos sobre como debe configurarse cada opción. Tómese todo el tiempo del mundo, este es básicamente el único fichero que realmente tendrá que configurar en la instalación inicial.
-
-Cree el fichero `/root/fws/infraestructura.sh` con el siguiente contenido y configure según los comentarios:
-{% highlight bash %}
-{% include_relative infraestructura.md %}
-{% endhighlight %}
+Los siguientes ficheros configuran el manejo que este firewall hace del tráfico de red. Por ahora, se trata sobre todo del filtro de paquetes y nateo
 
 ## Creación de Grupos IPSET
 Este fichero no necesita configuración alguna. Se limita a crear los grupos que usted ha configurado en `/root/fws/infraestructura.sh`
-
-Cree el fichero `/root/fws/grupos_ipset.sh` con el siguiente contenido
 {% highlight bash %}
+cat << "MAFI" > /root/fws/grupos_ipset.sh
 {% include_relative grupos_ipset.md %}
+MAFI
 {% endhighlight %}
 
 ## Configuración del Filtrado de Paquetes de Red
-Las reglas que se configuran en este script pretenden ser didácticas, su intención es que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades.
-No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota. Para agregar reglas, eche mano del script `establecimiento.sh`
-
-Cree el fichero de configuración para la tabla Filter de Iptables en `/root/fws/firewall.sh` con el siguiente contenido
+Las reglas que se configuran en este script pretenden ser didácticas; su intención es que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades.
+No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota. Para agregar reglas, eche mano del script `~/fws/establecimiento.sh`
 {% highlight bash %}
+cat << "MAFI" > /root/fws/firewall.sh
 {% include_relative firewall.md %}
+MAFI
 {% endhighlight %}
 
 ## Configuración de Tablas Nat y rutas en general
-Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/rutas.sh` con el siguiente contenido
+El siguiente script tampoco necesita configuración, y es poco probable que tenga que cambiarlo ya que siempre puede hechar mano del script `~/fws/establecimiento.sh`.
 {% highlight bash %}
+cat << "MAFI" > /root/fws/rutas.sh 
 {% include_relative rutas.md %}
+MAFI
 {% endhighlight %}
 
 ## Configuración de DMZ
@@ -54,17 +47,20 @@ Cree el archivo de configuración para la tabla Nat de Iptables en `/root/fws/ru
 
 La DMZ puede ser un trabajo realmente complicado. No hay una formula mágica: Aún con el mejor asistente gráfico de configuración, se requiere que usted realmente entienda la red que esta configurando. 
 
-El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del fichero establecimiento.sh. 
-
+El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del script `~/fws/establecimiento.sh`.
 {% highlight bash %}
+cat << "MAFI" > /root/fws/dmz.sh
 {% include_relative dmz.md %}
+MAFI
 {% endhighlight %}
 
 ## Configuración de reglas específicas para el establecimiento
 En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las que ya han sido configuradas en los ficheros anteriores. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
 Un ejemplo del fichero `/root/fws/establecimiento.sh`, con algunos ejemplos listos para usar y útiles para muchos establecimientos, es mostrada a continuación
 {% highlight bash %}
+cat << "MAFI" > /root/fws/establecimiento.sh
 {% include_relative establecimiento.md %}
+MAFI
 {% endhighlight %}
 
 # Personalización de la configuración
@@ -73,7 +69,7 @@ En definitiva, la mayoría de estos ficheros pueden recibir actualizaciones, por
 Si usted tiene alguna sugerencia para el cambio de estos ficheros, comuníquese con el nivel central, que estará agradecido por sus sugerencias.
 
 `/root/fws/firewall.sh`
- : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo** 
+ : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo 
 
 `/root/fws/rutas.sh`
  : Al igual que con el archivo `/root/fws/firewall.sh`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
@@ -88,16 +84,16 @@ Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal 
 # Despliegue de la configuración
 Habiendo configurado los archivos anteriores, reinicie la red:
 {% highlight bash %}
-service networking restart
+systemctl restart networking.service
 {% endhighlight %}
 
 Existe la extraña posibilidad que aparezca un mensaje de error como el siguiente:
 {% highlight bash %}
-Reconfiguring network interfaces...RTNETLINK answers: File exists
-Failed to bring up eth1.
+Job for networking.service failed because the control process exited with error code.
+See "systemctl status networking.service" and "journalctl -xe" for details.
 {% endhighlight %}
 
-Bastará con forzar el apagado de dicha interfaz:
+Sería buena idea en realidad correr el comando `journalctl -xe`, pero es posible que haya habido un problema previo con la configuración de alguna de las interfaces. Para eso, bastará con forzar el apagado de dicha interfaz:
 {% highlight bash %}
 ifdown --force eth1
 {% endhighlight %}

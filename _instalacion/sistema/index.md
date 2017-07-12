@@ -3,7 +3,7 @@ layout: docs
 site.author: Alexander Ortiz
 author: Alexander Ortiz
 title: Configuración sobre el sistema
-orden: 2
+orden: 3
 header: no
 ---
 
@@ -25,55 +25,63 @@ rm /etc/apt/sources.list
 
 cat << MAFI > /etc/apt/sources.list 
 #Inicio del archivo /etc/apt/sources.list para servidores
-deb http://debian.salud.gob.sv/debian/ wheezy main contrib non-free
-deb-src http://debian.salud.gob.sv/debian/ wheezy main contrib non-free
+deb http://debian.salud.gob.sv/debian/ stretch main contrib non-free
+deb-src http://debian.salud.gob.sv/debian/ stretch main contrib non-free
 
-deb http://debian.salud.gob.sv/debian/ wheezy-updates main contrib non-free
-deb-src http://debian.salud.gob.sv/debian/ wheezy-updates main contrib non-free
+deb http://debian.salud.gob.sv/debian/ stretch-updates main contrib non-free
+deb-src http://debian.salud.gob.sv/debian/ stretch-updates main contrib non-free
 
-deb http://debian.salud.gob.sv/debian-security/ wheezy/updates main contrib non-free
-deb-src http://debian.salud.gob.sv/debian-security/ wheezy/updates main contrib non-free
+deb http://debian.salud.gob.sv/debian-security/ stretch/updates main contrib non-free
+deb-src http://debian.salud.gob.sv/debian-security/ stretch/updates main contrib non-free
 #Fin del archivo /etc/apt/sources.list
 MAFI
 {% endhighlight %}
 
 Y actualice el sistema, tarea que debe realizar cada tanto:
 {% highlight bash %}
-aptitude upgrade 
+apt-get update
+apt-get upgrade 
 {% endhighlight %}
 
-Instale todos los paquetes necesarios. Aptitude se encargará de revolver todas las dependencias necesarias
+Los siguientes paquetes son necesarios para las funciones críticas de su firewall.
 {% highlight bash %}
-aptitude -y install squid3 squidGuard ipset apache2 apache2-mpm-prefork php5 sarg
+apt-get install -y squid squidguard{,-doc} ipset apache2 libapache2-mod-php7.0 php7.0 sarg vim
 {% endhighlight %}
 
-Instale los siguientes paquetes para obtener herramientas de monitoreo útiles para un servidor como este
+El siguiente paquete va para DHCP
 {% highlight bash %}
-DEBIAN_FRONTEND=noninteractive aptitude -y install vim htop iptraf vnstat lshw nmap pv python3 squidview sudo tcpdump tree tmux tshark bwm-ng iptstate ntp
+apt-get install -y isc-dhcp-server
 {% endhighlight %}
 
-Configure VIM
-Active, respectivamente, el resaltado de sintaxis, numerado de líneas,  identado a 4 espacios y, en el caso que el fondo de su terminal sea oscuro (Algo que recomiendo para la comodidad de sus ojos), configure el patrón de colores para tal efecto.
+Instale los siguientes paquetes para obtener herramientas de monitoreo y administración
 {% highlight bash %}
-sed -i '/\"syntax on/c\syntax on' /etc/vim/vimrc
-sed -i '/^syntax /a set number' /etc/vim/vimrc
+echo "wireshark-common	wireshark-common/install-setuid	boolean	false" | debconf-set-selections
+apt-get -y install nmap tree pv sudo lshw iptraf tcpdump tmux tshark bwm-ng iptstate 
+{% endhighlight %}
+
+Configure VIM  
+Active, respectivamente y a su gusto, identado a 4 espacios, numerado de líneas y, en el caso que el fondo de su terminal sea oscuro, el patrón de colores para tal efecto.  
+Por último, configure el comportamiento más clásico para mouse
+{% highlight bash %}
 sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
+sed -i '/^syntax /a set number' /etc/vim/vimrc
 sed -i '/\"set background=dark/c\set background=dark' /etc/vim/vimrc
+sed -i -r 's/(set\smouse=)\w/\1r/' /usr/share/vim/vim80/defaults.vim
 {% endhighlight %}
 
-Configure alternatives editor
+Configure alternatives editor  
 Este podría considerarse cuestión de gustos, pero nano puede llegar a considerarse engorroso a la hora de modificar ciertos ficheros
 {% highlight bash %}
 update-alternatives --set editor /usr/bin/vim.basic
 {% endhighlight %}
 
-Active los módulos para manejo de sesiones FTP.
+Active los módulos para manejo de sesiones FTP en tiempo real.
 {% highlight bash %}
 modprobe nf_nat_ftp
 modprobe ip_conntrack_ftp
 {% endhighlight %}
 
-Agregar los módulos para manejo de sesiones FTP  a la carga de módulos en el arranque del sistema:
+Agregar los módulos para manejo de sesiones FTP  a la carga de módulos en el arranque del sistema:  
 Configurar el reenvío de paquetes a través de interfaces, y activarla en caliente:
 {% highlight bash %}
 sed -i '$a ip_conntrack_ftp\nnf_nat_ftp ' /etc/modules
