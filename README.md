@@ -1,4 +1,4 @@
-#firewall
+# firewall
 
 Configuración de Iptables + Squid3 + SquidGuard como Firewall/Proxy para pequeñas organizaciones
 
@@ -13,4 +13,23 @@ El núcleo del proyecto es información sobre los siguientes aspectos de un Fire
 * Configuración de SquidGuard
 Todo ello esta organizado en [firewall](http://vtacius.github.io/firewall/)
 
-Además, planteamos un par de herramientas para automatizar la configuración sobre Debian, distribución que sirvió de base para este trabajo
+## reporte
+Lo que se llama el primer script de cierta importancia y que veo conveniente poner acá en lugar de en otro repo.  
+Para usarlo, será necesario crear un fichero `.configuracion_reporte.ini` con el siguiente contenido:
+
+```ini
+[correo]
+servidor = mail.salud.gob.sv
+usuario = envio@organizacion.org
+password = pass_enviante
+
+[envio]
+receptor = receptor@organizacion.org
+
+[general]
+ruta_datos = '/var/spool/actividad'
+tipo_fuente = '/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf'
+
+[sistema]
+memoria_ram = "4000000"
+```
