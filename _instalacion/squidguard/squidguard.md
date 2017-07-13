@@ -10,12 +10,12 @@ logdir /var/log/squidguard
 {% include_relative src_usuario.md %}
 ## Empiezan sus reglas personalizadas 
 src usuarios_laboral {
-    <<redlan>>
+    $(for r in ${listados_red['LAN']}; do printf "ip %s\n" $r; done)
     within  laboral
 }
 
 src usuarios_almuerzo {
-    <<redlan>>
+    $(for r in ${listados_red['LAN']}; do printf "ip %s\n" $r; done)
     within  almuerzo
 }
 
@@ -23,16 +23,16 @@ src usuarios_almuerzo {
 {% include_relative acl_rules.md %}
     usuarios_laboral  { 
         pass sitios !in-addr !adv !archivos !compras !descargas !deportes !foros !juegos !juegos-online !juegos-misc !musica !peliculas !porn !proxy !radio !redes !sexo !tracker !warez !web-proxy !web-tv !webphone !any 
-        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
+        redirect http://$(echo ${SRV[0]} | cut -d '/' -f 1)/index.php?purl=%u&razon=%t 
     } 
    
     usuarios_almuerzo  { 
         pass sitios !in-addr !adv !archivos !compras !descargas !juegos !porn !proxy !radio !sexo !tracker !warez !web-proxy !any 
-        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
+        redirect http://$(echo ${SRV[0]} | cut -d '/' -f 1)/index.php?purl=%u&razon=%t 
     } 
  
     default { 
         pass   none 
-        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t 
+        redirect http://$(echo ${SRV[0]} | cut -d '/' -f 1)/index.php?purl=%u&razon=%t 
     } 
 }

@@ -59,6 +59,16 @@ echo "wireshark-common	wireshark-common/install-setuid	boolean	false" | debconf-
 apt-get -y install nmap tree pv sudo lshw iptraf tcpdump tmux tshark bwm-ng iptstate 
 {% endhighlight %}
 
+Instale los siguientes paquetes si quiere la configuración para reportes diarios de actividad.
+{% highlight bash %}
+apt-get install sysstat libemail-sender-perl libemail-sender-transport-smtps-perl libemail-mime-perl libfile-slurp-perl libio-all-perl libdate-calc-perl libconfig-simple-perl libgd-graph-perl 
+{% endhighlight %}
+
+Los siguientes paquetes ayudan al script de diferencias, precisamente, a encontrar las diferencias entre los archivos de configuración que componen al firewall
+{% highlight bash %}
+apt-get install libtext-diff-perl
+{% endhighlight %}
+
 Configure VIM  
 Active, respectivamente y a su gusto, identado a 4 espacios, numerado de líneas y, en el caso que el fondo de su terminal sea oscuro, el patrón de colores para tal efecto.  
 Por último, configure el comportamiento más clásico para mouse

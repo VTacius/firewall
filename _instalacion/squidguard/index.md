@@ -18,46 +18,39 @@ header: no
 Borre el contenido del archivo original de configuración de SquidGuard y copie el siguiente.
 Si va a cambiar su contenido, tenga especial cuidado con los comentarios: No comente el contenido entre corchetes.
 
-{% highlight squid %}
-{% include_relative squidguard.md %}
-{% endhighlight %}
-
-# Personalizando la configuración: 
-Los siguientes comandos son la primera configuración que debe hacerse, automáticamente y en base a lo establecido en `/root/fws/infraestructura.sh`
-{% highlight bash %}
+{% highlight nginx %}
 source /root/fws/infraestructura.sh
-unset red;for i in ${listados_red[LAN]}; do red=$red"ip $i\n"; done
-sed -i "s|<<redlan>>|$red|g" /etc/squidguard/squidGuard.conf 
-unset srv;srv=(${listados[SRV]})
-sed -i "s|<<ipaddresslan>>|${srv[0]}|" /etc/squidguard/squidGuard.conf
+SRV=(${listados['SRV']})
+cat << MAFI > /etc/squidguard/squidGuard.conf
+{% include_relative squidguard.md %}
+
+MAFI
 {% endhighlight %}
 
-Obtener las listas negras a las que se refiere el archivo anterior. Si la descarga tarda mucho, cancele y vuelva a iniciar
+# Personalizando la configuración
+Obtener las listas negras a las que se hace referencia en el fichero anterior. No ubicamos en el directorio correspondiente, descargamos y descomprimimos
 {% highlight bash %}
 cd /var/lib/squidguard/db/
 wget http://www.shallalist.de/Downloads/shallalist.tar.gz 
-{% endhighlight %}
-
-Descomprima y normalice permisos. 
-{% highlight bash %}
 tar -xzvf shallalist.tar.gz
 {% endhighlight %}
 
 Ejecute lo siguientes comandos para crear ficheros donde guardar personalizaciones básicas.
 {% highlight bash %}
 mkdir /var/lib/squidguard/db/custom
-touch /var/lib/squidguard/db/custom/irrestrictos.lst
-touch /var/lib/squidguard/db/custom/restrictos.lst
+touch /var/lib/squidguard/db/custom/{,ir}restrictos.lst
 source /root/fws/infraestructura.sh
-unset srv;srv=(${listados[SRV]})
+SRV=(${listados['SRV']})
 cat << MAFI > /var/lib/squidguard/db/custom/sitios.lst
-${srv[0]}
+$(echo $SRV[0] | cut -d '/' -f 1)
 gob.sv
 typepad.com
 blogspot.com
 wordpress.com
 MAFI
-echo ".\.(com|exe|pif|scr|vbe|vbs|wsf|bat|inf|reg|lnk|url|iso|chm|hlp|avi|wma|wmf|mp3|drv|ovr|dll|torrent)$" > /var/lib/squidguard/db/custom/extensiones.lst
+cat << MAFI > /var/lib/squidguard/db/custom/extensiones.lst
+.\.(com|exe|pif|scr|vbe|vbs|wsf|bat|inf|reg|lnk|url|iso|chm|hlp|avi|wma|wmf|mp3|drv|ovr|dll|torrent)$
+MAFI
 {% endhighlight %}
 
 **Para una explicacion exhaustiva de los ficheros anteriormente creados, puede remitirse a [Extendiendo el proxy de su servidor Firewall]({{site.baseurl}}/manual/proxy)**
@@ -70,51 +63,55 @@ chown -R proxy:proxy BL custom
 # Despliegue de configuración
 Reinicie squid3, quién se encarga de iniciar/apagar a squidGuard
 {% highlight bash %}
-service squid3 restart
+systemctl restart squid.service 
 {% endhighlight %}
+
 Ahora debe revisar los log de squidGuard, (`tail -f /var/log/squidguard/squidGuard.log`).
-Es posible que vea la siguiente línea por un tiempo considerable.
+Es posible que vea la siguiente línea por un tiempo considerable. Que indica que por el considerables tamaño de esa lista, le es más difícil a squidGuard crear la base de datos correpondiente
 {% highlight bash %}
-service squid3 restart
 2015-03-07 12:46:40 [7651] init domainlist /var/lib/squidguard/db/BL/porn/domains 
 {% endhighlight %}
-Es normal porque squidGuard debe crear la base de datos para la lista de dominios `/var/lib/squidguard/db/BL/porn/domains`, la cual por alguna razón que no entiendo es considerablemente extensa.
+
 La siguiente linea marca el momento en que el proxy es capaz de recibir peticiones. No acepte nada menos que esto, otro mensaje indica algún error que debe ser revisado.
 {% highlight bash %}
 2013-06-04 09:12:15 [3348] INFO: squidGuard ready for requests (1370358735.429)
 {% endhighlight %}
+
 Pese a lo anteriormente dicho, podría aceptar también esta línea (Muchas, de hecho) si ha tardado mucho en revisar los log.
 {% highlight bash %}
 2015-03-26 12:29:31 [14125] INFO: recalculating alarm in 30 seconds
 {% endhighlight %}
 
 # Prueba de configuración
-La prueba más convincente de la configuración de filtro de contenido es ver a los usuarios navegando correctamente.  
+La prueba más convincente de la configuración de filtro de contenido es ver a usuarios reales navegando realmente.  
 En ese caso, necesita avanzar en Otras configuraciones importantes hasta Configuración de Mensajes de Error
 
-Sin embargo, es posible cerciorarse desde consola que todo funcione. Ejecute desde consola el siguiente comando, cambiando `10.20.20.5` por una ip válida en su red, sin importar si algún equipo la tiene configurada
+Sin embargo, es posible verificar desde consola que las reglas en squidGuard funcionen tal como se espera. Ejecute desde consola el siguiente comando, cambiando `10.20.20.5` por una ip válida en su red, sin importar si algún equipo la tiene configurada:
 {% highlight bash %}
 echo "hola.org/- 10.20.20.5 - GET -" | squidGuard -c /etc/squidguard/squidGuard.conf -d
 {% endhighlight %}
 
-Las últimas lineas debe ser de esta forma:
+Las últimas lineas debe tener esta forma:
 {% highlight bash %}
-2015-03-26 12:37:30 [14193] INFO: squidGuard ready for requests (1427387850.016)
-2015-03-26 12:37:30 [14193] Request(usuarios_almuerzo/web-proxy/-) hola.org/- 10.20.20.5/- - GET REDIRECT
-http://10.20.20.1/index.php?purl=hola.org/-&razon=web-proxy 10.20.20.5/- - GET
-2015-03-26 12:37:30 [14193] INFO: squidGuard stopped (1427387850.184)
+2017-07-13 08:31:59 [22635] INFO: squidGuard 1.5 started (1499956309.073)
+2017-07-13 08:31:59 [22635] INFO: squidGuard ready for requests (1499956319.099)
+2017-07-13 08:31:59 [22635] Request(usuarios_laboral/web-proxy/-) hola.org/- 10.168.4.5/- - GET REDIRECT
+OK rewrite-url="http://10.168.4.1/index.php?purl=hola.org/-&razon=web-proxy"
+2017-07-13 08:31:59 [22635] INFO: squidGuard stopped (1499956319.099)
 {% endhighlight %}
 
-Por otro lado, navegar hacia www.google.com.sv no debería causar mayores problemas
+Por otro lado, el fingir navegar hacia www.google.com.sv:
 {% highlight bash %}
 echo "www.google.com.sv/- 10.20.20.5 - GET -" | squidGuard -c /etc/squidguard/squidGuard.conf -d
-2015-03-26 12:39:27 [14206] INFO: recalculating alarm in 2073 seconds
-2015-03-26 12:39:27 [14206] INFO: squidGuard ready for requests (1427387967.027)
-<<esta línea esta en blanco en la consola>>
-2015-03-26 12:39:27 [14206] INFO: squidGuard stopped (1427387967.028)
 {% endhighlight %}
 
-En base a ello, puede seguir probando las configuraciones personalizadas que haya estado haciendo con usuarios específicos
+Debería devolver un mensaje como el siguiente. Acá, `ERR` significa error en el sentido que la URL esta permitida y no necesita una redirección como la que se arroja en el anterior ejemplo
+{% highlight bash %}
+2017-07-13 08:33:58 [22639] INFO: squidGuard 1.5 started (1499956428.578)
+2017-07-13 08:33:58 [22639] INFO: squidGuard ready for requests (1499956438.697)
+ERR
+2017-07-13 08:33:58 [22639] INFO: squidGuard stopped (1499956438.698)
+{% endhighlight %}
 
 # Configuración avanzada
 

@@ -22,7 +22,7 @@ debug_options ALL,2
 coredump_dir /var/spool/squid/dump
 
 url_rewrite_program /usr/bin/squidGuard 
-url_rewrite_children 5 startup=0 idle=1 concurrency=3
+url_rewrite_children 5 startup=5 idle=10 concurrency=0
 
 refresh_pattern .       0   20% 4320
 

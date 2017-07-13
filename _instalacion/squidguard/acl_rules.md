@@ -11,7 +11,6 @@ acl {
     } 
     
     lista_negra {
-        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t
+        redirect http://$(echo ${SRV[0]} | cut -d '/' -f 1)/index.php?purl=%u&razon=%t
     }else{
-        redirect http://<<ipaddresslan>>/index.php?purl=%u&razon=%t
-    }
+        redirect http://$(echo ${SRV[0]} | cut -d '/' -f 1)/index.php?purl=%u&razon=%t }

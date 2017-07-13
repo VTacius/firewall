@@ -17,7 +17,7 @@ header: no
 # Configuración de Squid
 Copiar y ejecutar los siguientes comandos desde consola creará un fichero de configuración para Squid en su mínima forma
 
-{% highlight squid %}
+{% highlight squidconf %}
 chown proxy:proxy /var/spool/squid/dump
 mkdir /var/spool/squid/dump
 source ~/fws/infraestructura.sh
