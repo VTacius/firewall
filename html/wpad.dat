@@ -1,0 +1,7 @@
+function FindProxyForURL(url, host)
+{
+if (isInNet(myIpAddress(), "10.20.20.0", "255.255.255.0")
+    return "PROXY 10.20.20.1:3128";
+else
+    return "DIRECT";
+} 
