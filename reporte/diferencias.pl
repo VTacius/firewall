@@ -6,7 +6,7 @@ use Text::Diff;
 use File::Compare;
 use File::Copy;
 
-my $RUTA = '/var/www/html';
+my $RUTA = '/root/reporte';
 
 require "$RUTA/envio_correo.pl";
 
@@ -51,8 +51,8 @@ my $directorio_base = '/root/fws';
 my $result_diferencias = envia_diferencias($directorio_base, @ficheros);
 if (length($result_diferencias) > 0){
 	envio_diff("Envio de las diferencias", $result_diferencias); 
-	while(@ficheros){
-		copy("$directorio_base/$_", "$directorio_base/archivo/$_") or die "Backup de $fichero fallido: $!";
+	foreach(@ficheros){
+		copy("$directorio_base/$_", "$directorio_base/archivo/$_") or die "Backup de $_ fallido: $!";
 	}
 }
 
