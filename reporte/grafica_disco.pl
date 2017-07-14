@@ -69,7 +69,6 @@ sub creacion_promedio_disco {
 	# Esta es la fecha
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 
-
     # Me aseguro que no crezca más allá de un límite
 	open(my $resultado, '<', $datos_promedio);
 	my @registro = map{$_} <$resultado>;
@@ -114,6 +113,10 @@ sub creacion_grafica_disco {
         } 
     }  
 
+    # Adecuamos la escala con conveniencia de cualquier datos que se disponga 
+    my @limite = $data->x_values();
+    my $intervalo = ceil(scalar(@limite)/13);
+
 	my $graph = GD::Graph::lines->new(600, 200);
 	 
 	$graph->set( 
@@ -124,7 +127,7 @@ sub creacion_grafica_disco {
 	    dclrs            => [ qw(red blue green lorange)] ,
 	
 	    y_label          => 'Memoria (kb)',
-	    x_label_skip     => 2,
+        x_label_skip     => $intervalo,
 	
 	    line_width       => 2,
 	    shadow_depth    => 4,

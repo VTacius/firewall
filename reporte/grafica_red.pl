@@ -28,6 +28,10 @@ sub creacion_grafica_red {
 	
 	my $graph = GD::Graph::lines->new(600, 200);
 	 
+    # Adecuamos la escala con conveniencia de cualquier datos que se disponga 
+    my @limite = $data->x_values();
+    my $intervalo = ceil(scalar(@limite)/13);
+
 	$graph->set( 
 	    legend_placement => 'BB',
 	    t_margin         => 15,
@@ -37,6 +41,7 @@ sub creacion_grafica_red {
 	
 	    y_label          => 'Tráfico (kb)',
 	    x_label_skip     => 60,
+            x_label_skip     => $intervalo,
 	
 	    line_width       => 2,
 	    shadow_depth     => 4,
