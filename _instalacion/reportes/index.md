@@ -17,8 +17,8 @@ header: no
 # Configuración de reporte y otras configuraciones opcionales
 Todas lo que sigue no es ni imprescindible ni realmente importante para el funcionamiento de su firewall, pero añadirá características importantes
 
-## Reportes y Backup
-Hacemos algunas modificaciones en el reporte que hace Sarg
+## Reporte de uso de internet
+Configuraremos al ya instalado sarg para que los reportes tengan sentido para nosotros
 {% highlight bash %}
 sed -i -r -f - /etc/sarg/sarg.conf << MAFI
 s/Squid User Access Reports/Reporte de Uso de Internet/
@@ -39,52 +39,83 @@ MAFI
 
 {% endhighlight %}
 
+Securizamos el acceso a /reportes por medio del servidor web
+{% highlight bash %}
+cat << "MAFI" > /etc/apache2/sites-available/000-default.conf 
+{% include_relative default.md %}
+MAFI
+{% endhighlight %}
 
-Restringimos el acceso (Cuidado con el momento en que piden la nueva contraseña):
+Creamos el fichero `/var/www/html/sarg/.htpassword` al que se hace referencia en el fichero anterior. El último archivos le pide una contraseña a usar en conjunto con el usuarios "administrador" para entrar a ver los reportes
 {% highlight bash %}
 touch /var/www/sarg/.htpassword
 chmod 600 /var/www/sarg/.htpassword
 chown -R www-data:www-data /var/www/sarg
-htpasswd /var/www/sarg/.htpassword administrador 
+htpasswd -B /var/www/sarg/.htpassword administrador 
 {% endhighlight %}
 
-Configure el servidor web.
+Reiniciamos apache para que toda la configuración tenga efecto:
 {% highlight bash %}
-{% include_relative default.md %}
+systemctl restart apache2.service
 {% endhighlight %}
 
-Hacemos un par de configuraciones que nos parecen necesarias para hacer un poco más discreto a Apache:
+## Reporte de sistema
+Este reporte es toda una serie de complicados script que tienen por objetivo último el enviar a su correo un par de gráficas muy bonitas. Esta en una fase bastante avanzada de desarrollo, y hasta ahora parecen que funcionan bien. 
+
+Activamos el registro de datos, aumentamos el número de registros a guardar y reiniciamos a `sysstat` para que los cambios tomen efecto
 {% highlight bash %}
-sed -i 's/^ServerTokens.*/ServerTokens Prod/g' /etc/apache2/conf.d/security
-sed -i 's/^expose_php.*/expose_php = Off/g' /etc/php5/apache2/php.ini
-a2dismod cgi autoindex
+sed -i -r 's/^ENABLED.+/ENABLED="true"/' /etc/default/sysstat
+sed -i -r 's/^HISTORY.+/HISTORY=28/' /etc/sysstat/sysstat
+systemctl restart sysstat.service
 {% endhighlight %}
 
-Y reinicie apache:
+Cambiamos la configuración de cron para sysstat, cambiando el intervalo de recolección de datos a 5 minutos y configurando otras tareas relacionadas.
 {% highlight bash %}
-service apache2 restart
-{% endhighlight %}
-
-
-Para activar el certificado, envíe un correo de prueba con 
-{% highlight bash %}
-mutt -nx -s "Probando desde cero el Mutt" fws@empresa.com
-{% endhighlight %}
-
-A continuación, aparecerán unos cuantos mensajes donde se le pide confirmar los certificados como válidos: Una vez aceptados, no requerirá intervención alguna nunca más.
-
-Configuramos la rotación de los log de Squid3 para que guarde un registro diariamente por 10 días, y para que cada vez que rote el registro, ejecute el archivo de para backup y reporte.
-{% highlight bash %}
-sed -i '/\trotate/c\\trotate 10' /etc/logrotate.d/squid3
-sed -i '/postrotate/i\\tprerotate\n\t\tbash /root/fws/reportes.sh \n\tendscript' /etc/logrotate.d/squid3
-{% endhighlight %}
-
-# Prueba de configuración
-Envie un correo de prueba
-{% highlight bash %}
-mutt -nx -s "Probando desde cero el Mutt" fws@salud.gob.sv <<MAFI
-Este correo es la prueba final en Firewall
+cat << MAFI > /etc/cron.d/sysstat
+{% include_relative sysstat.md %}
 MAFI
 {% endhighlight %}
 
-Una vez configurada, tendrá que esperar cosa de un día para que al acceder a sitio pueda encontrar las estadísticas
+Creamos el fichero de configuración para los script de reporte de la siguiente forma. Sobre todo, deberá configurar un usuario/contraseña válido y el servidor contra el cual sirva. Luego, su memoria RAM en kilobytes:
+{% highlight ini %}
+cat << MAFI >> ~/.configuracion_reporte.ini
+{% include_relative configuracion_reporte.md %}
+mafi
+{% endhighlight %}
+
+Y ya por último, configuramos los reportes a ejecutarse como tarea por parte de crontab
+
+{% highlight bash %}
+crontab -l > horario.cron
+grep reporte.pl horario.cron || echo " 14 7  * * 0 /root/reporte/reporte.pl"  >> horario.cron
+grep diferencias.pl horario.cron || echo " 15 7  * * 0 /root/reporte/diferencias.pl"  >> horario.cron
+crontab horario.cron 
+rm horario.cron
+{% endhighlight %}
+
+## NTP
+Es posible que su servidor tenga ya la hora correctamente configurada, pero si aún con eso quiere evitar los molestos mensajes en syslog, basta con ejecutar
+{% highlight bash %}
+sed -i -r 's/^#?NTP=/NTP=10.10.20.20/' /etc/systemd/timesyncd.conf
+sed -i -r 's/^#?FallbackNTP=.+/FallbackNTP=10.10.20.20/' /etc/systemd/timesyncd.conf
+timedatectl set-ntp true
+systemctl restart systemd-timesyncd
+{% endhighlight %}
+
+## DHCP
+La institución que usa esta configuración de firewall cree fervientemente en que la asignación dinámica de IP en los clientes puede ser decisión administrativa eficiente en muchos sentidos. Sin embargo, cierto dispositivo requiere de esta configuración y debido a los problemas que se presentan en Debian Stretch me pareció una buena idea recopilar la configuración mínima necesaria
+
+{% highlight bash %}
+source /root/fws/infraestructura.sh
+sed -i 's/^INTERFACESv6/#INTERFACESv6/' /etc/default/isc-dhcp-server
+sed -i -r "s/^INTERFACESv4.+/INTERFACESv4=\"$INP\"/" /etc/default/isc-dhcp-server
+{% endhighlight %}
+
+{% highlight bash %}
+source /root/fws/infraestructura.sh
+
+Y el archivo de configuración bien podría ir de la siguiente forma:
+cat << MAFI > /etc/dhcp/dhcpd.conf  
+{% include_relative dhcpd.md %}
+MAFI
+{% endhighlight %}

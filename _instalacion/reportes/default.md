@@ -1,4 +1,3 @@
-cat << "MAFI" > /etc/apache2/sites-available/default
 <VirtualHost *:80>
     ServerAdmin fws@salud.gob.sv
     DocumentRoot /var/www/html
@@ -24,4 +23,3 @@ cat << "MAFI" > /etc/apache2/sites-available/default
     CustomLog ${APACHE_LOG_DIR}/access.log combined
     
 </VirtualHost>
-MAFI

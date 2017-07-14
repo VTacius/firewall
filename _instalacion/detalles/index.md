@@ -45,6 +45,28 @@ sed -i "s|<<MarcadorInstitucion>>|$INSTITUCION|" /var/www/html/index.php
 ### Prueba de configuración
 Desde el navegador de un cliente, intente acceder a un sitio http que esté en alguna categoría restringida (`http://www.myspace.com` por ejemplo), y verifique que la página de error funcione correctamente.
 
+## Securizando Apache
+Hacemos un par de configuraciones que nos parecen necesarias para hacer un poco más discreto a Apache:
+{% highlight bash %}
+sed -i /etc/apache2/conf-available/security.conf -f - << MAFI
+s/^ServerTokens.*/ServerTokens Prod/
+s/^ServerSignature.*/ServerSignature Off/
+MAFI
+
+sed -i /etc/php/7.0/apache2/php.ini -f - << MAFI
+s/^file_uploads.*/file_uploads = Off/
+s/^allow_url_fopen.*/allow_url_fopen = Off/
+MAFI
+
+a2disconf javascript-common
+a2dismod -f alias cgi autoindex
+{% endhighlight %}
+
+Reiniciamos apache para que toda la configuración tenga efecto:
+{% highlight bash %}
+systemctl restart apache2.service
+{% endhighlight %}
+
 ## Configuración de Registro de Iptables
 Los siguientes comandos crearán el fichero de configuración `/etc/rsyslog.d/iptables.conf` para que rsyslog envíe los registros asociados a IPTABLES a una serie de ficheros.
 {% highlight bash %}
@@ -69,6 +91,12 @@ Configuramos logrotate
 {% endhighlight %}
 
 Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En base al espacio del que disponga en disco, puede configurar que guarde menos anecdóticos configurando el valor `rotate`.
+
+## Configuración de los Registros de Squid
+Configuramos la rotación de los log de Squid para que guarde un registro diariamente por 20 días
+{% highlight bash %}
+sed -i -r 's/rotate.+/rotate 20/' /etc/logrotate.d/squid
+{% endhighlight %}
 
 ## Script para tareas diversas
 ### Reinicio de la red
