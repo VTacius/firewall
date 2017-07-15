@@ -8,6 +8,10 @@ use GD::Graph::Data;
 	
 use POSIX;
 
+# ORIGEN: disco.data
+# DESTINO: Un hash a usar en el script principal
+# Esto no esta del todo bien. Básicamente, obtengo el listado de todos los porcentajes para al final
+# limitarme a buscar el último , cuando quizá debería ser un promedio
 sub obtener_porcentaje_disco {
 	my $datos_origen = shift;
 	my @orden = @_; 
@@ -16,13 +20,13 @@ sub obtener_porcentaje_disco {
 
 	my %dispositivos; 
 
+    my @particiones = obtener_particiones();
+	
 	while (my $fila = <$contenido>){
 		my @campos = split(/;/, $fila);	
-		if (exists $dispositivos{$campos[3]}) {
+		if ($campos[3] ~~ @particiones ) {
 			push (@{$dispositivos{$campos[3]}}, $campos[6]);
-		} elsif ($campos[3] =~ /^\//) {
-			@{$dispositivos{$campos[3]}} = ();
-		}
+		} 
 	} 
 
 	my %porcentajes_final; 
@@ -37,28 +41,31 @@ sub obtener_porcentaje_disco {
 
 }
 
+# ORIGEN: disco.data
+# DESTINO: disco.promedio
 sub creacion_promedio_disco {
 	my $datos_origen = shift;
 	my @orden = @_; 
 
     $datos_origen =~  /(.+?)\.(\w+)$/;
 	my $datos_promedio = $1 . ".promedio";
-
-	my %dispositivos; 
 	
     open (my $contenido, '<:encoding(UTF-8)', $datos_origen) or die "Problema al conseguir los datos en $datos_origen: $!";
+	
+    my %dispositivos; 
 
+    my @particiones = obtener_particiones();
+	
 	while (my $fila = <$contenido>){
 		my @campos = split(/;/, $fila);	
-		if (exists $dispositivos{$campos[3]}) {
+		if ($campos[3] ~~ @particiones ) {
 			push (@{$dispositivos{$campos[3]}}, $campos[4]);
-		} elsif ($campos[3] =~ /^\//) {
-			@{$dispositivos{$campos[3]}} = ();
-		}
+		} 
 	} 
 
 	close($contenido);
-
+    
+    # De acuerdo a @orden, disponemos de los promedios en una fila, formando un registro listo a ser guardado
 	my @promedio_diario = ();
 	while (my $etiqueta = shift(@orden)){
 		if (exists $dispositivos{$etiqueta}){
@@ -72,7 +79,7 @@ sub creacion_promedio_disco {
     # Me aseguro que no crezca más allá de un límite
 	open(my $resultado, '<', $datos_promedio);
 	my @registro = map{$_} <$resultado>;
-	while (@registro > 10){
+	while (@registro > 12){
 	    shift(@registro);
 	}
 	close ($resultado);

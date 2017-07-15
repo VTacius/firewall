@@ -40,8 +40,7 @@ sub creacion_grafica_red {
 	    dclrs            => [ qw(red green)] ,
 	
 	    y_label          => 'Tráfico (kb)',
-	    x_label_skip     => 60,
-            x_label_skip     => $intervalo,
+	    x_label_skip     => $intervalo,
 	
 	    line_width       => 2,
 	    shadow_depth     => 4,
