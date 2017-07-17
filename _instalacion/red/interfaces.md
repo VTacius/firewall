@@ -1,5 +1,3 @@
-SRV=(${listados['SRV']})
-cat <<MAFI >/etc/network/interfaces
 # Configuración de la interfaz Loopback. 
 auto lo 
 iface lo inet loopback 
@@ -46,5 +44,3 @@ post-up /root/fws/rutas.sh
 # Configuración de reglas especificas para el establecimiento dado.
 post-up /root/fws/establecimiento.sh
 
-
-MAFI

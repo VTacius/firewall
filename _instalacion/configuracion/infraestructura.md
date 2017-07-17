@@ -91,7 +91,7 @@ PBX=10.30.40.0/24
 ## Interfaz AP.
 ## Suele ser la misma interfaz para LAN en caso de no tener un puerto físico dedicado
 INP=eno2
-## IP interfaz de Red PBX
+## IP interfaz de Red AP
 SRP=10.40.40.1
-# Red PBX
+# Red AP
 APN=10.40.40.0/24

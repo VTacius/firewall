@@ -55,18 +55,18 @@ apt-get install -y isc-dhcp-server
 
 Instale los siguientes paquetes para obtener herramientas de monitoreo y administración
 {% highlight bash %}
-echo "wireshark-common	wireshark-common/install-setuid	boolean	false" | debconf-set-selections
+echo -e "wireshark-common\twireshark-common/install-setuid\tboolean\tfalse" | debconf-set-selections
 apt-get -y install nmap tree pv sudo lshw iptraf tcpdump tmux tshark bwm-ng iptstate 
 {% endhighlight %}
 
-Instale los siguientes paquetes si quiere la configuración para reportes diarios de actividad.
+Instale los siguientes paquetes si planea usar la configuración para reportes diarios de actividad.
 {% highlight bash %}
-apt-get install sysstat libemail-sender-perl libemail-sender-transport-smtps-perl libemail-mime-perl libfile-slurp-perl libio-all-perl libdate-calc-perl libconfig-simple-perl libgd-graph-perl 
+apt-get -y install sysstat libemail-sender-perl libemail-sender-transport-smtps-perl libemail-mime-perl libfile-slurp-perl libio-all-perl libdate-calc-perl libconfig-simple-perl libgd-graph-perl 
 {% endhighlight %}
 
-Los siguientes paquetes ayudan al script de diferencias, precisamente, a encontrar las diferencias entre los archivos de configuración que componen al firewall
+Instale los siguientes paquetes si planea usar el script para búsqueda de diferencias. 
 {% highlight bash %}
-apt-get install libtext-diff-perl
+apt-get -y install libtext-diff-perl
 {% endhighlight %}
 
 Configure VIM  

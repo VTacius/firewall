@@ -36,7 +36,4 @@ El contenido de dicho fichero es el siguiente:
 ## Consideraciones sobre la configuración de fws/infraetructura.sh
 * Leálo. Hay suficientes comentarios allí para saber lo que tiene que hacer
 * Para saber que interfaces de red tiene disponibles en el sistema, ejecute desde consola el comando `ip link show`. El nuevo sistema para [nombrado predictivo de interfaces de red](https://wiki.debian.org/NetworkConfiguration#Predictable_Network_Interface_Names) es diferente a lo que Debian nos tenía acostubrado, pero no es nada del otro mundo. (Sus ventajas son discutibles según mi experiencia, por otra parte, siempre estaré de lado de subir la complejidad en cualquier sistema)
-{% highlight bash %}
-ip link show
-{% endhighlight bash %}
 * Un encargado en nivel superior ha de especificarle que redes debe usar. 

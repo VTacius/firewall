@@ -48,10 +48,10 @@ MAFI
 
 Creamos el fichero `/var/www/html/sarg/.htpassword` al que se hace referencia en el fichero anterior. El último archivos le pide una contraseña a usar en conjunto con el usuarios "administrador" para entrar a ver los reportes
 {% highlight bash %}
-touch /var/www/sarg/.htpassword
-chmod 600 /var/www/sarg/.htpassword
-chown -R www-data:www-data /var/www/sarg
-htpasswd -B /var/www/sarg/.htpassword administrador 
+touch /var/www/html/sarg/.htpassword 
+chmod 600 /var/www/html/sarg/.htpassword 
+chown -R www-data:www-data /var/www/html/sarg/.htpassword 
+htpasswd -B /var/www/html/sarg/.htpassword administrador
 {% endhighlight %}
 
 Reiniciamos apache para que toda la configuración tenga efecto:
@@ -75,6 +75,7 @@ Cambiamos la configuración de cron para sysstat, cambiando el intervalo de reco
 cat << MAFI > /etc/cron.d/sysstat
 {% include_relative sysstat.md %}
 MAFI
+systemctl restart cron.service
 {% endhighlight %}
 
 Creamos el fichero de configuración para los script de reporte de la siguiente forma. Sobre todo, deberá configurar un usuario/contraseña válido y el servidor contra el cual sirva. Luego, su memoria RAM en kilobytes:

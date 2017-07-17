@@ -33,7 +33,8 @@ Puede cambiar los valores por defecto para `url_rewrite_children`. Es importante
 url_rewrite_children 15 startup=50 idle=10 concurrency=0
 {% endhighlight %}
 
-Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 30 startup=0 idle=1 concurrency=0`, que sin embargo es fácilmente superable por algunos servidores.
+Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 30 startup=0 idle=1 concurrency=0`, que sin embargo es fácilmente superable por algunos servidores.  
+**Es importante, sin embargo, que siempre use `concurrency=0`** squidGuard no es capaz de procesar adecuadamente las peticiones formadas con esta configuración por parte de Squid
 
 # Despliegue de configuración
 Ni siquiera reinicie Squid aún, realizaremos el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.

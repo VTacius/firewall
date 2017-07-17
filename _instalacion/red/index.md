@@ -18,14 +18,14 @@ header: no
 
 ## /etc/network/interfaces
 
-Leemos los parametros que hemos configurado en `~/fws/infraestructura.sh`
+Copie y pegue en consola el siguiente contenido. Leyendo los parámetros que hemos configurado en `~/fws/infraestructura.sh` gran parte de la red se configura. Por ahora, tendrá que configurar las redes LAN adicionales manualmente
 {% highlight squid %}
 source ~/fws/infraestructura.sh
-{% endhighlight %}
-
-Copie y pegue en consola el siguiente contenido, gran parte de la red se configura. Por ahora, tendrá que configurar las redes LAN adicionales manualmente
-{% highlight squid %}
+SRV=(${listados['SRV']})
+cat <<MAFI >/etc/network/interfaces
 {% include_relative interfaces.md %}
+
+MAFI
 {% endhighlight %}
 
 ## /etc/hosts
