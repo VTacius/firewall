@@ -66,6 +66,7 @@ Activamos el registro de datos, aumentamos el número de registros a guardar y r
 {% highlight bash %}
 sed -i -r 's/^ENABLED.+/ENABLED="true"/' /etc/default/sysstat
 sed -i -r 's/^HISTORY.+/HISTORY=28/' /etc/sysstat/sysstat
+sed -i -r 's/^SADC_OPTIONS.+/SADC_OPTIONS="-S XDISK"/' /etc/sysstat/sysstat
 systemctl restart sysstat.service
 {% endhighlight %}
 

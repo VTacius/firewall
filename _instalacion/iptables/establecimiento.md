@@ -60,5 +60,10 @@ $FWD_SLAN -m set --match-set RWA dst -m multiport -p tcp --dport 22,63231 -m con
 # $FWD_SSET -s <<telefono>> -d <<pbx>> -p udp -j ACCEPT
 # $FWD_SSET -s <<pbx>> -d <<telefono>> -p udp -m multiport --dport 5004,5005,5060 -j ACCEPT
 
+## Otros casos de uso
+
+## Caso 1: No contamos con DMZ. Servidor HTTP se encuentra dentro de la misma red LAN
+#iptables -t filter -A FWD_LOCAL -i $INL -m set --match-set LAN src -o $INL -m set --match-set servidor_siap dst -p tcp -m multiport --dport 80,443 -m conntrack --ctstate NEW -m comment --comment "Toda #LAN accede a #servidores_siap disponibles" -j ACCEPT
+
 ### Empiece sus reglas a partir de este punto
 

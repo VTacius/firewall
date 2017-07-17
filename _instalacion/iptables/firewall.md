@@ -80,7 +80,7 @@ iptables -t filter -A FORWARD -j FWD_LOCAL -m comment --comment "Enviamos a las 
 iptables -t filter -N FWD_DMZ
 iptables -t filter -A FORWARD -j FWD_DMZ -m comment --comment "Enviamos a las reglas de DMZ"
 
-## LOGGIN - No dude en desactivarlo si el registro es inmenso
+## LOGGING - No dude en desactivarlo si el registro es inmenso
 iptables -t filter -A FORWARD -j LOG --log-prefix "IPTABLES FWD: "
 iptables -t filter -A INPUT -i $INL -j LOG --log-prefix "IPTABLES IN LAN: "
 iptables -t filter -A INPUT -i $INW -j LOG --log-prefix "IPTABLES IN WAN: "
