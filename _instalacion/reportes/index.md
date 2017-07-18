@@ -70,15 +70,16 @@ sed -i -r 's/^SADC_OPTIONS.+/SADC_OPTIONS="-S XDISK"/' /etc/sysstat/sysstat
 systemctl restart sysstat.service
 {% endhighlight %}
 
-Cambiamos la configuración de cron para sysstat, cambiando el intervalo de recolección de datos a 5 minutos y configurando otras tareas relacionadas.
+Cambiamos la configuración de cron para sysstat, cambiando el intervalo de recolección de datos a 5 minutos y configurando otras tareas relacionadas. Creamos el directorio donde se han de almacenar los ficheros:
 {% highlight bash %}
 cat << MAFI > /etc/cron.d/sysstat
 {% include_relative sysstat.md %}
 MAFI
 systemctl restart cron.service
+mkdir /var/spool/actividad/
 {% endhighlight %}
 
-Creamos el fichero de configuración para los script de reporte de la siguiente forma. Sobre todo, deberá configurar un usuario/contraseña válido y el servidor contra el cual sirva. Luego, su memoria RAM en kilobytes:
+Creamos el fichero de configuración para los script de reporte de la siguiente forma. Sobre todo, deberá configurar un usuario/contraseña válido y el servidor contra el cual sirva. Luego, su memoria RAM en kilobytes
 {% highlight ini %}
 cat << MAFI >> ~/.configuracion_reporte.ini
 {% include_relative configuracion_reporte.md %}
@@ -89,8 +90,8 @@ Y ya por último, configuramos los reportes a ejecutarse como tarea por parte de
 
 {% highlight bash %}
 crontab -l > horario.cron
-grep reporte.pl horario.cron || echo " 14 7  * * 0 /root/reporte/reporte.pl"  >> horario.cron
-grep diferencias.pl horario.cron || echo " 15 7  * * 0 /root/reporte/diferencias.pl"  >> horario.cron
+grep reporte.pl horario.cron || echo " 14 7  * * * /root/reporte/reporte.pl"  >> horario.cron
+grep diferencias.pl horario.cron || echo " 15 7  * * * /root/reporte/diferencias.pl"  >> horario.cron
 crontab horario.cron 
 rm horario.cron
 {% endhighlight %}
