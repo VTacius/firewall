@@ -30,7 +30,7 @@ my ($dias, $horas, $minutos, $segundos) = uptime();
 my $RUTA_DATA = obtener_configuracion_general('ruta_datos');
 my $TIPO_FUENTE = obtener_configuracion_general('tipo_fuente');
 
-# Informaci�n obtenida desde ~/configuracion_reporte.ini
+# Informacón obtenida desde ~/configuracion_reporte.ini
 my $memoria_disponible = obtener_configuracion_sistema('memoria_ram');
 
 # Información obtenida desde /root/fws/infraestructura.sh
@@ -52,14 +52,15 @@ creacion_grafica_red($trafico_origen, $TIPO_FUENTE, $interfaz_wan);
 
 # Operaciones estadísticas relacionadas con discos
 my $disco_origen = "$RUTA_DATA/disco.data";
-my $disco_promedio = "$RUTA_DATA/disco.promedio"; 
 creacion_promedio_disco($disco_origen, @orden); 
 
 my $disco_promedio_origen = "$RUTA_DATA/disco.promedio";
 my $disco_imagen = "$RUTA_DATA/disco.png";
-creacion_grafica_disco($disco_promedio_origen, $TIPO_FUENTE, @orden);
 
 my %porcentaje_disco = obtener_porcentaje_disco($disco_origen, @orden); 
+
+# Creada en este punto, al menos tenemos los datos para hoy
+creacion_grafica_disco($disco_promedio_origen, $TIPO_FUENTE, @orden);
 
 my $actual_uso_disco = "<ul>"; 
 foreach(@orden){
@@ -70,7 +71,7 @@ foreach(@orden){
 $actual_uso_disco .= "</ul>";
 
 my $fichero_backup = "$RUTA_BACKUP/backup-$hostname-$timestamp.tgz";
-backup($fichero_backup, 1);
+backup($fichero_backup);
 
 my $asunto = "Firewall $institucion: Reporte y Backup en $dia";
 

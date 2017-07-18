@@ -10,6 +10,7 @@ my $RUTA = '/root/reporte';
 
 require "$RUTA/envio_correo.pl";
 
+# Está
 sub diferencias {
 
     my $directorio_base = shift;

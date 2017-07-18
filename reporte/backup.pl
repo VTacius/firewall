@@ -6,67 +6,78 @@ use File::Find;
 
 my @ficheros = (
     qw(    
-        /etc/apache2/sites-available/000-default.conf
+        /root/fws/infraestructura.sh
         /etc/network/interfaces 
-        /etc/host.conf 
-        /etc/resolv.conf
         /etc/hosts
-        /etc/sarg/sarg.conf 
-		/etc/sarg/sarg-reports.conf
-        /etc/squid/squid.conf 
-        /etc/squidguard/squidGuard.conf 
-        /root/fws/tools/cleantmp.sh
-        /root/fws/tools/reinicio.sh
+        /etc/resolv.conf
+        /etc/host.conf 
         /root/fws/grupos_ipset.sh
         /root/fws/firewall.sh
-        /root/fws/dmz.sh
         /root/fws/rutas.sh
+        /root/fws/dmz.sh
         /root/fws/establecimiento.sh
-        /root/fws/infraestructura.sh
-        /root/fws/reportes.sh
-        /var/www/html/
+        /etc/squid/squid.conf 
+        /etc/squidguard/squidGuard.conf 
         /var/www/html/script
         /var/www/html/script/default.css
         /var/www/html/index.php
         /var/www/html/favicon.ico
         /var/www/html/categorias.php
-        /var/www/html/destino.php
+        /etc/apache2/conf-available/security.conf
+        /etc/php/7.0/apache2/php.ini
+        /etc/rsyslog.d/iptables.conf
+        /etc/sarg/sarg.conf 
+        /etc/sarg/sarg-reports.conf
+        /etc/apache2/sites-available/000-default.conf
+        /etc/default/sysstat
+        /etc/cron.d/sysstat
+        /root/.configuracion_reporte.ini
+        /etc/systemd/timesyncd.conf
     )
 );
 
+my $tar = Archive::Tar->new;
+
+sub busqueda {
+    \$tar->add_files($File::Find::name) 
+        or die "No puedo agregar $File::Find::name $!";
+}
+
 sub backup {
 
-	my $fichero_resultante = shift;
-	my $usa_dhcp = shift;
+    my $fichero_resultante = shift;
 
-	my $tar = Archive::Tar->new;
-	
-	while (my $fichero = shift(@ficheros)){
-	    $tar->add_files($fichero) 
-	        or die "No puedo agregar $fichero: $!";
-	}
-	
-	# Las reglas de squidGuard tienen la particularidad de crearse arbitrariamente
-	my $directorio = "/var/lib/squidguard/db/custom";
-	
-	find(\&busqueda, $directorio);
-	
-	sub busqueda {
-	    \$tar->add_files($File::Find::name) 
-	        or die "No puedo agregar $File::Find::name $!";
-	}
+    
+    while (my $fichero = shift(@ficheros)){
+        $tar->add_files($fichero) 
+            or die "No puedo agregar $fichero: $!";
+    }
+    
+    # Las reglas de squidGuard tienen la particularidad de crearse arbitrariamente
+    my $directorio = "/var/lib/squidguard/db/custom";
+    
+    find(\&busqueda, $directorio);
+    
+    # Este es un par de script que se han considerado opcionales, por lo que podrían estar o no
+    if (-f '/root/fws/tools/cleantmp.sh'){
+        $tar->add_files('/root/fws/tools/cleantmp.sh');
+    }
 
-	# La configuración de DHCP, sólo cuando sea necesaria
-	if ($usa_dhcp){
-	    $tar->add_files('/etc/dhcp/dhcpd.conf') 
-	        or die "No puedo agregar $File::Find::name $!";
-		
-	    $tar->add_files('/etc/default/isc-dhcp-server') 
-	        or die "No puedo agregar $File::Find::name $!";
-	}
-	
-	$tar->write($fichero_resultante, COMPRESS_GZIP)
-		or die "No puedo agregar $File::Find::name $!";
+    if (-f '/root/fws/tools/reinicio.sh'){
+        $tar->add_files('/root/fws/tools/reinicio.sh');
+    }
+    
+    # La configuración de DHCP, sólo cuando sea necesaria
+    if (-f '/etc/dhcp/dhcpd.conf'){
+        $tar->add_files('/etc/dhcp/dhcpd.conf') 
+            or die "No puedo agregar $File::Find::name $!";
+        
+        $tar->add_files('/etc/default/isc-dhcp-server') 
+            or die "No puedo agregar $File::Find::name $!";
+    }
+    
+    $tar->write($fichero_resultante, COMPRESS_GZIP)
+        or die "No puedo agregar $File::Find::name $!";
 
 }
 

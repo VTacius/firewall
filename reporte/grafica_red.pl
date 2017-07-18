@@ -30,24 +30,24 @@ sub creacion_grafica_red {
 	 
     # Adecuamos la escala con conveniencia de cualquier datos que se disponga 
     my @limite = $data->x_values();
-    my $intervalo = ceil(scalar(@limite)/13);
+    my $intervalo = ceil(scalar(@limite)/11);
 
 	$graph->set( 
 	    legend_placement => 'BB',
 	    t_margin         => 15,
 	    r_margin         => 15,
 	    b_margin         => 5,
-	    dclrs            => [ qw(red green)] ,
+	    dclrs            => [qw(red green)] ,
 	
 	    y_label          => 'Tráfico (kb)',
-	    x_label_skip     => $intervalo,
+        x_label_skip     => $intervalo,
 	
 	    line_width       => 2,
 	    shadow_depth     => 4,
 	 
 	) or die $graph->error;
 	
-	$graph->set_legend('Kilobytes recibidos (rxkB/s)', 'Kilobytes enviados (txkB/s)', 'buff/cache');
+	$graph->set_legend('Kilobytes recibidos (rxkB/s)', 'Kilobytes enviados (txkB/s)');
 	
 	$graph->set_y_label_font($fuente, 12);
 	$graph->set_x_label_font($fuente, 12);

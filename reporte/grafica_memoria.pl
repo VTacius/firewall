@@ -27,7 +27,7 @@ sub creacion_grafica_memoria {
    
     # Adecuamos la escala con conveniencia de cualquier datos que se disponga 
     my @limite = $data->x_values();
-    my $intervalo = ceil(scalar(@limite)/13);
+    my $intervalo = ceil(scalar(@limite)/11);
 
     my $graph = GD::Graph::lines->new(600, 200);
      
@@ -36,7 +36,7 @@ sub creacion_grafica_memoria {
         t_margin         => 15,
         r_margin         => 15,
         b_margin         => 5,
-        dclrs            => [qw(red blue green)] ,
+        dclrs            => [qw(blue red green)] ,
     
         y_label          => 'Memoria (kb)',
         y_max_value      => $memoria_disponible,
@@ -47,7 +47,7 @@ sub creacion_grafica_memoria {
      
     ) or die $graph->error;
     
-    $graph->set_legend('Memoria Usada', 'Memoria Libre', 'buff/cache');
+    $graph->set_legend('Memoria Libre', 'Memoria Usada', 'buff/cache');
     
     $graph->set_y_label_font($fuente, 12);
     $graph->set_x_label_font($fuente, 12);

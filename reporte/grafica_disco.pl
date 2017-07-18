@@ -122,7 +122,7 @@ sub creacion_grafica_disco {
 
     # Adecuamos la escala con conveniencia de cualquier datos que se disponga 
     my @limite = $data->x_values();
-    my $intervalo = ceil(scalar(@limite)/13);
+    my $intervalo = ceil(scalar(@limite)/11);
 
 	my $graph = GD::Graph::lines->new(600, 200);
 	 
