@@ -18,8 +18,6 @@ $year += 1900;
 my $dia = "$mday/$mon/$year";
 my $timestamp = "$mday$mon$year-$hour$min$sec";
 
-my @orden = ('/boot', '/boot/efi', '/', '/home', '/tmp', '/var');
-
 # Información del equipo obtenida directamente del sistema
 my $hostname = hostname();
 my %reglas_firewall = reglas_firewall();
@@ -52,20 +50,15 @@ creacion_grafica_red($trafico_origen, $TIPO_FUENTE, $interfaz_wan);
 
 # Operaciones estadísticas relacionadas con discos
 my $disco_origen = "$RUTA_DATA/disco.data";
-creacion_promedio_disco($disco_origen, @orden); 
+my @orden = ('/boot', '/boot/efi', '/', '/home', '/tmp', '/var');
 
-my $disco_promedio_origen = "$RUTA_DATA/disco.promedio";
-my $disco_imagen = "$RUTA_DATA/disco.png";
-
-my %porcentaje_disco = obtener_porcentaje_disco($disco_origen, @orden); 
-
-# Creada en este punto, al menos tenemos los datos para hoy
-creacion_grafica_disco($disco_promedio_origen, $TIPO_FUENTE, @orden);
+my %porcentaje_disco = promedio_uso_disco($disco_origen, @orden); 
+my $disco_imagen = graficar_disco($disco_origen, $TIPO_FUENTE, @orden);
 
 my $actual_uso_disco = "<ul>"; 
 foreach(@orden){
     if (exists($porcentaje_disco{$_})){
-        $actual_uso_disco .= "<li><b>$_:</b> $porcentaje_disco{$_}%</li>";
+        $actual_uso_disco .= "<li><b>$_:</b> " . sprintf("%.2f", $porcentaje_disco{$_}) . "%</li>";
     }
 }
 $actual_uso_disco .= "</ul>";
@@ -89,7 +82,7 @@ my $mensaje = <<"MAFI";
         } 
 
         li b {
-                width: 9em;
+                width: 7.5em;
                 display: inline-block;
                 text-align: right;
         }
@@ -131,5 +124,4 @@ my $mensaje = <<"MAFI";
 </html>
 
 MAFI
-
 envio_reporte($asunto, $mensaje, $memoria_imagen, $trafico_imagen, $disco_imagen, $fichero_backup);
