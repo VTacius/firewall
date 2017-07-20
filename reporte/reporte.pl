@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use POSIX;
 
 my $RUTA = '/root/reporte';
 my $RUTA_BACKUP = "/var/backups"; 
@@ -8,7 +9,8 @@ my $RUTA_BACKUP = "/var/backups";
 require "$RUTA/backup.pl";
 require "$RUTA/envio_correo.pl";
 require "$RUTA/informacion_sistema.pl";
-require "$RUTA/grafica_red.pl";
+require "$RUTA/grafica.pl";
+require "$RUTA/grafica_trafico.pl";
 require "$RUTA/grafica_disco.pl";
 require "$RUTA/grafica_memoria.pl";
 
@@ -28,9 +30,6 @@ my ($dias, $horas, $minutos, $segundos) = uptime();
 my $RUTA_DATA = obtener_configuracion_general('ruta_datos');
 my $TIPO_FUENTE = obtener_configuracion_general('tipo_fuente');
 
-# Informacón obtenida desde ~/configuracion_reporte.ini
-my $memoria_disponible = obtener_configuracion_sistema('memoria_ram');
-
 # Información obtenida desde /root/fws/infraestructura.sh
 my %configuracion_legacy = cargar_configuracion_legacy();
 my $institucion = $configuracion_legacy{'INSTITUCION'};
@@ -40,13 +39,11 @@ my $ip_interfaz_wan = $configuracion_legacy{'SRW'};
 
 # Operaciones estadísticas relacionadas con uso de memoria
 my $datos_origen = "$RUTA_DATA/memoria.data";
-my $memoria_imagen = "$RUTA_DATA/memoria.png";
-creacion_grafica_memoria($datos_origen, $TIPO_FUENTE, $memoria_disponible);
+my $memoria_imagen = graficar_memoria($datos_origen, $TIPO_FUENTE);
 
 # Operaciones estadísticas relacionadas con tráfico de red
 my $trafico_origen = "$RUTA_DATA/trafico.data";
-my $trafico_imagen = "$RUTA_DATA/trafico.png";
-creacion_grafica_red($trafico_origen, $TIPO_FUENTE, $interfaz_wan);
+my $trafico_imagen = graficar_trafico($trafico_origen, $TIPO_FUENTE, $interfaz_wan);
 
 # Operaciones estadísticas relacionadas con discos
 my $disco_origen = "$RUTA_DATA/disco.data";
