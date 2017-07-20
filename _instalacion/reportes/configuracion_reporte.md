@@ -10,5 +10,3 @@ receptor = receptor@organizacion.org
 ruta_datos = '/var/spool/actividad'
 tipo_fuente = '/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf'
 
-[sistema]
-memoria_ram = "4000000"

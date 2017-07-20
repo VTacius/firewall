@@ -61,7 +61,7 @@ chown -R proxy:proxy BL custom
 {% endhighlight %}
 
 # Despliegue de configuración
-Reinicie squid3, quién se encarga de iniciar/apagar a squidGuard
+Reinicie squid, quién se encarga de iniciar/apagar a squidGuard.
 {% highlight bash %}
 systemctl restart squid.service 
 {% endhighlight %}

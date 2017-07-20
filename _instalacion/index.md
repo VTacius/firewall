@@ -35,4 +35,4 @@ El proyecto es altamente configurable. Sin embargo, podrá sentirse más comódo
 * Instale Debian en su mínima expresión: Seleccione **SSH Server** y **Utilidades estándar del sistema**
 ![Selección de paquetes mínima en Debian]({{site.urlimg}}/Debian_seleccion_paquetes_minimo.png)
 
-* Habiendo instalado el **SSH Server**, debería ser capaz de realizar la configuración de la guía en remoto, lo que es facilitará enormemente su trabajo.
+* Habiendo instalado el **SSH Server**, debería ser capaz de realizar la configuración de la guía en remoto, lo que facilitará enormemente su trabajo.

@@ -22,14 +22,14 @@ Configuraremos al ya instalado sarg para que los reportes tengan sentido para no
 {% highlight bash %}
 sed -i -r -f - /etc/sarg/sarg.conf << MAFI
 s/Squid User Access Reports/Reporte de Uso de Internet/
-s%^output_dir.*%output_dir /var/www/html/sarg%
-s/^resolve_ip.*/resolve_ip no/
-s/^date_format.*/date_format e/
-s/^charset.*/charset UTF-8/
+s%^output_dir.+%output_dir /var/www/html/sarg%
+s/^resolve_ip.+/resolve_ip no/
+s/^date_format.+/date_format e/
+s/^charset.+/charset UTF-8/
 s/lastlog 0/lastlog 20/g
-s/^show_successful_message.*/show_successful_message yes/
-s/^\#?show_sarg_info.*/show_sarg_info no/g
-s/^\#?show_sarg_logo.*/show_sarg_logo no/g
+s/^show_successful_message.+/show_successful_message yes/
+s/^\#?show_sarg_info.+/show_sarg_info no/g
+s/^\#?show_sarg_logo.+/show_sarg_logo no/g
 MAFI
 
 sed -i -f - /etc/sarg/sarg-reports.conf <<MAFI
@@ -40,7 +40,7 @@ MAFI
 {% endhighlight %}
 
 Securizamos el acceso a /reportes por medio del servidor web
-{% highlight bash %}
+{% highlight apache %}
 cat << "MAFI" > /etc/apache2/sites-available/000-default.conf 
 {% include_relative default.md %}
 MAFI
@@ -83,7 +83,8 @@ Creamos el fichero de configuración para los script de reporte de la siguiente 
 {% highlight ini %}
 cat << MAFI >> ~/.configuracion_reporte.ini
 {% include_relative configuracion_reporte.md %}
-mafi
+MAFI
+touch /var/spool/actividad/disco.prom
 {% endhighlight %}
 
 Y ya por último, configuramos los reportes a ejecutarse como tarea por parte de crontab
@@ -110,15 +111,37 @@ La institución que usa esta configuración de firewall cree fervientemente en q
 
 {% highlight bash %}
 source /root/fws/infraestructura.sh
-sed -i 's/^INTERFACESv6/#INTERFACESv6/' /etc/default/isc-dhcp-server
 sed -i -r "s/^INTERFACESv4.+/INTERFACESv4=\"$INP\"/" /etc/default/isc-dhcp-server
+sed -i -r 's/^INTERFACESv6(.+)/#INTERFACESv6\1/' /etc/default/isc-dhcp-server
 {% endhighlight %}
 
+El siguiente es más bien un ejemplo de como podría ir el fichero de configuración. 
 {% highlight bash %}
 source /root/fws/infraestructura.sh
-
-Y el archivo de configuración bien podría ir de la siguiente forma:
 cat << MAFI > /etc/dhcp/dhcpd.conf  
 {% include_relative dhcpd.md %}
 MAFI
 {% endhighlight %}
+
+Si después de una configuración satisfactoria aún tiene problemas para arrancar el servicio, con un mensaje en los logs como los siguientes:
+
+{% highlight log %}
+Jul 20 13:26:47 fw-establecimiento isc-dhcp-server[24369]: Launching IPv4 server only.
+Jul 20 13:26:47 fw-establecimiento dhcpd[24378]: Internet Systems Consortium DHCP Server 4.3.5
+Jul 20 13:26:47 fw-establecimiento dhcpd[24378]: Copyright 2004-2016 Internet Systems Consortium.
+Jul 20 13:26:47 fw-establecimiento dhcpd[24378]: All rights reserved.
+Jul 20 13:26:47 fw-establecimiento dhcpd[24378]: For info, please visit https://www.isc.org/software/dhcp/
+Jul 20 13:26:47 fw-establecimiento isc-dhcp-server[24369]: Starting ISC DHCPv4 server: dhcpddhcpd service already running (pid file /var/run/dhcpd.pid currenty exists) ... failed!
+Jul 20 13:26:47 fw-establecimiento systemd[1]: isc-dhcp-server.service: Control process exited, code=exited status=1
+Jul 20 13:26:47 fw-establecimiento systemd[1]: Failed to start LSB: DHCP server.
+Jul 20 13:26:47 fw-establecimiento systemd[1]: isc-dhcp-server.service: Unit entered failed state.
+Jul 20 13:26:47 fw-establecimiento systemd[1]: isc-dhcp-server.service: Failed with result 'exit-code'.
+{% endhighlight %}
+
+Bastará con apagar el servicio, borrar a `dhcpd.pid` e iniciar el servicio
+{% highlight bash %}
+systemctl stop isc-dhcp-server.service
+rm /var/run/dhcpd.pid
+systemctl start isc-dhcp-server.service
+{% endhighlight %}
+

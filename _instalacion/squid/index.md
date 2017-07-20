@@ -17,7 +17,7 @@ header: no
 # Configuración de Squid
 Copiar y ejecutar los siguientes comandos desde consola creará un fichero de configuración para Squid en su mínima forma
 
-{% highlight squidconf %}
+{% highlight bash %}
 chown proxy:proxy /var/spool/squid/dump
 mkdir /var/spool/squid/dump
 source ~/fws/infraestructura.sh
@@ -27,17 +27,17 @@ MAFI
 {% endhighlight %}
 
 # Personalizando la configuración: 
-Puede cambiar los valores por defecto para `url_rewrite_children`. Es importante que deje `concurrency=0` o squidGuard dejará de funcionar:
+Puede cambiar los valores por defecto para `url_rewrite_children`.  
+**Es importante, sin embargo, que siempre use `concurrency=0`**, [squidGuard no es capaz de procesar adecuadamente las peticiones formadas con esta configuración por parte de Squid](http://apuntestuxianos.blogspot.com/2017/06/apuntes-sobre-el-error-de-squid.html)
 
 {% highlight bash %}
 url_rewrite_children 15 startup=50 idle=10 concurrency=0
 {% endhighlight %}
 
 Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 30 startup=0 idle=1 concurrency=0`, que sin embargo es fácilmente superable por algunos servidores.  
-**Es importante, sin embargo, que siempre use `concurrency=0`** squidGuard no es capaz de procesar adecuadamente las peticiones formadas con esta configuración por parte de Squid
 
 # Despliegue de configuración
-Ni siquiera reinicie Squid aún, realizaremos el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
+No reinicie Squid aún, el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
 
 # Configuración avanzada  
 

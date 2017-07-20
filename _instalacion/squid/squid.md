@@ -11,7 +11,7 @@ http_access deny !Safe_ports
 http_access allow usuarios
 http_access deny all
 
-$(for r in ${listados['SRV']}; do printf "http_port %s:3128 intercept\n" $(echo $r | cut -d '/' -f 1); done)
+$(for r in ${listados['SRV']}; do printf "http_port %s:3128\n" $(echo $r | cut -d '/' -f 1); done)
 http_port 8080
 
 cache_mem 469 MB

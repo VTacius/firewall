@@ -10,6 +10,7 @@ declare -A listados_red
 ## Recuerde agregar todas las redes LAN adicionales que haya agregado en /etc/network/interfaces
 listados_red["LAN"]="
     10.168.4.0/24
+    10.168.5.0/24
 "
 
 ## Listados de Red WAN Alterna, 
@@ -31,7 +32,7 @@ listados_red["MH"]="
 ### Listados de grupos HOST
 ## IP Interfaz de Red LAN 
 ## Recuerde configurar todas las interfaces LAN adicionales que haya agregado en /etc/network/interfaces
-## NOTA: Para este lista es importante configurar la RED en formato máscara: /mask
+## NOTA: Esta lista debe configurarse en formato IP/MASK, pero es una excepción respecto a las demás
 listados["SRV"]="
     10.168.4.1/24
     10.168.5.1/24
@@ -70,28 +71,29 @@ GWW=192.168.2.1
 ## Interfaz LAN
 INL=eno2
 
-### DMZ
-## Interfaz DMZ
-IND=enp3s0f0
-## IP interfaz de Red DMZ
-SRD=10.20.40.1
-## Red DMZ
-DMZ=10.20.40.0/24
+#### DMZ
+### Interfaz DMZ
+#IND=enp3s0f0
+### IP interfaz de Red DMZ
+#SRD=10.20.40.1/24
+### Red DMZ
+#DMZ=10.20.40.0/24
 
-### RED PBX
-## Interfaz PBX.
-## Suele ser la misma interfaz para DMZ en caso de no tener un puerto físico dedicado
-INX=enp3s0f0
-## IP interfaz de Red PBX
-SRX=10.30.40.1
-# Red PBX
-PBX=10.30.40.0/24
+#### RED PBX
+### Interfaz PBX.
+### Suele ser la misma interfaz para DMZ en caso de no tener un puerto físico dedicado
+#INX=enp3s0f0
+### IP interfaz de Red PBX
+#SRX=10.30.40.1/24
+## Red PBX
+#PBX=10.30.40.0/24
 
-### RED AP
-## Interfaz AP.
-## Suele ser la misma interfaz para LAN en caso de no tener un puerto físico dedicado
-INP=eno2
-## IP interfaz de Red AP
-SRP=10.40.40.1
-# Red AP
-APN=10.40.40.0/24
+#### RED AP
+### Interfaz AP.
+### Suele ser la misma interfaz para LAN en caso de no tener un puerto físico dedicado. 
+### En ese mismo caso, que sea :0
+#INP=eno2:0
+### IP interfaz de Red AP
+#SRP=10.40.40.1/24
+## Red AP
+#APN=10.40.40.0/24

@@ -17,21 +17,23 @@ header: no
 # Configuración Primaria del Sistema
 
 ## Fichero de configuración fws/infraestructura.sh
-Antes de empezar con el procedimiento de configuración, crearemos y personalizaremos el fichero **/root/fws/infraestructura.sh**.
-Como todo lo que necesita se encuentra en este fichero, sea cuidadoso de revisar aquellas cosas que necesite configurar.
+Empezamos creando fichero de configuración en `/root/fws/infraestructura.sh` de la siguiente forma:
 
-Creamos parte de los ficheros que componen el proyecto
 {% highlight bash %}
-mkdir -p ~/fws/{tools,archivo}
+mkdir ~/fws
+cat << "MAFI" > /root/fws/infraestructura.sh
+{% include_relative infraestructura.md %}
+MAFI
+{% endhighlight bash %}
+
+Gran parte de todo el procedimiento se basa en la información contenida en este fichero. Por tanto, sea cuidadoso de revisar cada aspecto y personalizarlo de acuerdo a sus necesidades
+
+Creamos parte de los demás ficheros que componen el proyecto:
+{% highlight bash %}
+mkdir ~/fws/{tools,archivo}
 touch ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimiento.sh,dmz.sh,grupos_ipset.sh}
 chmod 744 ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimiento.sh,dmz.sh,grupos_ipset.sh}
 {% endhighlight %}
-
-El contenido de dicho fichero es el siguiente:
-
-{% highlight bash %}
-{% include_relative infraestructura.md %}
-{% endhighlight bash %}
 
 ## Consideraciones sobre la configuración de fws/infraetructura.sh
 * Leálo. Hay suficientes comentarios allí para saber lo que tiene que hacer
