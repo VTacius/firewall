@@ -32,19 +32,19 @@ done)
 # En caso de no disponer de una interfaz física dedicada, haga subinterfaz respecto a LAN
 $([ $IND ] || echo "#")auto ${IND:-"enp3s0f0"}
 $([ $IND ] || echo "#")iface ${IND:-"enp3s0f0"} inet static
-$([ $IND ] || echo "#")    address ${SRD:-"10.20.40.0/24"}
+$([ $IND ] || echo "#")    address ${SRD:-"10.20.40.1/24"}
 
 # RED PBX.
 # En caso de no disponer de una interfaz física dedicada, haga subinterfaz respecto a DMZ
 $([ $INX ] || echo "#")auto ${INX:-"enp3s0f0"}
 $([ $INX ] || echo "#")iface ${INX:-"enp3s0f0"} inet static
-$([ $INX ] || echo "#")    address ${SRX:-"10.30.40.0/24"}
+$([ $INX ] || echo "#")    address ${SRX:-"10.30.40.1/24"}
 
 # RED AP.
 # En caso de no disponer de una interfaz física dedicada, haga subinterfaz respecto a DMZ
 $([ $INP ] || echo "#")auto ${INP:-"eno2"}
 $([ $INP ] || echo "#")iface ${INP:-"eno2"} inet static
-$([ $INP ] || echo "#")    address ${SRP:-"10.30.40.0/24"}
+$([ $INP ] || echo "#")    address ${SRP:-"10.30.40.1/24"}
 
 # Configuración de los grupos IPSET a usar en IPTABLES.
 post-up /root/fws/grupos_ipset.sh

@@ -37,6 +37,7 @@ s%HTMLOUT\=.*%HTMLOUT\=/var/www/html/sarg/%
 s/PAGETITLE\=.*/PAGETITLE="Reporte de Uso de Internet"/
 MAFI
 
+grep -q 'TAG_NONE/400' /etc/sarg/exclude_codes || echo 'TAG_NONE/400' >> /etc/sarg/exclude_codes
 {% endhighlight %}
 
 Securizamos el acceso a /reportes por medio del servidor web
@@ -77,6 +78,7 @@ cat << MAFI > /etc/cron.d/sysstat
 MAFI
 systemctl restart cron.service
 mkdir /var/spool/actividad/
+touch /var/spool/actividad/disco.prom
 {% endhighlight %}
 
 Creamos el fichero de configuración para los script de reporte de la siguiente forma. Sobre todo, deberá configurar un usuario/contraseña válido y el servidor contra el cual sirva. Luego, su memoria RAM en kilobytes
@@ -84,7 +86,6 @@ Creamos el fichero de configuración para los script de reporte de la siguiente 
 cat << MAFI >> ~/.configuracion_reporte.ini
 {% include_relative configuracion_reporte.md %}
 MAFI
-touch /var/spool/actividad/disco.prom
 {% endhighlight %}
 
 Y ya por último, configuramos los reportes a ejecutarse como tarea por parte de crontab

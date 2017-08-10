@@ -95,7 +95,7 @@ Se estima que estos ficheros de registros pueden ser de hasta 250 MB diarios. En
 ## Configuración de los Registros de Squid
 Configuramos la rotación de los log de Squid para que guarde un registro diariamente por 20 días
 {% highlight bash %}
-sed -i -r 's/rotate.+/rotate 20/' /etc/logrotate.d/squid
+sed -i -r 's/rotate.+/rotate 10/' /etc/logrotate.d/squid
 {% endhighlight %}
 
 ## Script para tareas diversas
