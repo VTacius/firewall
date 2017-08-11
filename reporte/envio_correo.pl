@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTPS;
@@ -74,7 +75,7 @@ sub envio_diff {
             charset      => "utf-8",
             encoding     => "base64",
         },
-        body => $contenido,
+        body_str => $contenido,
     );
     
     my $transporte = transporte(); 
@@ -100,7 +101,7 @@ sub envio_reporte {
             charset      => "utf-8",
             encoding     => "base64",
         },
-        body => $contenido,
+        body_str => $contenido,
     );
     
     my $memoria = crear_imagen_embebida($memoria_imagen, 'memoria');

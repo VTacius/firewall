@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use utf8;
 use POSIX;
 
 my $RUTA = '/root/reporte';
@@ -55,7 +56,7 @@ my $disco_imagen = graficar_disco($disco_origen, $TIPO_FUENTE, @orden);
 my $actual_uso_disco = "<ul>"; 
 foreach(@orden){
     if (exists($porcentaje_disco{$_})){
-        $actual_uso_disco .= "<li><b>$_:</b> " . sprintf("%.2f", $porcentaje_disco{$_}) . "%</li>";
+        $actual_uso_disco .= "<li><b class=\"etiquetas\">$_:</b> " . sprintf("%.2f", $porcentaje_disco{$_}) . "%</li>";
     }
 }
 $actual_uso_disco .= "</ul>";
@@ -67,57 +68,61 @@ my $asunto = "Firewall $institucion: Reporte y Backup en $dia";
 
 my $mensaje = <<"MAFI";
 <html>
-        <head>
-<style>
-        ul {
+    <head>
+        <style>
+            ul {
                 list-style: none;
                 padding-left: 0;
-        }
-
-        li {
+            }
+        
+            li {
                 display: inline;
-        } 
-
-        li b {
-                width: 7.5em;
+            } 
+        
+            li b {
+                width: 8.7em;
                 display: inline-block;
                 text-align: right;
-        }
-</style>
-        </head>
-        <body>
-                <h4>Información General del Firewall</h4>
-                <p><b>$hostname</b> accesible en <tt>$ip_interfaz_wan</tt></p> 
-                <p>En <b>$modelo</b> por <b>$marca</b> </p>
-                <div>           
-                        <ul>    
-                                <li><b>Service TAG:</b> $chasis</li>
-                                <li><b>Fondo Compra:</b> $fondo_compra</li>
-                        </ul>
-                </div>
-                
-                <h4>Información General del Sistema</h4>
-                <p>Arriba por <b>$dias días, $horas horas y $minutos minutos</b></p>
-
-                <h4> Memoria </h4>
-                <img src="cid:memoria" />
-                
-                <h4> Tráfico en interfaz WAN ($interfaz_wan) </h4>
-                <img src="cid:trafico" />
-                
-                <h4> Uso actual de disco duro </h4>
-                   $actual_uso_disco
- 
-                <h4> Uso histórico de disco duro </h4>
-                <img src="cid:disco" />
-
-                <h4> Estado Firewall </h4>
-                <ul>    
-                        <li><b>INPUT:</b> $reglas_firewall{'INPUT'}</li> 
-                        <li><b>OUTPUT:</b> $reglas_firewall{'OUTPUT'}</li>
-                        <li><b>FORWARD:</b> $reglas_firewall{'FORWARD'}</li>
-                </ul>   
-        </body>
+            }
+        
+            .etiquetas {
+                width: 7.6em;
+            }
+        </style>
+    </head>
+    <body>
+        <h4>Información General del Firewall</h4>
+        <p><b>$hostname</b> accesible en <tt>$ip_interfaz_wan</tt></p> 
+        <p>En <b>$modelo</b> por <b>$marca</b> </p>
+        <div>           
+            <ul>    
+                <li><b>Service TAG:</b> $chasis</li>
+                <li><b>Fondo Compra:</b> $fondo_compra</li>
+            </ul>
+        </div>
+        
+        <h4>Información General del Sistema</h4>
+        <p>Arriba por <b>$dias días, $horas horas y $minutos minutos</b></p>
+    
+        <h4> Memoria </h4>
+        <img src="cid:memoria" />
+        
+        <h4> Tráfico en interfaz WAN ($interfaz_wan) </h4>
+        <img src="cid:trafico" />
+        
+        <h4> Uso actual de disco duro </h4>
+           $actual_uso_disco
+    
+        <h4> Uso histórico de disco duro </h4>
+        <img src="cid:disco" />
+    
+        <h4> Estado Firewall </h4>
+        <ul>    
+            <li><b class="etiquetas">INPUT:</b> $reglas_firewall{'INPUT'}</li> 
+            <li><b class="etiquetas">OUTPUT:</b> $reglas_firewall{'OUTPUT'}</li>
+            <li><b class="etiquetas">FORWARD:</b> $reglas_firewall{'FORWARD'}</li>
+        </ul>   
+    </body>
 </html>
 
 MAFI
