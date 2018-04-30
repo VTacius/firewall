@@ -4,7 +4,7 @@ acl Safe_ports port 80 443 8080 20 21
 acl CONNECT method CONNECT
 acl NONE method NONE
 
-ftp_passive off
+ftp_passive on
 
 http_access deny NONE
 http_access deny !Safe_ports
@@ -21,7 +21,7 @@ debug_options ALL,2
 coredump_dir /var/spool/squid/dump
 
 url_rewrite_program /usr/bin/squidGuard 
-url_rewrite_children 5 startup=5 idle=10 concurrency=0
+url_rewrite_children 10 startup=10 idle=10 concurrency=0
 
 refresh_pattern .       0   20% 4320
 

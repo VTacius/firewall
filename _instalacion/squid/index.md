@@ -31,10 +31,15 @@ Puede cambiar los valores por defecto para `url_rewrite_children`.
 **Es importante, sin embargo, que siempre use `concurrency=0`**, [squidGuard no es capaz de procesar adecuadamente las peticiones formadas con esta configuración por parte de Squid](http://apuntestuxianos.blogspot.com/2017/06/apuntes-sobre-el-error-de-squid.html)
 
 {% highlight bash %}
-url_rewrite_children 15 startup=50 idle=10 concurrency=0
+url_rewrite_children 15 startup=15 idle=15 concurrency=0
 {% endhighlight %}
 
-Puede ir probando a subir los valores hasta un máximo conocido de `url_rewrite_children 30 startup=0 idle=1 concurrency=0`, que sin embargo es fácilmente superable por algunos servidores.  
+En realidad, es altamente recomendable iniciar squid con todos los hilos que planeé  hacer disponibles, y que estos no mueran el estar ocioso.  
+El problema es que estos hilos tienen una inicialización muy costosa, así que si la petición de un usuario necesita de la creación de uno, este termina esperando un tiempo espantoso en su navegador 
+
+## Marcas conocidas
+`url_rewrite_children 25 startup=25 idle=25 concurrency=0`, AMD Opteron(tm) Processor 4332 HE 4 GB de RAM
+`url_rewrite_children 30 startup=30 idle=30 concurrency=0`, AMD Opteron(tm) Processor 4332 HE  16 GB de RAM (Este podría mucho más)
 
 # Despliegue de configuración
 No reinicie Squid aún, el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
@@ -72,33 +77,51 @@ ftp_passive off
 
 delay_pools 3
 
+#640 kbps. 1/8 del total
+acl STREAMING dstdomain .yimg.com
 acl STREAMING dstdomain .fbcdn.net
-acl STREAMING dstdomain .openload.co
+acl STREAMING dstdomain .twimg.com
+acl STREAMING dstdomain .mega.co.nz
+acl STREAMING dstdomain .nflxso.net
 acl STREAMING dstdomain .cloudup.com
+acl STREAMING dstdomain .openload.co
+acl STREAMING dstdomain .akamaihd.net
+acl STREAMING dstdomain .akamaized.net
+acl STREAMING dstdomain .angelcam.com
+acl STREAMING dstdomain .gfrvideo.com
 acl STREAMING dstdomain .oloadcdn.net
 acl STREAMING dstdomain .nflxvideo.net
+acl STREAMING dstdomain .flowplayer.org
+acl STREAMING dstdomain .vkuserlive.com
 acl STREAMING dstdomain .googlevideo.com
+acl STREAMING dstdomain .dailymotion.com
 acl STREAMING dstdomain .drive.amazonaws.com
+acl STREAMING dstdomain .whatsapp.com
 delay_class 1 2
 delay_access 1 allow STREAMING
-delay_parameters 1 80000/80000 64000/64000
+delay_parameters 1 80000/80000 160000/160000
 
+#1280 kbps. 2/8 del total
 acl DISPENSA dstdomain .muug.ca
+acl DISPENSA dstdomain .office365
+acl DISPENSA dstdomain .microsoft.com
 acl DISPENSA dstdomain .dropbox.com
 acl DISPENSA dstdomain .360safe.com
 acl DISPENSA dstdomain .ff.avast.com
-acl DISPENSA dstdomain .drive.google.com
 acl DISPENSA dstdomain .cdn.livefyre.com
+acl DISPENSA dstdomain .drive.google.com
 acl DISPENSA dstdomain .windowsupdate.com
-acl DISPENSA dstdomain .mirror.steadfast.net
 acl DISPENSA dstdomain .geo.kaspersky.com
+acl DISPENSA dstdomain .mirror.steadfast.net
+acl DISPENSA dstdomain .googleusercontent.com
 delay_class 2 2
 delay_access 2 allow DISPENSA
-delay_parameters 2 80000/80000 64000/64000
+delay_parameters 2 80000/80000 160000/160000
 
+# 3200 kbps. 5/8 del total
 delay_class 3 1
 delay_access 3 allow all
-delay_parameters 3 192000/192000 
+delay_parameters 3 400000/400000
 
 http_access deny NONE
 [...]
@@ -109,7 +132,7 @@ Los tres pool definen el siguiente comportamiento:
 
 + Al acceder a los sitios en la ACL STREAMING, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
 + Al acceder a los sitios en la ACL DISPENSA, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
-+ Para todo el tráfico restante, squid3 tratará de usar no más de 1536 Kbps.
++ Para todo el tráfico restante, squid tratará de usar no más de 1536 Kbps.
 
 Si necesita agregar una bucket adicional, debe configurarse antes del bucket por defecto, el último en el ejemplo
 

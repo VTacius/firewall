@@ -27,6 +27,7 @@ OUTPUTW="iptables -t filter -A OUTPUT -o $INW"
 $OUTPUTW -m set --match-set admins dst -m multiport -p tcp --sport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Puertos abiertos para WAN"  -j ACCEPT
 $OUTPUTW -d 0.0.0.0/0 -m multiport -p tcp --dport 53,80,443,22,20,21,389,465,8080 -m comment --comment "Servicios permitidos hacia WAN"  -j ACCEPT
 $OUTPUTW -d 0.0.0.0/0 -m multiport -p udp --dport 53,123,33434:33523 -m comment --comment "Servicios permitidos hacia WAN" -j ACCEPT
+$OUTPUTW -p tcp -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Tráfico FTP Pasivo"
 $OUTPUTW -p icmp -m comment --comment "Sondeo a exteriores desde interfaz WAN" -j ACCEPT 
 
 ### INPUT ### 
@@ -48,6 +49,7 @@ $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m connt
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta ICMP para #admins" -j ACCEPT
 $INPUTW -s 0.0.0.0/0 -m multiport -p tcp --sport 53,80,443,22,20,21,389,465,8080 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
 $INPUTW -s 0.0.0.0/0 -m multiport -p udp --sport 53,123,33434:33523 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
+$INPUTW -m conntrack --ctstate ESTABLISHED -j ACCEPT -m comment --comment "Tráfico FTP Pasivo"
 $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m conntrack --ctstate NEW -m comment --comment "Sarg y SSH entrante para #admins" -j ACCEPT
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate NEW -m comment --comment "ICMP para #admins" -j ACCEPT
 $INPUTW -p icmp -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "ICMP iniciado por Firewall" -j ACCEPT
@@ -61,7 +63,7 @@ iptables -t filter -A FORWARD -i $INL -m set --match-set LAN src -o $INW -p icmp
 ## Administración y monitoreo remoto para grupo admins
 FWDW="iptables -t filter -A FORWARD -i $INW -m set --match-set"
 $FWDW admins src -o $INL -m set --match-set LAN dst -p icmp -m comment --comment "Monitoreo remoto" -j ACCEPT
-$FWDW admins src -o $INL -m set --match-set LAN dst -p tcp -m multiport --dport 22,3389,5800,5900,5901,5902 -m conntrack --ctstate NEW -m comment --comment "Administración remota" -j ACCEPT
+$FWDW admins src -o $INL -m set --match-set LAN dst -p tcp -m multiport --dport 22,80,443,3389,5800,5900,5901,5902,33434:33523 -m conntrack --ctstate NEW -m comment --comment "Administración remota" -j ACCEPT
 
 ## Tráfico de servicios básicos
 FWDL="iptables -t filter -A FORWARD -i $INL -m set --match-set LAN src -o $INW"
