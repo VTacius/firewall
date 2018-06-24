@@ -1,10 +1,14 @@
 #!/bin/bash
 
-apt install -y libconfig-simple-perl libemail-sender-perl libemail-sender-transport-smtps-perl libemail-sender-transport-smtps-perl libemail-mime-perl 
+apt install -y libtext-diff-perl libconfig-simple-perl libemail-sender-perl libemail-sender-transport-smtps-perl libemail-sender-transport-smtps-perl libemail-mime-perl libio-all-perl
 
-cp backup.pl diferencias.pl firewall.sh informacion.pl /usr/local/bin/
+cp diferencias.pl firewall.sh informacion.pl /usr/local/bin/
 chown root:MinsalAdminFirewall {*pl,firewall.sh}
 chmod 750 {*pl,firewall.sh}
+
+cp backup.pl /usr/local/sbin/
+chmod u+x /usr/local/sbin/backup.pl
+
 [ -d /usr/local/lib/site_perl ] || mkdir /usr/local/lib/site_perl
 cp -r Minsal/ /usr/local/lib/site_perl/
 
@@ -17,7 +21,7 @@ systemctl enable iptables.service
 cp ruth /etc/sudoers.d/iptables
 
 crontab -l > horario.cron
-grep backup.pl horario.cron || echo "15 7 * * * /usr/local/bin/backup.pl"  >> horario.cron
+grep backup.pl horario.cron || echo "15 7 * * * /usr/local/sbin/backup.pl"  >> horario.cron
 crontab horario.cron
 rm horario.cron
 

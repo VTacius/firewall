@@ -51,7 +51,8 @@ sub informacion_equipo {
 
 #####
 sub obtener_configuracion_correo {
-    my $cfg = new Config::Simple(filename => $fichero_configuracion);
+    my $cfg = new Config::Simple(filename => $fichero_configuracion)
+        or die Config::Simple->error();
     
     my $server = $cfg->param('correo.servidor');
     my $user   = $cfg->param('correo.usuario');
@@ -63,7 +64,8 @@ sub obtener_configuracion_correo {
 
 #####
 sub obtener_configuracion_envio {
-    my $cfg = new Config::Simple(filename => $fichero_configuracion);
+    my $cfg = new Config::Simple(filename => $fichero_configuracion)
+        or die Config::Simple->error();
 
     my $receptor = $cfg->param('envio.receptor');
     my $emisor = $cfg->param('correo.usuario');
