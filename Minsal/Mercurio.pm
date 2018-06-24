@@ -1,19 +1,23 @@
+package Minsal::Mercurio;
+
 use strict;
 use warnings;
 use utf8;
+use Exporter;
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+$VERSION     = 0.20;
+@ISA         = qw(Exporter);
+@EXPORT      = qw(&envio_diferencias &envio_backup);
+@EXPORT_OK   = qw(&envio_diferencias &envio_backup);
+%EXPORT_TAGS = ( DEFAULT => [qw(&envio_diferencias &envio_backup)]);
+
+use Minsal::Informacion;
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTPS;
-
 use Email::MIME;
 
-use MIME::Base64;
-use File::Slurp;
-
 use IO::All;
-
-my $RUTA = '/root/reporte';
-require "$RUTA/informacion_sistema.pl";
 
 sub transporte {
     my ($smtpserver, $smtpuser, $smtppassword) = obtener_configuracion_correo();
@@ -41,54 +45,33 @@ sub definicion_envio {
         ]
 }
 
-sub crear_imagen_embebida {
-
-    my $fichero_imagen = shift; 
-    my $id_imagen = shift; 
-    
-    my $imagen = read_file($fichero_imagen, binmode => ':raw');
-
-    return Email::MIME->create(
-        header_str => [
-            'Content-ID' => "<$id_imagen>",
-            'Content-Disposition' => 'inline',
-        ],
-        attributes => {
-            content_type => "image/png",
-            encoding     => "base64",
-        },
-        body => $imagen,
-    );
-    
-}
-
-sub envio_diff {
+sub envio_diferencias {
     my $asunto = shift;
-    my $contenido = shift; 
+    my $contenido = shift;
 
     my $cabecera = definicion_envio($asunto);
-
-    my $correo = Email::MIME->create(
+    
+    my $email = Email::MIME->create(
         header_str => $cabecera,
         attributes => {
-            content_type => "text/plain",
+            content_type => "multipart/related",
+        },
+        attributes => {
+            content_type => "text/html",
             charset      => "utf-8",
             encoding     => "base64",
         },
         body_str => $contenido,
     );
     
-    my $transporte = transporte(); 
-    sendmail($correo, { transport => $transporte });
+    my $transport = transporte();
+    sendmail($email, { transport => $transport });
 }
 
-sub envio_reporte {
+sub envio_backup {
     my $asunto = shift;
     my $contenido = shift;
 
-    my $memoria_imagen = shift;    
-    my $trafico_imagen = shift;
-    my $disco_imagen = shift;
 	my $backup_fichero = shift;
 
 	my $backup_name = (split (/\//, $backup_fichero))[-1];
@@ -104,10 +87,6 @@ sub envio_reporte {
         body_str => $contenido,
     );
     
-    my $memoria = crear_imagen_embebida($memoria_imagen, 'memoria');
-    my $trafico = crear_imagen_embebida($trafico_imagen, 'trafico');
-    my $disco = crear_imagen_embebida($disco_imagen, 'disco');
-    
 	my $backup_part = Email::MIME->create(
 			attributes => {
 				filename => $backup_name,
@@ -116,6 +95,7 @@ sub envio_reporte {
           },
           body => io($backup_fichero)->binary->all,
       ) or die "Error adjuntado el archivo";
+    
     my $email = Email::MIME->create(
         header_str => $cabecera,
         attributes => {
@@ -123,15 +103,12 @@ sub envio_reporte {
         },
         parts => [
             $mail_part,
-            $trafico,
-            $memoria,
-            $disco,
 			$backup_part
         ],
     );
     
-    
     my $transport = transporte();
     sendmail($email, { transport => $transport });
 }
+
 1;

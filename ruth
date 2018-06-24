@@ -1,0 +1,8 @@
+Cmnd_Alias IPT = /sbin/iptables -t * -nvL, /sbin/iptables -t * -nvL *
+Cmnd_Alias SQUID = /bin/systemctl * squid.service, /bin/journalctl
+
+%MinsalAdminFirewall ALL=(ALL) NOPASSWD:IPT
+%MinsalAdminFirewall ALL=(ALL) NOPASSWD:SQUID
+%MinsalAdminFirewall ALL=(ALL) NOPASSWD:/usr/local/bin/firewall.sh ""
+%MinsalAdminFirewall ALL=(ALL) NOPASSWD:/usr/local/bin/diferencias.pl
+telegraf ALL=(ALL) NOPASSWD:/usr/local/bin/informacion.pl
