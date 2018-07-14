@@ -14,7 +14,7 @@ widget-1:
 widget-2:
     title: "Guía de configuración"
     url: 'instalacion/'
-    text: 'El presente trabajo no es más que una guía de configuración tal como la usamos en la organización donde laboro. Y por el otro lado, no he pretendido que esta sea "La Guía Definitiva". <br> Si ha llegado
+    text: 'La presente guía de configuración orienta sobre la instalación para un caso particular, que sin embargo, y debido a su sencillez, es bastante probable que sea útil para otras instalaciones del mismo estilo 
 '
 widget-3:
     title: "Guía de mantenimiento"
