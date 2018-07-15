@@ -25,3 +25,13 @@ grep backup.pl horario.cron || echo "15 7 * * * /usr/local/sbin/backup.pl"  >> h
 crontab horario.cron
 rm horario.cron
 
+cat << MAFI > ~/.configuracion_reporte.ini
+[correo]
+servidor = mail.salud.gob.sv
+usuario = envio@organizacion.org
+password = pass_enviante
+
+[envio]
+receptor = receptor@organizacion.org
+
+MAFI

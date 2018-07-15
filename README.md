@@ -4,7 +4,7 @@ Configuración de Iptables + Squid + SquidGuard como Firewall/Proxy para pequeñ
 
 ## Introducción
 El presente es una recopilación de un poco más de seis meses de investigación y pruebas sobre la configuración de un Firewall en Linux desde cero.
-Considerése una guía que es posible usar con su distribución favorita
+Considerése una guía que es posible usar con su distribución favorita luego de un par de ajustes.
 
 ## ¿Que incluye?
 El núcleo del proyecto es información sobre los siguientes aspectos de un Firewall:
@@ -21,15 +21,10 @@ Por ahora, los usuarios en MinsalAdminFirewall son capaces de:
 * Modificar y aplicar cambios para Squid/SquidGuard
 * Obtener cierta información del sistema en formato influx. 
 
-La instalación debería realizarse por medio de `instalacion.sh`
+## Instalación y configuración
+La instalación debería realizarse por medio de `instalacion.sh`. 
+Es necesario cambiar la configuración en el fichero ~/.configuracion_reporte
 
-```ini
-[correo]
-servidor = mail.salud.gob.sv
-usuario = envio@organizacion.org
-password = pass_enviante
+## Sobre como modificar esta guía. 
+Pues que me tomé 
 
-[envio]
-receptor = receptor@organizacion.org
-
-```
