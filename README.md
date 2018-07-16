@@ -8,7 +8,7 @@ Considerése una guía que es posible usar con su distribución favorita
 
 ## ¿Que incluye?
 El núcleo del proyecto es información sobre los siguientes aspectos de un Firewall:
-* Configuración de IPtables
+* Configuración de Iptables
 * Configuración de Squid
 * Configuración de SquidGuard
 Todo ello esta organizado en [firewall](http://vtacius.github.io/firewall/)
@@ -21,15 +21,4 @@ Por ahora, los usuarios en MinsalAdminFirewall son capaces de:
 * Modificar y aplicar cambios para Squid/SquidGuard
 * Obtener cierta información del sistema en formato influx. 
 
-La instalación debería realizarse por medio de `instalacion.sh`
-
-```ini
-[correo]
-servidor = mail.salud.gob.sv
-usuario = envio@organizacion.org
-password = pass_enviante
-
-[envio]
-receptor = receptor@organizacion.org
-
-```
+La instalación debería realizarse por medio de `instalacion.sh`. Luego, debe cambiarse la configuración en ~/.configuracion_reporte.ini 
