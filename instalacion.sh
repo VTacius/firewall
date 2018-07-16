@@ -25,7 +25,11 @@ grep backup.pl horario.cron || echo "15 7 * * * /usr/local/sbin/backup.pl"  >> h
 crontab horario.cron
 rm horario.cron
 
+<<<<<<< HEAD
 cat <<MAFI > ~/.configuracion_reporte.ini
+=======
+cat << MAFI > ~/.configuracion_reporte.ini
+>>>>>>> c6aa83f3cf5648c8573407875e49859d110be247
 [correo]
 servidor = mail.salud.gob.sv
 usuario = envio@organizacion.org
