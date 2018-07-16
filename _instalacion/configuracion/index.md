@@ -37,5 +37,5 @@ chmod 744 ~/fws/{,archivo/}{firewall.sh,rutas.sh,infraestructura.sh,establecimie
 
 ## Consideraciones sobre la configuración de fws/infraetructura.sh
 * Leálo. Hay suficientes comentarios allí para saber lo que tiene que hacer
-* Para saber que interfaces de red tiene disponibles en el sistema, ejecute desde consola el comando `ip link show`. El nuevo sistema para [nombrado predictivo de interfaces de red](https://wiki.debian.org/NetworkConfiguration#Predictable_Network_Interface_Names) es diferente a lo que Debian nos tenía acostubrado, pero no es nada del otro mundo. (Sus ventajas son discutibles según mi experiencia, por otra parte, siempre estaré de lado de subir la complejidad en cualquier sistema)
-* Un encargado en nivel superior ha de especificarle que redes debe usar. 
+* Para saber que interfaces de red tiene disponibles en el sistema, ejecute desde consola el comando `ip link show`. El nuevo sistema para [nombrado predictivo de interfaces de red](https://wiki.debian.org/NetworkConfiguration#Predictable_Network_Interface_Names) es diferente a lo que Debian nos tenía acostumbrados, pero no es nada del otro mundo. 
+* Las redes no se escogen de forma caprichosa. Si este firewall es parte de una infraestructura más grande, será necesaria más configuración de parte de otros equipos, por lo que estas deben planificarse cuidadosamente 

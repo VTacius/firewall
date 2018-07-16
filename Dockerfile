@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-ARG ID=1000
+ARG ID
 
 RUN apk add --no-cache ruby ruby-dev make gcc musl-dev g++ zlib zlib-dev && \
  gem install rdoc; exit 0
@@ -17,7 +17,7 @@ RUN apk del ruby-dev make gcc musl-dev g++ zlib-dev isl gmp-dev
 VOLUME /var/www
 EXPOSE 4000
 
-RUN adduser -D -u ${ID} usuario
+RUN adduser -D -u ${ID:-1000} usuario
 USER usuario
 
 CMD bundle exec jekyll serve --host $(ip addr | grep -oE '172(\.\w+)+') -c _config.yml,_config_dev.yml

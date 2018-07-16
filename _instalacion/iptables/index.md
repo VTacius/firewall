@@ -27,7 +27,8 @@ MAFI
 
 ## Configuración del Filtrado de Paquetes de Red
 Las reglas que se configuran en este script pretenden ser didácticas; su intención es que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades.
-No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota. Para agregar reglas, eche mano del script `~/fws/establecimiento.sh`
+
+No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota en cualquier momento. Para agregar reglas, eche mano del script `~/fws/establecimiento.sh`
 {% highlight bash %}
 cat << "MAFI" > /root/fws/firewall.sh
 {% include_relative firewall.md %}

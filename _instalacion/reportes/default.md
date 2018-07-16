@@ -9,15 +9,6 @@
         Allow from all
     </Directory>
     
-    <Directory /var/www/html/sarg>
-        Options -Indexes -FollowSymLinks -MultiViews -ExecCGI
-    
-        AuthType Basic
-        AuthName "Acceso a SARG"
-        Require valid-user
-        AuthUserFile /var/www/html/sarg/.htpassword
-    </Directory> 
-    
     LogLevel warn
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined

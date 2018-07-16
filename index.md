@@ -19,6 +19,6 @@ widget-2:
 widget-3:
     title: "Guía de mantenimiento"
     url: 'manual/'
-    text: 'Este manual para el diario vivir con el firewall puede parecer incompleto. Para ser precisos, siempre estaŕa incompleto en cumplir con todos los escenarios y casos imaginables es bastante improbable'
+    text: '. Para ser precisos, siempre estaŕa incompleto en cumplir con todos los escenarios y casos imaginables es bastante improbable'
 
 ---

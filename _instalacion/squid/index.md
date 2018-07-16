@@ -38,11 +38,14 @@ En realidad, es altamente recomendable iniciar squid con todos los hilos que pla
 El problema es que estos hilos tienen una inicialización muy costosa, así que si la petición de un usuario necesita de la creación de uno, este termina esperando un tiempo espantoso en su navegador 
 
 ## Marcas conocidas
+Hasta el momento, conocemos de los siguiente casos:
+
 `url_rewrite_children 25 startup=25 idle=25 concurrency=0`, AMD Opteron(tm) Processor 4332 HE 4 GB de RAM
+
 `url_rewrite_children 30 startup=30 idle=30 concurrency=0`, AMD Opteron(tm) Processor 4332 HE  16 GB de RAM (Este podría mucho más)
 
 # Despliegue de configuración
-No reinicie Squid aún, el despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
+Reiniciar Squid no tiene sentido por el momento. El despliegue y pruebas de configuración se llevarán a cabo hasta que hayamos configurado squidGuard.
 
 # Configuración avanzada  
 
@@ -130,8 +133,8 @@ http_access deny NONE
 
 Los tres pool definen el siguiente comportamiento:
 
-+ Al acceder a los sitios en la ACL STREAMING, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
-+ Al acceder a los sitios en la ACL DISPENSA, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
++ Al acceder a los sitios en la `ACL STREAMING`, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps
++ Al acceder a los sitios en la `ACL DISPENSA`, se puede hacer uso de hasta 640 kbps en total, y cada usuario que caiga en dicho bucket no puede usar más de 512 kbps. Cabe destacar que ambos son bucket totalmente diferentes
 + Para todo el tráfico restante, squid tratará de usar no más de 1536 Kbps.
 
 Si necesita agregar una bucket adicional, debe configurarse antes del bucket por defecto, el último en el ejemplo

@@ -6,116 +6,116 @@
 ## Se recomienda el nombre sitios_{nombre}
 #dest sitios_{nombre} {
 #  domainlist custom/{nombre}.lst
-#  log sitio-dest.log
+#  log destino.log
 #}
 
 # URL especificas que, si bien incluidos en las listas negras, se confía para su acceso a TODOS los usuarios de la red. Por lo general, para sitios de actualizaciones y ese tipo de cosas
 dest sitios { 
     domainlist custom/sitios.lst
-    log sitio-dest.log
+    log destino.log
 } 
 
 dest adv {
     domainlist BL/adv/domains
-    log proxy-dest.log 
+    log destino.log
 }
 
 dest archivos {
     expressionlist custom/extensiones.lst
-    log archivo-dest.log
+    log destino.log
 }
 
 dest compras {
     domainlist BL/shopping/domains 
-    log ocio-dest.log
+    log destino.log
 }
 
 dest descargas {
     domainlist BL/downloads/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest deportes {
     domainlist BL/recreation/sports/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest foros {
     domainlist BL/forum/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest juegos {
     domainlist BL/gamble/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest juegos-online {
     domainlist BL/hobby/games-online/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest juegos-misc {
     domainlist BL/hobby/games-misc/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest musica {
     domainlist BL/music/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest peliculas {
     domainlist BL/movies/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest porn {
     domainlist BL/porn/domains
-    log adulto-dest.log
+    log destino.log
 }
 
 dest proxy {
     domainlist BL/anonvpn/domains
-    log proxy-dest.log
+    log destino.log
 }
 
 dest radio {
     domainlist BL/webradio/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest redes {
     domainlist BL/socialnet/domains
-    log redes-dest.log
+    log destino.log
 } 
 
 dest sexo {
     domainlist BL/sex/lingerie/domains
-    log adulto-dest.log
+    log destino.log
 }
 
 dest tracker {
     domainlist BL/tracker/domains
-    log proxy-dest.log
+    log destino.log
 }
 
 dest warez {
     domainlist BL/warez/domains
-    log ocio-dest.log
+    log destino.log
 }
  
 dest web-proxy {
     domainlist BL/redirector/domains
-    log proxy-dest.log
+    log destino.log
 }
 
 dest web-tv {
     domainlist BL/webtv/domains
-    log ocio-dest.log
+    log destino.log
 }
 
 dest webphone {
     domainlist BL/webphone/domains
-    log ocio-dest.log
+    log destino.log
 }

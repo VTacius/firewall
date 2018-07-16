@@ -7,7 +7,6 @@ declare -A listados_red
 
 ### Listados de grupos REDES
 ## Definición de Redes LAN
-## Recuerde agregar todas las redes LAN adicionales que haya agregado en /etc/network/interfaces
 listados_red["LAN"]="
     10.168.4.0/24
     10.168.5.0/24
@@ -43,7 +42,7 @@ listados["admins"]="
     172.16.2.20
 "
 
-### Este es el punto perfecto para agregar listas personalizadas
+### Este es el punto perfecto para empezar a agregar listas personalizadas
 
 
 #### Datos Generales ####

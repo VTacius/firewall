@@ -15,10 +15,10 @@ header: no
 </div>
 
 # Configuración de Red
+Copie y pegue en consola los siguientes comandos en consola. De esta forma, su red debe quedar configurada según la configuración en `~/fws/infraestructura.sh`.
 
 ## /etc/network/interfaces
 
-Copie y pegue en consola el siguiente contenido. Leyendo los parámetros que hemos configurado en `~/fws/infraestructura.sh` gran parte de la red se configura.  
 {% highlight bash %}
 source ~/fws/infraestructura.sh
 SRV=(${listados['SRV']})
@@ -39,7 +39,6 @@ MAFI
 {% endhighlight %}
 
 ## /etc/resolv.conf
-Revise ahora el archivo `/etc/resolv.conf`, configure los paramétros de búsqueda DNS, debiendo usar sus servidores DNS y su dominio como mejor opción, o usar los nuestros como opción predeterminada
 {% highlight bash %}
 cat << MAFI > /etc/resolv.conf
 search $DOMINIO
@@ -49,7 +48,6 @@ MAFI
 {% endhighlight %}
 
 ## /etc/host.conf
-Configure `/etc/host.conf` de forma más explícita que la que trae por defecto.
 {% highlight bash %}
 cat << MAFI > /etc/host.conf
 order hosts,bind 
@@ -63,7 +61,7 @@ Reinicie la red para que la anterior configuración tome efecto.
 systemctl restart networking.service
 {% endhighlight %}
 
-En este punto, pudo haber perdido la sesión ssh por no fijarse de la ubicación de las interfaces. Esa es la única razón ya que aún no se han configurado permisos
+NOTA: En este punto, es posible que haya perdido la sesión SSH. Ya que aún no hay permisos configurados, debe fijarse en como ha configurado las intefaces de red, y que la conexión se corresponda con el diagrama que usted necesite.
 
 # Prueba de configuración
 Ejecutar `ip addr show` debería devolver todas físicas como activas y configuradas. 
