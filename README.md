@@ -22,7 +22,6 @@ Por ahora, los usuarios en MinsalAdminFirewall son capaces de:
 * Obtener cierta información del sistema en formato influx. 
 
 La instalación debería realizarse por medio de `instalacion.sh`. Luego, debe cambiarse la configuración en ~/.configuracion_reporte.ini 
-=======
 ## Instalación y configuración
 La instalación debería realizarse por medio de `instalacion.sh`. 
 Es necesario cambiar la configuración en el fichero ~/.configuracion_reporte
