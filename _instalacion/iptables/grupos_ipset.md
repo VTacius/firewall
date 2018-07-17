@@ -1,6 +1,6 @@
 #!/bin/bash -x
 ## grupos_ipset.sh ## 
-## El presente archivo configurará la tabla filter del Firewall.  
+## El presente archivo configurará los grupos IPSET en el sistema
 # Leemos el archivo de configuración 
 source /root/fws/infraestructura.sh 
 echo -e "\n\n GRUPOS_IPSET.SH\n\n" 

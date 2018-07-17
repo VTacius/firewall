@@ -2,7 +2,7 @@
 ## rutas.sh ## 
 ## El presente archivo configurará la tabla NAT de iptables 
 # Leemos el archivo de configuración 
-source /root/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 echo -e "\n\n RUTAS.SH\n\n"
 
 # Borramos las reglas de filtrado, reinicializamos los contadores y borramos las cadenas personalizadas que existan al momento de ejecutar el script

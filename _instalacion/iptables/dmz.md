@@ -2,7 +2,7 @@
 ## dmz.sh ##
 ## El presente archivo configurará la tabla filter del Firewall. 
 # Leemos el archivo de configuración 
-source /root/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 echo -e "\n\n DMZ.SH\n\n"
  
 #### FILTER ####

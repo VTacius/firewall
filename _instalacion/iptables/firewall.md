@@ -2,12 +2,14 @@
 ## firewall.sh ## 
 ## El presente archivo configurará la tabla filter del Firewall.  
 # Leemos el archivo de configuración 
-source /root/fws/infraestructura.sh 
+source /etc/fws/infraestructura.sh 
 echo -e "\n\n FIREWALL.SH\n\n" 
+
 # Borramos las reglas de filtrado, reinicializamos los contadores y borramos las cadenas personalizadas que existan al momento de ejecutar el script 
 iptables -t filter -F 
 iptables -t filter -Z 
 iptables -t filter -X 
+
 # Configuramos las reglas por defecto en DROP 
 iptables -t filter -P INPUT   DROP 
 iptables -t filter -P OUTPUT  DROP 
@@ -19,19 +21,23 @@ iptables -t filter -P FORWARD DROP
 iptables -t filter -A OUTPUT -m set --match-set SRV src -m set --match-set SRV dst -m comment --comment "Permisivo hacia IP de interfaz LAN" -j ACCEPT 
 OUTPUTL="iptables -t filter -A OUTPUT -o $INL -m set --match-set LAN dst" 
 $OUTPUTL -p tcp -m multiport --sport 3128,22,80 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta a tráfico originado en LAN" -j ACCEPT 
-$OUTPUTL -p tcp -m multiport --dport 22 -m comment --comment "Servicios permitidos hacia LAN" -j ACCEPT 
+$OUTPUTL -p udp -m multiport --sport 67,68 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta a tráfico originado en LAN" -j ACCEPT
+$OUTPUTL -p tcp -m multiport --dport 22,80 -m comment --comment "Servicios permitidos hacia LAN" -j ACCEPT 
 $OUTPUTL -p icmp -m comment --comment "Sondeo desde Firewall hacia si mismo" -j ACCEPT 
 
 ## Salida desde $INW 
 OUTPUTW="iptables -t filter -A OUTPUT -o $INW"
 $OUTPUTW -m set --match-set admins dst -m multiport -p tcp --sport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Puertos abiertos para WAN"  -j ACCEPT
 $OUTPUTW -d 0.0.0.0/0 -m multiport -p tcp --dport 53,80,443,22,20,21,389,465,8080 -m comment --comment "Servicios permitidos hacia WAN"  -j ACCEPT
+$OUTPUTW -d 0.0.0.0/0 -m multiport -p tcp --dport 5044,8086,9200 -m comment --comment "Servicios de administración hacia WAN" -j ACCEPT
 $OUTPUTW -d 0.0.0.0/0 -m multiport -p udp --dport 53,123,33434:33523 -m comment --comment "Servicios permitidos hacia WAN" -j ACCEPT
 $OUTPUTW -p tcp -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Tráfico FTP Pasivo"
 $OUTPUTW -p icmp -m comment --comment "Sondeo a exteriores desde interfaz WAN" -j ACCEPT 
 
 ### INPUT ### 
+
 ## Entrada hacia $SRV
+iptables -t filter -A INPUT -m set --match-set LANBLOCK src -m set --match-set SRV dst -m comment --comment "IP LAN Bloqueadas" -j DROP
 iptables -t filter -A INPUT -m set --match-set SRV src -m set --match-set SRV dst -m comment --comment "Permisivo hacia IP de interfaz LAN" -j ACCEPT
 INPUTL="iptables -t filter -A INPUT -i $INL -m set --match-set LAN src -m set --match-set SRV dst" 
 $INPUTL -p tcp -m multiport --dport 3128,22,80 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta a tráfico desde LAN" -j ACCEPT
@@ -48,6 +54,7 @@ INPUTW="iptables -t filter -A INPUT -i $INW"
 $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas para #admins" -j ACCEPT 
 $INPUTW -m set --match-set admins src -p icmp -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta ICMP para #admins" -j ACCEPT
 $INPUTW -s 0.0.0.0/0 -m multiport -p tcp --sport 53,80,443,22,20,21,389,465,8080 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
+$INPUTW -s 0.0.0.0/0 -m multiport -p tcp --sport 5044,8086,9200 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuesta de servicios de administración hacia WAN"
 $INPUTW -s 0.0.0.0/0 -m multiport -p udp --sport 53,123,33434:33523 -m conntrack --ctstate ESTABLISHED,RELATED -m comment --comment "Respuestas de tráfico originado en Firewall" -j ACCEPT 
 $INPUTW -m conntrack --ctstate ESTABLISHED -j ACCEPT -m comment --comment "Tráfico FTP Pasivo"
 $INPUTW -m set --match-set admins src -m multiport -p tcp --dport 80,22 -m conntrack --ctstate NEW -m comment --comment "Sarg y SSH entrante para #admins" -j ACCEPT
@@ -88,3 +95,4 @@ iptables -t filter -A INPUT -i $INL -j LOG --log-prefix "IPTABLES IN LAN: "
 iptables -t filter -A INPUT -i $INW -j LOG --log-prefix "IPTABLES IN WAN: "
 iptables -t filter -A OUTPUT -o $INL -j LOG --log-prefix "IPTABLES OUT LAN: "
 iptables -t filter -A OUTPUT -o $INW -j LOG --log-prefix "IPTABLES OUT WAN: "
+

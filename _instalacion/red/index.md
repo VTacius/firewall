@@ -15,12 +15,12 @@ header: no
 </div>
 
 # Configuración de Red
-Copie y pegue en consola los siguientes comandos en consola. De esta forma, su red debe quedar configurada según la configuración en `~/fws/infraestructura.sh`.
+Copie y pegue en consola los siguientes comandos en consola. De esta forma, su red debe quedar configurada según su definición en `/etc/fws/infraestructura.sh`.
 
 ## /etc/network/interfaces
 
 {% highlight bash %}
-source ~/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 SRV=(${listados['SRV']})
 limite=$(expr ${#SRV[@]} - 1)
 cat <<MAFI >/etc/network/interfaces
@@ -61,7 +61,12 @@ Reinicie la red para que la anterior configuración tome efecto.
 systemctl restart networking.service
 {% endhighlight %}
 
-NOTA: En este punto, es posible que haya perdido la sesión SSH. Ya que aún no hay permisos configurados, debe fijarse en como ha configurado las intefaces de red, y que la conexión se corresponda con el diagrama que usted necesite.
+<div class="row">
+    <div class="panel callout">
+        En este punto, es posible que haya perdido la sesión SSH. Ya que aún no hay permisos configurados, debe fijarse en como ha configurado las intefaces de red, y que la conexión se corresponda con el diagrama que usted necesite.
+    </div>
+</div>
+
 
 # Prueba de configuración
 Ejecutar `ip addr show` debería devolver todas físicas como activas y configuradas. 
@@ -92,7 +97,14 @@ Ejecutar `ip addr show` debería devolver todas físicas como activas y configur
        valid_lft forever preferred_lft forever
 {% endhighlight %}
 
-Pese a lo que puedan decir al respecto, ping es una herramienta muy útil. Por ejemplo, podemos usarla para verificar tanto la resolución correcta del nombre de host como que lo alcanzamos por medio de ICMP.
+Para este caso, podemos usar ping para verificar tanto la resolución correcta del nombre de host por parte del mismo host como el que lo alcancemos por ICMP, lo que constituye una de las tantas reglas configuradas.
+
+<div class="row">
+    <div class="panel callout">
+        No se acostumbre: Ping es una herramienta de capacidad limitada. En su diario trabajo, prácticamente debería descartar su uso.
+    </div>
+</div>
+
 {% highlight bash %}
 $ ping `hostname`
 

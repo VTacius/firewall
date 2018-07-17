@@ -1,6 +1,8 @@
 #!/bin/bash -x 
 ## establecimiento.sh #### 
-source /root/fws/infraestructura.sh
+## El presente archivo configurará debería limitarse a configurar las tablas del tipo FWD_*
+# Leemos el archivo de configuración 
+source /etc/fws/infraestructura.sh
 echo -e "\n\n ESTABLECIMIENTO.SH\n\n"
 
 ## Servicios adicionales en el servidor

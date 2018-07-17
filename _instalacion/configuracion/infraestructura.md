@@ -42,6 +42,10 @@ listados["admins"]="
     172.16.2.20
 "
 
+## IP con bloqueo total hacia el firewall. Asegúrese de notificar a todos los interesados sobre esto  
+listados["LANBLOCK"]=" 
+"
+
 ### Este es el punto perfecto para empezar a agregar listas personalizadas
 
 
