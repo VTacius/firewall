@@ -20,7 +20,7 @@ Copiar y ejecutar los siguientes comandos desde consola creará un fichero de co
 {% highlight bash %}
 chown proxy:proxy /var/spool/squid/dump
 mkdir /var/spool/squid/dump
-source ~/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 cat <<MAFI > /etc/squid/squid.conf
 {% include_relative squid.md %}
 MAFI

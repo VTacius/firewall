@@ -19,7 +19,7 @@ Borre el contenido del archivo original de configuración de SquidGuard y copie 
 Si va a cambiar su contenido, tenga especial cuidado con los comentarios: No comente el contenido entre corchetes.
 
 {% highlight nginx %}
-source /root/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 SRV=(${listados['SRV']})
 cat << MAFI > /etc/squidguard/squidGuard.conf
 {% include_relative squidguard.md %}
@@ -39,7 +39,7 @@ Ejecute lo siguientes comandos para crear ficheros donde guardar personalizacion
 {% highlight bash %}
 mkdir /var/lib/squidguard/db/custom
 touch /var/lib/squidguard/db/custom/{,ir}restrictos.lst
-source /root/fws/infraestructura.sh
+source /etc/fws/infraestructura.sh
 SRV=(${listados['SRV']})
 cat << MAFI > /var/lib/squidguard/db/custom/sitios.lst
 $(echo $SRV[0] | cut -d '/' -f 1)

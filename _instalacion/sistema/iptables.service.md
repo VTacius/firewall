@@ -1,0 +1,10 @@
+[Unit]
+Description="Inicio de las reglas de Iptables"
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/firewall.sh sistema
+Type=forking
+
+[Install]
+WantedBy=default.target

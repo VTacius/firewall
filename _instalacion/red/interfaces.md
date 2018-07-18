@@ -17,7 +17,7 @@ iface $INL inet static
 # RED LAN Adicional. 
 # Cree una subinterfaz en la interfaz LAN para agregar redes adicionales
 # La siguiente es la forma recomendada para agregar interfaces según https://wiki.debian.org/NetworkConfiguration#Multiple_IP_addresses_on_one_Interface
-# No olvide agregar nuevas redes a #LAN en /root/fws/infraestructura.sh
+# No olvide agregar nuevas redes a #LAN en /etc/fws/infraestructura.sh
 #auto $INL:0
 #iface $INL:0 inet static 
 #    address 10.168.5.1/24
@@ -45,20 +45,3 @@ $([ $INX ] || echo "#")    address ${SRX:-"10.30.40.1/24"}
 $([ $INP ] || echo "#")auto ${INP:-"eno2"}
 $([ $INP ] || echo "#")iface ${INP:-"eno2"} inet static
 $([ $INP ] || echo "#")    address ${SRP:-"10.30.40.1/24"}
-
-# Configuración de los grupos IPSET a usar en IPTABLES.
-post-up /root/fws/grupos_ipset.sh
-
-# Configuración de la tabla FILTER de IPTABLES. 
-post-up /root/fws/firewall.sh
-
-# Configuración de tabla NAT en IPTABLES
-post-up /root/fws/rutas.sh
-
-# Configuración de reglas para DMZ en caso de tenerla
-# Descomentarize si la necesita 
-#post-up /root/fws/dmz.sh 
-
-# Configuración de reglas especificas para el establecimiento dado.
-post-up /root/fws/establecimiento.sh
-

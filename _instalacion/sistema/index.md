@@ -18,25 +18,16 @@ header: no
 
 Tomando en cuenta que ahora tiene una red totalmente funcional, le será posible seguir con las siguientes instrucciones que incluyen la instalación de paquetes, actividad que hace uso de la red.
 
-## /etc/apt/sources.list
+### sources.list. Instalación de paquetes
 {% highlight bash %}
 rm /etc/apt/sources.list
 
 cat << MAFI > /etc/apt/sources.list 
-#Inicio del archivo /etc/apt/sources.list para servidores
-deb http://debian.salud.gob.sv/debian/ stretch main contrib non-free
-deb-src http://debian.salud.gob.sv/debian/ stretch main contrib non-free
-
-deb http://debian.salud.gob.sv/debian/ stretch-updates main contrib non-free
-deb-src http://debian.salud.gob.sv/debian/ stretch-updates main contrib non-free
-
-deb http://debian.salud.gob.sv/debian-security/ stretch/updates main contrib non-free
-deb-src http://debian.salud.gob.sv/debian-security/ stretch/updates main contrib non-free
-#Fin del archivo /etc/apt/sources.list
+{% include_relative sources.list.md %}
 MAFI
 {% endhighlight %}
 
-Y actualice el sistema, tarea que debe realizar cada tanto:
+Actualice el sistema:
 {% highlight bash %}
 apt update
 apt upgrade 
@@ -63,8 +54,43 @@ Los siguientes paquetes son necesarios para los scripts auxiliares, y como estos
 apt install -y libtext-diff-perl libconfig-simple-perl libemail-sender-perl libemail-sender-transport-smtps-perl libemail-sender-transport-smtps-perl libemail-mime-perl libio-all-perl
 {% endhighlight %}
 
-Configure VIM  
-Active, respectivamente y a su gusto, identado a 4 espacios, numerado de líneas y, en el caso que el fondo de su terminal sea oscuro, el patrón de colores para tal efecto.  
+### Inicio de iptables
+La configuración de iptables se realiza como si fuera un servicio en el sistema. 
+
+Primero, creamos el script que se encarga de la ejecución de los ficheros en `/etc/fws/` donde configuramos los permisos para la red.
+
+A continuación, creamos el fichero con la unidad `iptables` y activamos para que se ejecute al inicio del sistema:
+
+{% highlight bash %}
+
+tee /usr/local/bin/firewall.sh  < MAFI
+{% include_relative firewall.md %}
+MAFI
+
+
+cat <MAFI >> /etc/systemd/system/iptables.service
+{% include_relative iptables.service.md %}
+MAFI
+
+systemctl enable iptables.service
+{% endhighlight %}
+
+### Módulos para FTP Pasivo 
+Configurar el reenvío de paquetes a través de interfaces, y activarla en caliente:
+{% highlight bash %}
+sed -i '$a ip_conntrack_ftp\nnf_nat_ftp ' /etc/modules
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+{% endhighlight %}
+
+Si no va reiniciar el sistema antes de hacer pruebas, será necesario cargar los módulos anteriores en el sistema con los siguientes comandos:
+{% highlight bash %}
+modprobe nf_nat_ftp
+modprobe ip_conntrack_ftp
+{% endhighlight %}
+
+### VIM  
+Configuración opcional: Resaltado de sintaxis, identado a 4 espacios, patrón de colores para terminal obscuro y numerado de líneas.  
 Por último, configure el comportamiento más clásico para mouse
 {% highlight bash %}
 sed -i '/syntax on/ a set tabstop=4\nset shiftwidth=4\nset expandtab' /etc/vim/vimrc
@@ -73,23 +99,9 @@ sed -i -r 's/(set\smouse=)\w/\1r/' /usr/share/vim/vim80/defaults.vim
 sed -i '/^syntax /a set number' /etc/vim/vimrc
 {% endhighlight %}
 
-Configure alternatives editor  
-Este podría considerarse cuestión de gustos, pero nano puede llegar a considerarse engorroso a la hora de modificar ciertos ficheros
+### Alternatives editor  
+Configuración opcional: nano puede llegar a considerarse engorroso a la hora de modificar ciertos ficheros que así lo requieran
 {% highlight bash %}
 update-alternatives --set editor /usr/bin/vim.basic
-{% endhighlight %}
-
-Agregar los módulos para manejo de sesiones FTP  a la carga de módulos en el arranque del sistema:  
-Configurar el reenvío de paquetes a través de interfaces, y activarla en caliente:
-{% highlight bash %}
-sed -i '$a ip_conntrack_ftp\nnf_nat_ftp ' /etc/modules
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
-{% endhighlight %}
-
-Si no va reiniciar el sistema antes de hacer prueba, será necesario cargar los módulos anteriores en el sistema con los siguientes comandos:
-{% highlight bash %}
-modprobe nf_nat_ftp
-modprobe ip_conntrack_ftp
 {% endhighlight %}
 

@@ -1,5 +1,4 @@
 $(for r in ${listados_red['LAN']}; do printf "acl usuarios src %s\n" $r; done)
-
 acl Safe_ports port 80 443 8080 20 21
 acl CONNECT method CONNECT
 acl NONE method NONE

@@ -20,7 +20,7 @@ Los siguientes ficheros configuran el manejo que este firewall hace del tráfico
 ## Creación de Grupos IPSET
 Este fichero no necesita configuración alguna. Se limita a crear los grupos que usted ha configurado en `/root/fws/infraestructura.sh`
 {% highlight bash %}
-cat << "MAFI" > /root/fws/grupos_ipset.sh
+cat << "MAFI" > /etc/fws/grupos_ipset.sh
 {% include_relative grupos_ipset.md %}
 MAFI
 {% endhighlight %}
@@ -28,81 +28,68 @@ MAFI
 ## Configuración del Filtrado de Paquetes de Red
 Las reglas que se configuran en este script pretenden ser didácticas; su intención es que pueda llegar a comprender su funcionamiento, lo cual le hará estar mejor preparado frente a posibles eventualidades.
 
-No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota en cualquier momento. Para agregar reglas, eche mano del script `~/fws/establecimiento.sh`
+No modifique su contenido. El fichero podría ser sustituido por un administrador de forma remota en cualquier momento. Para agregar reglas, eche mano del script `/etc/fws/establecimiento.sh`
 {% highlight bash %}
-cat << "MAFI" > /root/fws/firewall.sh
+cat << "MAFI" > /etc/fws/firewall.sh
 {% include_relative firewall.md %}
 MAFI
 {% endhighlight %}
 
 ## Configuración de Tablas Nat y rutas en general
-El siguiente script tampoco necesita configuración, y es poco probable que tenga que cambiarlo ya que siempre puede hechar mano del script `~/fws/establecimiento.sh`.
+El siguiente script tampoco necesita configuración, y es poco probable que tenga que cambiarlo ya que siempre puede hechar mano del script `/etc/fws/establecimiento.sh`.
 {% highlight bash %}
-cat << "MAFI" > /root/fws/rutas.sh 
+cat << "MAFI" > /etc/fws/rutas.sh 
 {% include_relative rutas.md %}
 MAFI
 {% endhighlight %}
 
 ## Configuración de DMZ
-**Si usted no tiene una red de servidores como tal, la forma más sencilla es comentarizar su post-up en `/etc/network/interfaces`**  
+** Si usted no tiene una red de servidores como tal, la forma más sencilla es comentarizar las variables bajo la sección DMZ em /etc/fws/infraestructura.sh  **  
 
 La DMZ puede ser un trabajo realmente complicado. No hay una formula mágica: Aún con el mejor asistente gráfico de configuración, se requiere que usted realmente entienda la red que esta configurando. 
 
 El presente fichero habilita a una red de servidores web para ser alcanzados desde la LAN. Un ejemplo de la publicación de los mismos puede hallarse hacia el final del script `~/fws/establecimiento.sh`.
 {% highlight bash %}
-cat << "MAFI" > /root/fws/dmz.sh
+cat << "MAFI" > /etc/fws/dmz.sh
 {% include_relative dmz.md %}
 MAFI
 {% endhighlight %}
 
 ## Configuración de reglas específicas para el establecimiento
-En el fichero `/root/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las que ya han sido configuradas en los ficheros anteriores. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
-Un ejemplo del fichero `/root/fws/establecimiento.sh`, con algunos ejemplos listos para usar y útiles para muchos establecimientos, es mostrada a continuación
+En el fichero `/etc/fws/establecimiento.sh`, se configuran las reglas que desea agregar a las que ya han sido configuradas en los ficheros anteriores. Ya que el Firewall es restrictivo por defecto, se supone que debiera configurar sólo reglas para aceptar algún servicio en particular, usualmente a usuarios particulares.  
+Un ejemplo del fichero `/etc/fws/establecimiento.sh`, con algunos ejemplos listos para usar y útiles para muchos establecimientos, es mostrada a continuación
 {% highlight bash %}
-cat << "MAFI" > /root/fws/establecimiento.sh
+cat << "MAFI" > /etc/fws/establecimiento.sh
 {% include_relative establecimiento.md %}
 MAFI
 {% endhighlight %}
 
 # Personalización de la configuración
-En definitiva, la mayoría de estos ficheros pueden recibir actualizaciones, por lo que es conveniente que se limite a usar el fichero `/root/fws/establecimiento.sh` para las reglas propias de sus establecimiento.
+En definitiva, la mayoría de estos ficheros pueden recibir actualizaciones, por lo que es conveniente que se limite a usar el fichero `/etc/fws/establecimiento.sh` para las reglas propias de sus establecimiento.
 
 Si usted tiene alguna sugerencia para el cambio de estos ficheros, comuníquese con el nivel central, que estará agradecido por sus sugerencias.
 
-`/root/fws/firewall.sh`
- : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/root/fws/establecimiento.sh`, o en `/root/fws/dmz.sh` si aplica en la infraestructura de red a su cargo 
+`/etc/fws/firewall.sh`
+ : Esta prohibido de forma terminante modificar este fichero. Todas las reglas adicionales que usted deba crear deben ser agregada en el fichero `/etc/fws/establecimiento.sh`, o en `/etc/fws/dmz.sh` si aplica en la infraestructura de red a su cargo 
 
-`/root/fws/rutas.sh`
- : Al igual que con el archivo `/root/fws/firewall.sh`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
+`/etc/fws/rutas.sh`
+ : Al igual que con el archivo `/etc/fws/firewall.sh`, salvos contadas excepciones que debe decidir con el técnico enlace en el Nivel Central, no debería cambiar este fichero.  
 Para todo lo demás, desde infraestructura.sh puede agregar modificaciones, tal como en la sección de dicho fichero (Y en el fichero mismo) se observa.
 
-`/root/fws/dmz.sh`
+`/etc/fws/dmz.sh`
  : Tampoco lo vaya a cambiar. Parece que ya hemos explicado nuestras razones, `establecimiento.sh` tiene lo suficiente para poder modificar los permisos relacionados con su red DMZ
 
-`/root/fws/establecimiento.sh`
+`/etc/fws/establecimiento.sh`
  : Hay algunos ejemplos dentro del fichero Este lo puede cambiar todo lo que quiera. Lea en el manual [Extendiendo las ACL de red para su Firewall]({{site.baseurl}}/manual/iptables/) y vea las opciones que tiene para cambiar este fichero.
 
 # Despliegue de la configuración
-Habiendo configurado los archivos anteriores, reinicie la red:
+Habiendo configurado los archivos anteriores, reinicie el servicio `iptables` para aplicar los cambios:
 {% highlight bash %}
-systemctl restart networking.service
+systemctl restart iptables.service
 {% endhighlight %}
-
-Existe la extraña posibilidad que aparezca un mensaje de error como el siguiente:
-{% highlight bash %}
-Job for networking.service failed because the control process exited with error code.
-See "systemctl status networking.service" and "journalctl -xe" for details.
-{% endhighlight %}
-
-Sería buena idea en realidad correr el comando `journalctl -xe`, pero es posible que haya habido un problema previo con la configuración de alguna de las interfaces. Para eso, bastará con forzar el apagado de dicha interfaz:
-{% highlight bash %}
-ifdown --force eth1
-{% endhighlight %}
-
-Y podrá reiniciar la red sin ningún problema
 
 # Prueba de configuración
-Desde alguno de los cliente en la red interna debe acceder a los servicios del MINSAL, y los servidores de HACIENDA. Algunos ejemplos que puede hacer:
+Desde alguno de los cliente en la red interna pruebe acceder a los servicios del MINSAL, y los servidores de HACIENDA. Algunos ejemplos que puede hacer:
 {% highlight bash %}
 nslookup debian.salud.gob.sv
 Server:     10.10.20.20
@@ -132,7 +119,7 @@ drwxrwsr-x    3 0        503          4096 Nov 13  2013 GOBSAFII
 
 Desde el Firewall, comprueba la conectividad en general. Note como este par de pruebas implican la mayoría de permisos con los que el Firewall cuenta:
 {% highlight bash %}
-ping www.google.com.sv
+ping -c 2 www.google.com.sv
 PING www.google.com.sv (74.125.137.94) 56(84) bytes of data.
 64 bytes from yh-in-f94.1e100.net (74.125.137.94): icmp_req=1 ttl=43 time=74.5 ms
 64 bytes from yh-in-f94.1e100.net (74.125.137.94): icmp_req=2 ttl=43 time=74.7 ms
