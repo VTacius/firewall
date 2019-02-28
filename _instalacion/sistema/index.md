@@ -105,3 +105,51 @@ Configuración opcional: nano puede llegar a considerarse engorroso a la hora de
 update-alternatives --set editor /usr/bin/vim.basic
 {% endhighlight %}
 
+### Autenticación contra el árbol LDAP En el servidor de dominio (10.10.20.49) existe un certificado digital llamado `CA-sv.crt`, desde un cliente cualquiera es posible obtenerlo con el siguiente comando, y usando las credenciales del usuario soporte:
+
+{% highlight bash %}
+smbclient //10.10.20.49/soporte/ -U soporte -c 'get CA-sv.crt'
+{% endhighlight %}
+
+Luego puede enviarse al firewall de la siguiente forma:
+
+{% highlight bash %}
+scp CA-sv.crt fwadmin@<ip-firewall>:~/
+{% endhighlight %}
+
+Luego, en el firewall configuramos de la siguiente forma:
+{% highlight bash %}
+aptitude install sssd{,-tools} sudo
+mv /home/fwadmin/CA-sv.crt /etc/ssl/certs/
+
+cat <<MAFI>/etc/sssd/sssd.conf
+[sssd]
+config_file_version = 2
+services = nss,pam
+domains = salud.gob.sv
+
+[nss]
+
+[pam]  
+
+[domain/salud.gob.sv]
+ldap_uri = ldap://directorio.salud.gob.sv
+ldap_search_base = dc=salud,dc=gob,dc=sv
+ldap_schema = rfc2307
+id_provider = ldap
+ldap_user_uuid = entryuuid
+ldap_group_uuid = entryuuid
+ldap_id_use_start_tls = True
+enumerate = False
+cache_credentials = True
+ldap_user_search_base = ou=Users,dc=salud,dc=gob,dc=sv
+ldap_group_search_base = ou=Groups,dc=salud,dc=gob,dc=sv
+chpass_provider = ldap
+auth_provider = ldap
+ldap_tls_cacertdir = /etc/ssl/certs
+ldap_tls_cacert = /etc/ssl/certs/CA-sv.crt
+MAFI
+
+{% include_relative comandos.md %}
+
+{% endhighlight %}

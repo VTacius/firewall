@@ -21,6 +21,7 @@ Si quiere instalarlo en una forma más tradicional, no hay problema: Sólo aseg�
 Así, basta con ejecutar desde la rama `gh-pages`:
 
 ```sh
+rm Gemfile.lock
 docker build . -t jekewall
 docker run -it --rm -v $(pwd):/var/www -P jekewall
 ```
