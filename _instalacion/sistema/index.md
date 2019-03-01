@@ -105,7 +105,8 @@ Configuración opcional: nano puede llegar a considerarse engorroso a la hora de
 update-alternatives --set editor /usr/bin/vim.basic
 {% endhighlight %}
 
-### Autenticación contra el árbol LDAP En el servidor de dominio (10.10.20.49) existe un certificado digital llamado `CA-sv.crt`, desde un cliente cualquiera es posible obtenerlo con el siguiente comando, y usando las credenciales del usuario soporte:
+### Autenticación contra el árbol LDAP 
+En el servidor de dominio (10.10.20.49) existe un certificado digital llamado `CA-sv.crt`, desde un cliente cualquiera, y usando las credenciales del usuario soporte, es posible obtenerlo con el siguiente comando:
 
 {% highlight bash %}
 smbclient //10.10.20.49/soporte/ -U soporte -c 'get CA-sv.crt'
@@ -150,6 +151,21 @@ ldap_tls_cacertdir = /etc/ssl/certs
 ldap_tls_cacert = /etc/ssl/certs/CA-sv.crt
 MAFI
 
-{% include_relative comandos.md %}
+systemctl restart sssd.service
 
+chmod 700 /etc/sssd/sssd.conf
+systemctl restart sssd.service 
+
+sed -E -i 's/^#\s*(account\s*required\s*pam_access.so)/\1/g' /etc/pam.d/sshd
+
+grep -q '+ : root : 192.168.2.20/27' /etc/security/access.conf || sed '$a + : root : 192.168.2.20/27' /etc/security/access.conf  -i
+grep -q '+ : MinsalAdminFirewall : ALL' /etc/security/access.conf || sed '$a + : MinsalAdminFirewall : ALL' /etc/security/access.conf  -i
+grep -q -- '- : ALL: ALL' /etc/security/access.conf || sed '$a - : ALL: ALL' /etc/security/access.conf  -i
+
+grep -q 'pam_mkhomedir.so' /etc/pam.d/common-session || sed -i '/"Additional" block/ a session\trequired\tpam_mkhomedir.so umask=0022 skel=/etc/skel' /etc/pam.d/common-session
+grep -q 'pam_mkhomedir.so' /etc/pam.d/common-session-noninteractive || sed -i '/"Additional" block/ a session\trequired\tpam_mkhomedir.so umask=0022 skel=/etc/skel' /etc/pam.d/common-session-noninteractive
+
+cat <<MAFI>/etc/sudoers.d/ruth 
+%MinsalAdminFirewall ALL=(ALL) NOPASSWD:/bin/su
+MAFI
 {% endhighlight %}

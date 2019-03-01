@@ -12,7 +12,7 @@ header: no
 El proyecto es altamente configurable. Sin embargo, podrá sentirse más comódo si se limita a cambiar aquellos parámetros de los que se le pida explícitamente que lo haga. Con esto, procuramos estandarizar el proyecto, facilitando así la asistencia con posibles problemas.
 
 * Haga configuración manual la red. Al menos hasta configurar una interfaz (Podría ser la interfaz que será asignada a LAN) que le permite comunicarse con el firewall.
-* El usuario sin derechos administrativos será mafi. Es necesario para conectarse al equipo por medio de SSH, siguiendo los actuales lineamientos de Debian.  
+* El usuario sin derechos administrativos será fwadmin. Es necesario para conectarse al equipo por medio de SSH, siguiendo los actuales lineamientos de Debian.  
 * A menos que sea experto particionando, o que lo haya hecho antes con ese equipo en particular, se recomienda el siguiente proceso para tal operacion:
   * En **Particionado de discos** escoja la opción **Guiado – utilizar todo el disco**.
   * Después de **Elija disco a particionar**, escoja en **Esquema de particionado** la opción **Todos los ficheros en una partición (recomendado para novatos)**.    
